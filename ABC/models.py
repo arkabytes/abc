@@ -1,11 +1,13 @@
 from django.db import models
 
+
 class VatType(models.Model):
     name = models.CharField(max_length=25,unique=True)
     rate = models.FloatField(default=0)
 
     def __str__(self):
         return self.name;
+
 
 class PaymentType(models.Model):
     name = models.CharField(max_length=25,unique=True)
@@ -15,6 +17,7 @@ class PaymentType(models.Model):
     def __str__(self):
         return self.name
 
+
 class DeliveryType(models.Model):
     name = models.CharField(max_length=25,unique=True)
     description = models.TextField(default=None)
@@ -23,6 +26,7 @@ class DeliveryType(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Customer(models.Model):
     cif = models.CharField(max_length=25,unique=True)
@@ -43,6 +47,7 @@ class Customer(models.Model):
     def __str__(self):
         return self.company_name
 
+
 class Provider(models.Model):
     name = models.CharField(max_length=50,unique=True)
     contact_name = models.CharField(max_length=100)
@@ -61,6 +66,7 @@ class Provider(models.Model):
     def __str__(self):
         return self.name
 
+
 class Item(models.Model):
     name = models.CharField(max_length=50,unique=True)
     description = models.TextField(default=None)
@@ -78,6 +84,7 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
+
 class Event(models.Model):
     name = models.CharField(max_length=50,unique=True)
     description = models.TextField(default=None)
@@ -89,6 +96,7 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Order(models.Model):
     number = models.CharField(max_length=20,unique=True)
@@ -111,6 +119,7 @@ class Order(models.Model):
     def __str__(self):
         return self.number
 
+
 class OrderDetail(models.Model):
     item = models.ForeignKey(Item)
     item_name = models.CharField(max_length=100)
@@ -125,6 +134,7 @@ class OrderDetail(models.Model):
 
     def __str__(self):
         return self.order.number + "|" + self.item.name
+
 
 class Invoice(models.Model):
     number = models.CharField(max_length=20,unique=True)
@@ -148,6 +158,7 @@ class Invoice(models.Model):
     def __str__(self):
         return self.number
 
+
 class InvoiceDetail(models.Model):
     item = models.ForeignKey(Item)
     item_name = models.CharField(max_length=100)
@@ -162,6 +173,7 @@ class InvoiceDetail(models.Model):
 
     def __str__(self):
         return self.invoice.number + "|" + self.item.name
+
 
 class Task(models.Model):
     name = models.CharField(max_length=50,unique=True)
@@ -180,6 +192,7 @@ class Task(models.Model):
     def __str__(self):
         return self.name
 
+
 class User(models.Model):
     username = models.CharField(max_length=20,unique=True,null=False)
     password = models.CharField(max_length=100,null=False)
@@ -189,6 +202,7 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
+
 
 class Company(models.Model):
     name = models.CharField(max_length=50,unique=True)
@@ -205,6 +219,7 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Option(models.Model):
     name = models.CharField(max_length=50)
