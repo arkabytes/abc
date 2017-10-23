@@ -12,23 +12,18 @@
 
   <link href="{% static 'ABC/css/sticky-footer.css' %}" rel="stylesheet">
   <link href="{% static 'ABC/css/my.css" rel="stylesheet' %}">
+  <link rel="shortcut icon" type="image/png" href="{% static 'ABC/img/logo.ico' %}"/>
   <title>ABC | arkabytes</title>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">ABC</a>
+      <a class="navbar-brand" href="{% url 'index' %}">ABC</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
 
-      <form class="navbar-form navbar-right" method="post" action="UserActions">
+      <form class="navbar-form navbar-right" method="post" action="#">
         <div class="form-group">
           <input type="text" placeholder="Email" name="email" class="form-control">
         </div>
@@ -45,8 +40,9 @@
 
 <div class="jumbotron">
   <div class="container">
-    <h1>Gestión de tu PyME</h1>
-    <p>Estás en el panel principal desde donde tienes acceso a todo</p>
+
+    <h1><img height="150px" src="{% static 'ABC/img/logo_abc_trans.png' %}"/> ABC ERP</h1>
+    <!--<p>Estás en el panel principal desde donde tienes acceso a todo</p>-->
   </div>
 </div>
 
@@ -61,30 +57,66 @@
   <div class="row">
     <div class="col-lg-4">
       <h2>Artículos</h2>
-      <p>Registra, modifica o elimina teléfonos de la pantalla de inicio de la app</p>
-      <p><a class="btn btn-primary" href="phones.jsp" role="button">Acceder &raquo;</a></p>
+        <img style="width:64px" src="{% static 'ABC/img/articulos.png' %}"/>
+        <a href="#" title="Añadir artículo"><img src="{% static 'ABC/icons/anadircesta32.png' %}"/></a>
+      <p>Registra, modifica o elimina artículos</p>
+      <p><a class="btn btn-primary" href="{% url 'items' %}" role="button">Acceder &raquo;</a></p>
+
     </div>
     <div class="col-lg-4">
       <h2>Pedidos</h2>
-      <p>Registra, modifica o elimina información de la plantilla de Bomberos</p>
-      <p><a class="btn btn-primary" href="professionals.jsp" role="button">Acceder &raquo;</a></p>
+        <img src="{% static 'ABC/img/pedidos.png' %}"/>
+        <a href="#" title="Añadir pedido"><img src="{% static 'ABC/icons/anadirpedido32.png' %}"/></a>
+      <p>Registra, modifica o elimina Pedidos</p>
+      <p><a class="btn btn-primary" href="#" role="button">Acceder &raquo;</a></p>
     </div>
     <div class="col-lg-4">
       <h2>Facturas</h2>
-      <p>Registra, modifica o elimina información de los Voluntarios</p>
-      <p><a class="btn btn-primary" href="volunteers.jsp" role="button">Acceder &raquo;</a></p>
+        <img src="{% static 'ABC/img/facturas.png' %}"/>
+        <a href="#" title="Añadir factura"><img src="{% static 'ABC/icons/anadirfactura32.png' %}"/></a>
+      <p>Registra, modifica o elimina Factuars</p>
+      <p><a class="btn btn-primary" href="#" role="button">Acceder &raquo;</a></p>
     </div>
   </div>
   <div class="row">
     <div class="col-lg-4">
       <h2>Clientes</h2>
-      <p>Registra, modifica o elimina protocolos de la app</p>
-      <p><a class="btn btn-primary" href="protocols.jsp" role="button">Acceder &raquo;</a></p>
+        <img src="{% static 'ABC/img/usuario.png' %}"/>
+        <a href="#" title="Añadir usuario"><img src="{% static 'ABC/icons/anadirusuario32.png' %}"/></a>
+      <p>Registra, modifica o elimina Clientes</p>
+      <p><a class="btn btn-primary" href="#" role="button">Acceder &raquo;</a></p>
     </div>
     <div class="col-lg-4">
       <h2>Proveedores</h2>
-      <p>Registra, modifica o elimina eventos relacionados con el Parque</p>
-      <p><a class="btn btn-primary" href="events.jsp" role="button">Acceder &raquo;</a></p>
+        <img src="{% static 'ABC/img/proveedor.png' %}"/>
+        <a href="#" title="Añadir proveedor"><img src="{% static 'ABC/icons/anadirproveedor32.png' %}"/></a>
+      <p>Registra, modifica o elimina Proveedores</p>
+      <p><a class="btn btn-primary" href="#" role="button">Acceder &raquo;</a></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4">
+      <h2>Tareas</h2>
+        <img src="{% static 'ABC/img/tareas.png' %}"/>
+        <a href="#" title="Añadir tarea"><img src="{% static 'ABC/icons/anadirtarea32.png' %}"/></a>
+      <p>Gestiona tu tiempo. Alta, seguimiento, cancelación e informes de tus Tareas</p>
+      <p><a class="btn btn-primary" href="#" role="button">Acceder &raquo;</a></p>
+    </div>
+    <div class="col-lg-4">
+      <h2>Calendario</h2>
+        <img src="{% static 'ABC/img/calendario.png' %}"/>
+        <a href="#" title="Añadir usuario"><img src="{% static 'ABC/icons/anadiragenda32.png' %}"/></a>
+      <p>Consulta las citas para hoy o cualquier día del año. Alta, modificación y cancelación de citas</p>
+      <p><a class="btn btn-primary" href="#" role="button">Acceder &raquo;</a></p>
+    </div>
+    <div class="col-lg-4">
+      <h2>Tablas maestras</h2>
+        <img src="{% static 'ABC/img/tablasmaestras.png' %}"/>
+        <img src="{% static 'ABC/icons/anadirformaenvio32.png' %}"/>
+        <img src="{% static 'ABC/icons/anadirformapago32.png' %}"/>
+        <img src="{% static 'ABC/icons/anadirtipoiva32.png' %}"/>
+      <p>Gestiona las tablas maestras de la aplicación. Formas de Envío, Formas de Pago y Tipos de IVA</p>
+      <p><a class="btn btn-primary" href="#" role="button">Acceder &raquo;</a></p>
     </div>
   </div>
 </div>
