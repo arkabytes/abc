@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+        integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+  <link href="{% static 'ABC/css/sticky-footer.css' %}" rel="stylesheet">
+  <link href="{% static 'ABC/css/my.css" rel="stylesheet' %}">
+  <title>ABC | arkabytes</title>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Gestión Bomberos</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+
+      <form class="navbar-form navbar-right" method="post" action="UserActions">
+        <div class="form-group">
+          <input type="text" placeholder="Email" name="email" class="form-control">
+        </div>
+        <div class="form-group">
+          <input type="password" placeholder="Password" name="password" class="form-control">
+        </div>
+        <input type="hidden" name="action" value="login"/>
+        <button type="submit" class="btn btn-success">Acceder</button>
+      </form>
+
+    </div>
+  </div>
+</nav>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>Gestión del Parque de Bomberos</h1>
+    <p>Desde este panel se podrán gestionar la información de la aplicación móvil</p>
+  </div>
+</div>
+
+<script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.jeditable.mini.js"></script>
+<script type="text/javascript" src="{% static 'ABC/js/bootbox.min.js' %}"></script>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-4">
+      <h2>Teléfonos</h2>
+      <p>Registra, modifica o elimina teléfonos de la pantalla de inicio de la app</p>
+      <p><a class="btn btn-primary" href="phones.jsp" role="button">Acceder &raquo;</a></p>
+    </div>
+    <div class="col-lg-4">
+      <h2>Bomberos</h2>
+      <p>Registra, modifica o elimina información de la plantilla de Bomberos</p>
+      <p><a class="btn btn-primary" href="professionals.jsp" role="button">Acceder &raquo;</a></p>
+    </div>
+    <div class="col-lg-4">
+      <h2>Voluntarios</h2>
+      <p>Registra, modifica o elimina información de los Voluntarios</p>
+      <p><a class="btn btn-primary" href="volunteers.jsp" role="button">Acceder &raquo;</a></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4">
+      <h2>Protocolos</h2>
+      <p>Registra, modifica o elimina protocolos de la app</p>
+      <p><a class="btn btn-primary" href="protocols.jsp" role="button">Acceder &raquo;</a></p>
+    </div>
+    <div class="col-lg-4">
+      <h2>Eventos</h2>
+      <p>Registra, modifica o elimina eventos relacionados con el Parque</p>
+      <p><a class="btn btn-primary" href="events.jsp" role="button">Acceder &raquo;</a></p>
+    </div>
+  </div>
+</div>
+
+
+<footer class="footer">
+  <div class="containerf">
+    <p class="text-muted">(c) 2016 arkabytes | Gestión de Parques de Bomberos v0.1b</p>
+  </div>
+</footer>
+</div>
+</body>
+</html>
