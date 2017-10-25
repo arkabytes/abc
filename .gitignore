@@ -99,3 +99,12 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+#Mac files
+.DS_Store
+
+#PyCharm files
+.idea
+
+#SQLite databases
+*.sqlite3
