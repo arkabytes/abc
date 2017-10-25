@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+        integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <link href="{% static 'ABC/css/sticky-footer.css' %}" rel="stylesheet">
+    <link href="{% static 'ABC/css/my.css' %}" rel="stylesheet">
+    <link href="{% static 'ABC/css/signin.css' %}" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'ABC/img/logo.ico' %}"/>
+    <title>ABC | arkabytes</title>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+            <img style="float:left" src="{% static 'ABC/img/logo_abc_trans_mini.png' %}"/>
+          <a class="navbar-brand" href="{% url 'index' %}">ABC</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+
+        <form class="form-signin">
+            <h2 class="form-signin-heading">Inicia sesión</h2>
+            <label for="inputEmail" class="sr-only">Correo Electrónico</label>
+            <input type="email" id="inputEmail" class="form-control" placeholder="Correo electrónico" required autofocus>
+            <label for="inputPassword" class="sr-only">Contraseña</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña" required>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" value="remember-me"> Recordarme
+              </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+        </form>
+    </div> <!-- /container -->
+
+    <footer class="footer">
+      <div class="containerf">
+        <p class="text-muted">(c) 2017 arkabytes | ABC v0.1b</p>
+      </div>
+    </footer>
+
+</body>
+</html>

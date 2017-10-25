@@ -13,3 +13,9 @@ def items(request):
     template = loader.get_template('ABC/items.html')
     context = {}
     return HttpResponse(template.render(context, request))
+
+
+def signin(request):
+    template = loader.get_template('ABC/signin.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
