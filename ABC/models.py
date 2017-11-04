@@ -73,13 +73,18 @@ class Item(models.Model):
     stock = models.IntegerField(default=0)
     cost_price = models.FloatField(default=0)
     retail_price = models.FloatField(default=0)
-    notes = models.TextField(default=None)
+    notes = models.TextField(default=None,null=True)
     image1 = models.ImageField(upload_to='items')
     image2 = models.ImageField(upload_to='items')
     image3 = models.ImageField(upload_to='items')
     thumbnail = models.ImageField(upload_to='items')
-    provider = models.ForeignKey(Provider)
-    vat_type = models.ForeignKey(VatType)
+    provider = models.ForeignKey(Provider,null=True)
+    vat_type = models.ForeignKey(VatType,null=True)
+
+    @classmethod
+    def create(cls, name, description, price):
+        item = cls(name=name, description=description, retail_price=price)
+        return item
 
     def __str__(self):
         return self.name
