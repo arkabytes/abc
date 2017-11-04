@@ -1,0 +1,19 @@
+{% include 'ABC/header.html' with title='Artículo' %}
+
+<div class="container">
+    <div class="navbar">
+        <ol class="breadcrumb">
+            <li><a href="{% url 'index' %}">ABC</a></li>
+            <li><a href="{% url 'items' %}">Artículos</a></li>
+            <li class="active">{{ the_item.name }}</li>
+        </ol>
+    </div>
+</div>
+
+<div class="container">
+    <p>{{ the_item.name }}</p>
+    <p>{{ the_item.description }}</p>
+    <p>{{ the_item.retail_price }} €</p>
+</div>
+
+{% include 'ABC/footer.html' %}

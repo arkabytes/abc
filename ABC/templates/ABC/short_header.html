@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="es">
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+        integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <link href="{% static 'ABC/css/sticky-footer.css' %}" rel="stylesheet">
+    <link href="{% static 'ABC/css/my.css'%}" rel="stylesheet">
+    {% if request.path == '/ABC/signin/' %}
+        <link href="{% static 'ABC/css/signin.css' %}" rel="stylesheet">
+    {% endif %}
+    <link rel="shortcut icon" type="image/png" href="{% static 'ABC/img/logo.ico' %}"/>
+    <title>ABC | arkabytes</title>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <img style="float:left" src="{% static 'ABC/img/logo_abc_trans_mini.png' %}"/>
+            <a class="navbar-brand" href="{% url 'index' %}">ABC</a>
+        </div>
+
+        {% if login_form %}
+        <div id="navbar" class="navbar-collapse collapse">
+            <form class="navbar-form navbar-right" method="post" action="#">
+                <div class="form-group">
+                    <input type="text" placeholder="Email" name="email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Contraseña" name="password" class="form-control">
+                </div>
+                <input type="hidden" name="action" value="login"/>
+                <button type="submit" class="btn btn-success">Acceder</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</nav>

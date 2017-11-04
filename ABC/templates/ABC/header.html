@@ -1,0 +1,16 @@
+{% load static %}
+{% include 'ABC/short_header.html' with login_form=True %}
+
+<div class="jumbotron">
+    <div class="container">
+        <h2 style="float:left">{{ title }}</h2>
+        <ul class="nav navbar-nav navbar-right">
+            <form class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Búsqueda">
+                </div>
+                <button type="submit" class="btn btn-default">Buscar</button>
+            </form>
+        </ul>
+    </div>
+</div>
