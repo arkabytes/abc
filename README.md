@@ -6,6 +6,8 @@ Pedidos, Facturas e Inventario.
 
 Actualmente no hay ninguna versión liberada.
 
+***
+
 abc is a web application written in Python with Django framework to be used like an ERP by SME to manage Customers, Providers, Orders,
 Invoices and Stocking.
 
