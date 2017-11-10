@@ -82,8 +82,8 @@ class Item(models.Model):
     vat_type = models.ForeignKey(VatType,null=True)
 
     @classmethod
-    def create(cls, name, description, price):
-        item = cls(name=name, description=description, retail_price=price)
+    def create(cls, name, description, price, thumbnail):
+        item = cls(name=name, description=description, retail_price=price, thumbnail=thumbnail)
         return item
 
     def __str__(self):

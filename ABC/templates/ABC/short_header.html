@@ -1,13 +1,20 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html>
 <head lang="es">
     <meta charset="UTF-8">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
-        integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://cdnjs.com/libraries/popper.js"></script>
+    <script src="{% static 'ABC/js/ckeditor/ckeditor.js' %}"></script>
+
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <link href="{% static 'ABC/css/sticky-footer.css' %}" rel="stylesheet">
@@ -30,13 +37,13 @@
         <div id="navbar" class="navbar-collapse collapse">
             <form class="navbar-form navbar-right" method="post" action="#">
                 <div class="form-group">
-                    <input type="text" placeholder="Email" name="email" class="form-control">
+                    <input type="text" placeholder="{% trans 'E-mail' %}" name="email" class="form-control">
                 </div>
                 <div class="form-group">
-                    <input type="password" placeholder="Contraseña" name="password" class="form-control">
+                    <input type="password" placeholder="{% trans 'Password' %}" name="password" class="form-control">
                 </div>
                 <input type="hidden" name="action" value="login"/>
-                <button type="submit" class="btn btn-success">Acceder</button>
+                <button type="submit" class="btn btn-success">{% trans 'Login' %}</button>
             </form>
         </div>
         {% endif %}

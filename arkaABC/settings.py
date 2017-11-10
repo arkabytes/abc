@@ -25,7 +25,7 @@ SECRET_KEY = '0awda6c13@4uz=0**0(leg6on)ssi(pfi+6embvbp&yqh8dv6s'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['']
 
 
 # Application definition
@@ -121,3 +121,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Where django search for media files (image.url)
+MEDIA_URL = '/'
+
+# Where files are uploaded
+MEDIA_ROOT = '/Users/Santi/Projects/abc/ABC/static/ABC'
+
+# Global constants
+ITEMS_PER_PAGE = 5
