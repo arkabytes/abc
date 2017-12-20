@@ -1,3 +1,45 @@
-{% include 'ABC/header.html' with title='Tasks' search_form=True %}
+{% load static %}
+{% load i18n %}
+
+{% include 'ABC/header.html' %}
+{% include 'ABC/navbar.html' %}
+{% include 'ABC/page_header.html' with title='Tasks' new_link='new_task' tooltip='Add Task'  %}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Items
+    </div>
+    <div class="panel-body">
+    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-abc">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>{% trans 'Name' %}</th>
+                <th>{% trans 'Description' %}</th>
+                <th>{% trans 'Start Date' %}</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if tasks %}
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.id }}</td>
+                <td>{{ task.name }}</td>
+                <td>{{ task.description | safe | truncatewords:10 }}</td>
+                <td>{{ task.start_date}}</td>
+                <td><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                <td><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
+                       href="{% url 'delete_task' task.id %}">{% trans 'Delete' %}</a></td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+        </tbody>
+    </table>
+    </div>
+</div>
+
 
 {% include 'ABC/footer.html' %}

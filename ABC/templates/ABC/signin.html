@@ -1,21 +1,19 @@
 {% load static %}
-{% include 'ABC/short_header.html' %}
+{% load i18n %}
 
 <div class="container">
 
     <form class="form-signin">
-        <h2 class="form-signin-heading">Inicia sesión</h2>
-        <label for="inputEmail" class="sr-only">Correo Electrónico</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Correo electrónico" required autofocus>
-        <label for="inputPassword" class="sr-only">Contraseña</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña" required>
+        <h2 class="form-signin-heading">{% trans 'Log in' %}</h2>
+        <label for="inputEmail" class="sr-only">{% trans 'E-mail address' %}</label>
+        <input type="email" id="inputEmail" class="form-control" placeholder="{% trans 'E-mail address' %}" required autofocus>
+        <label for="inputPassword" class="sr-only">{% trans 'Password' %}</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="{% trans 'Password' %}" required>
         <div class="checkbox">
           <label>
-            <input type="checkbox" value="remember-me"> Recordarme
+            <input type="checkbox" value="remember-me"> {% trans 'Remember me' %}
           </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">{% trans 'Log in' %}</button>
     </form>
-</div> <!-- /container -->
-
-{% include 'ABC/footer.html' %}
+</div>

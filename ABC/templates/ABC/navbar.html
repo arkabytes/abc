@@ -1,0 +1,18 @@
+{% load static %}
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <img style='margin-left:10px;float:left;height:50px' src="{% static 'ABC/img/logo_abc_trans.png' %}"/><a class="navbar-brand" href="{% url 'index' %}">ABC-ERP</a>
+    </div>
+    <!-- /.navbar-header -->
+
+    {% include 'ABC/topnavbar.html' %}
+
+    {% include 'ABC/sidebar.html' %}
+</nav>

@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from ABC.models import Item
+from ABC.models import Item, Customer, Provider
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from arkaABC.settings import ITEMS_PER_PAGE
@@ -12,26 +12,18 @@ def index(request):
     return render(request, 'ABC/index.html')
 
 
-def items(request):
-    all_items = Item.objects.order_by('name')
-    page = request.GET.get('page', 1)
-
-    paginator = Paginator(all_items, ITEMS_PER_PAGE)
-    try:
-        items = paginator.page(page)
-    except PageNotAnInteger:
-        items = paginator.page(1)
-    except EmptyPage:
-        items = paginator.page(paginator.num_pages)
-
-    context = {'items': items}
-    return render(request, 'ABC/items.html', context)
+def signin(request):
+    return render(request, 'ABC/signin.html')
 
 
 def item(request, item_id):
     the_item = Item.objects.get(id=item_id)
     context = {'the_item': the_item}
     return render(request, 'ABC/item.html', context)
+
+
+def new_item(request):
+    return render(request, 'ABC/new_item.html')
 
 
 def add_item(request):
@@ -72,39 +64,163 @@ def add_item(request):
             return HttpResponseRedirect(reverse('new_item'))
 
 
-def remove_item(request, item_id):
+def delete_item(request, item_id):
     an_item = Item.objects.get(id=item_id)
     an_item.delete()
     return HttpResponseRedirect(reverse('items'))
 
 
-def new_item(request):
-    return render(request, 'ABC/new_item.html')
+def items(request):
+    all_items = Item.objects.order_by('name')
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(all_items, ITEMS_PER_PAGE)
+    try:
+        items = paginator.page(page)
+    except PageNotAnInteger:
+        items = paginator.page(1)
+    except EmptyPage:
+        items = paginator.page(paginator.num_pages)
+
+    context = {'items': items}
+    return render(request, 'ABC/items.html', context)
+
+
+def new_customer(request):
+    return render(request, 'ABC/new_customer.html')
+
+
+def add_customer(request):
+    pass
+
+
+def delete_customer(request, customer_id):
+    a_customer = Customer.objects.get(id=customer_id)
+    a_customer.delete()
+    return HttpResponseRedirect(reverse('customers'))
 
 
 def customers(request):
     return render(request, 'ABC/customers.html')
 
 
+def new_provider(request):
+    return render(request, 'ABC/new_provider.html')
+
+
+def add_provider(request):
+    pass
+
+
+def delete_provider(request, provider_id):
+    a_provider = Provider.objects.get(id=provider_id)
+    a_provider.delete()
+    return HttpResponseRedirect(reverse('providers'))
+
+
 def providers(request):
     return render(request, 'ABC/providers.html')
+
+
+def new_order(request):
+    return render(request, 'ABC/new_order.html')
 
 
 def orders(request):
     return render(request, 'ABC/orders.html')
 
 
+def add_order(request):
+    pass;
+
+
+def delete_order(request):
+    pass;
+
+
+def new_invoice(request):
+    return render(request, 'ABC/new_invoice.html')
+
+
 def invoices(request):
     return render(request, 'ABC/invoices.html')
+
+
+def add_invoice(request):
+    pass;
+
+
+def delete_invoice(request):
+    pass;
+
+
+def new_event(request):
+    return render(request, 'ABC/new_event.html')
 
 
 def events(request):
     return render(request, 'ABC/events.html')
 
 
+def add_event(request):
+    pass;
+
+
+def delete_event(request):
+    pass;
+
+
+def new_task(request):
+    return render(request, 'ABC/new_task.html')
+
+
 def tasks(request):
     return render(request, 'ABC/tasks.html')
 
 
-def signin(request):
-    return render(request, 'ABC/signin.html')
+def add_task(request):
+    pass;
+
+
+def delete_task(request):
+    pass;
+
+
+def master_tables(request):
+    return render(request, 'ABC/master_tables.html')
+
+
+def new_delivery_type(request):
+    return render(request, 'ABC/new_delivery_type.html')
+
+
+def add_delivery_type(request):
+    pass;
+
+
+def delete_delivery_type(request):
+    pass
+
+
+def new_payment_type(request):
+    return render(request, 'ABC/new_payment_type.html')
+
+
+def add_payment_type(request):
+    pass;
+
+
+def delete_payment_type(request):
+    pass
+
+
+def new_vat_type(request):
+    return render(request, 'ABC/new_vat_type.html')
+
+
+def add_vat_type(request):
+    pass;
+
+
+def delete_vat_type(request):
+    pass

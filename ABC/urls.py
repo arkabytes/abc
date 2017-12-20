@@ -6,17 +6,50 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'signin/$', views.signin, name='signin'),
+
+    url(r'new_item/$', views.new_item, name='new_item'),
+    url(r'add_item/$', views.add_item, name='add_item'),
+    url(r'^delete_item/(?P<item_id>[0-9]*)/$', views.delete_item, name='delete_item'),
+    url(r'^item/(?P<item_id>[0-9]*)/$', views.item, name='item'),
     url(r'items/$', views.items, name='items'),
     url(r'^items/(?P<item_pos>[0-9]*)/$', views.items, name='items'),
-    url(r'add_item/$', views.add_item, name='add_item'),
-    url(r'^remove_item/(?P<item_id>[0-9]*)/$', views.remove_item, name='remove_item'),
-    url(r'^item/(?P<item_id>[0-9]*)/$', views.item, name='item'),
-    url(r'^new_item/$', views.new_item, name='new_item'),
-    url(r'signin/$', views.signin, name='signin'),
+
+    url(r'new_provider/$', views.new_provider, name='new_provider'),
+    url(r'add_provider/$', views.add_provider, name='add_provider'),
+    url(r'delete_provider/$', views.delete_provider, name='delete_provider'),
     url(r'providers/$', views.providers, name='providers'),
+
+    url(r'new_customer/$', views.new_customer, name='new_customer'),
+    url(r'add_customer/$', views.add_customer, name='add_customer'),
+    url(r'delete_customer/$', views.delete_customer, name='delete_customer'),
     url(r'customers/$', views.customers, name='customers'),
+
+    url(r'new_order/$', views.new_order, name='new_order'),
+    url(r'add_order/$', views.add_order, name='add_order'),
+    url(r'delete_order/$', views.delete_order, name='delete_order'),
     url(r'orders/$', views.orders, name='orders'),
+
+    url(r'new_invoice/$', views.new_invoice, name='new_invoice'),
+    url(r'add_invoice/$', views.add_invoice, name='add_invoice'),
+    url(r'delete_invoice/$', views.delete_invoice, name='delete_invoice'),
     url(r'invoices/$', views.invoices, name='invoices'),
+
+    url(r'new_event/$', views.new_event, name='new_event'),
+    url(r'add_event/$', views.add_event, name='add_event'),
+    url(r'delete_event/$', views.delete_event, name='delete_event'),
     url(r'events/$', views.events, name='events'),
-    url(r'tasks/$', views.tasks, name='tasks')
+
+    url(r'new_task/$', views.new_task, name='new_task'),
+    url(r'add_task/$', views.add_task, name='add_task'),
+    url(r'delete_task/$', views.delete_task, name='delete_task'),
+    url(r'tasks/$', views.tasks, name='tasks'),
+
+    url(r'master_tables/$', views.master_tables, name='master_tables'),
+    url(r'new_delivery_type/$', views.new_delivery_type, name='new_delivery_type'),
+    url(r'add_delivery_type/$', views.add_delivery_type, name='add_delivery_type'),
+    url(r'new_payment_type/$', views.new_payment_type, name='new_payment_type'),
+    url(r'add_payment_type/$', views.add_payment_type, name='add_payment_type'),
+    url(r'new_vat_type/$', views.new_vat_type, name='new_vat_type'),
+    url(r'add_vat_type/$', views.add_vat_type, name='add_vat_type'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

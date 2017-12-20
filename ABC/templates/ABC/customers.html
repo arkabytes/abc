@@ -1,3 +1,59 @@
-{% include 'ABC/header.html' with title='Customers' search_form=True %}
+{% load static %}
+{% load i18n %}
+
+{% include 'ABC/header.html' %}
+{% include 'ABC/navbar.html' %}
+{% include 'ABC/page_header.html' with title='Customers'  new_link='new_customer' tooltip='Add Customer'  %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        {% trans 'Customers' %}
+    </div>
+    <div class="panel-body">
+    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-abc">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>{% trans 'Name' %}</th>
+                <th>{% trans 'Company Name' %}</th>
+                <th>{% trans 'E-mail' %}</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if customers %}
+        {% for customer in customers %}
+            <tr>
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.company_name }}</td>
+                <td>{{ customer.email }}</td>
+                <td><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                <td><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
+                       href="{% url 'delete_customer' customer.id %}">{% trans 'Delete' %}</a></td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+        </tbody>
+    </table>
+    </div>
+</div>
+<div class="container" style="margin-left:0px;width:25%">
+    <form class="form-anadir" action="{% url 'add_customer' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            <legend></legend>
+            <label for="inputName" class="sr-only">{% trans 'Name' %}</label>
+            <input type="text" name="name" id="inputName" class="form-control" placeholder="{% trans 'Name' %}" required autofocus>
+            <label for="inputNumber" class="sr-only">{% trans 'Company Name' %}</label>
+            <input type="text" name="company_name" id="inputName"  class="form-control" placeholder="{% trans 'Company Name' %}">
+            <label for="inputNumber" class="sr-only">{% trans 'Email Address' %}</label>
+            <input type="text" name="email" id="inputNumber" class="form-control" placeholder="{% trans 'E-mail Address' %}" required>
+            <input type="hidden" name="mode" value="quick"/>
+            <button class="btn btn-primary btn-block" type="submit">{% trans 'Quick add' %}</button>
+        </fieldset>
+    </form>
+</div>
 
 {% include 'ABC/footer.html' %}

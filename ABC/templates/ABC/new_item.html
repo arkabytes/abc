@@ -1,14 +1,19 @@
-{% include 'ABC/header.html' with title="New Item" %}
+{% load static %}
+{% load humanize %}
 {% load i18n %}
 
-{% if form.errors %}
-    {{ form.as_p }}
-{% endif %}
+{% include 'ABC/header.html' %}
+{% include 'ABC/navbar.html' %}
+{% include 'ABC/page_header.html' with title='New Item' %}
 
-<div class="container">
-    <form class="empty-form" action="{% url 'add_item' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+
+    </div>
+    <div class="panel-body">
+<form class="empty-form" action="{% url 'add_item' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
     <fieldset>
-        <legend>{% trans 'Item information' %}</legend>
+        <legend>{% trans 'Item Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>
         <div class="input-group">
             <input type="text" name="name" id="name" class="form-control" placeholder="Name" size="80" aria-describedby="basic-addon1">
@@ -103,9 +108,8 @@
         <input type="hidden" name="mode" value="complete"/>
     </fieldset>
     </form>
+    </div>
 </div>
-
-<br/>
 
 <script>
     var config = {};
@@ -119,5 +123,6 @@
     config.height = 150;
     CKEDITOR.replace('notes', config);
 </script>
+
 
 {% include 'ABC/footer.html' %}

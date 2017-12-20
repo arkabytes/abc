@@ -1,16 +1,48 @@
 {% load static %}
-
-<footer class="footer">
-    <div class="containerf">
-        <p class="text-muted">(c) 2017 arkabytes | ABC v0.1b</p>
     </div>
-</footer>
+</div>
+    <!-- /#wrapper -->
 
-<script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
-<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<script src="{% static 'ABC/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'ABC/js/jquery.jeditable.mini.js' %}"></script>
-<script type="text/javascript" src="{% static 'ABC/js/bootbox.min.js' %}"></script>
+    <!-- jQuery -->
+    <script src="{% static 'ABC/vendor/jquery/jquery.min.js' %}"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'ABC/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{% static 'ABC/vendor/metisMenu/metisMenu.min.js' %}"></script>
+    <!-- DataTables JavaScript -->
+    <script src="{% static 'ABC/vendor/datatables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'ABC/vendor/datatables-plugins/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'ABC/vendor/datatables-responsive/dataTables.responsive.js' %}"></script>
+    <!-- Morris Charts JavaScript -->
+    <script src="{% static 'ABC/vendor/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'ABC/vendor/morrisjs/morris.min.js' %}"></script>
+    <script src="{% static 'ABC/js/morris-data.js' %}"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="{% static 'ABC/js/sb-admin-2.js' %}"></script>
 
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-abc').DataTable({
+            responsive: true
+        });
+        $('#dataTables-abc2').DataTable({
+            responsive: true
+        });
+        $('#dataTables-abc3').DataTable({
+            responsive: true
+        });
+    });
+    </script>
+    <script>
+    // tooltip demo
+    $('.tooltip-demo').tooltip({
+        selector: "[data-toggle=tooltip]",
+        container: "body"
+    })
+    // popover demo
+    $("[data-toggle=popover]")
+        .popover()
+    </script>
 </body>
 </html>

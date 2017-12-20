@@ -1,0 +1,128 @@
+{% load static %}
+{% load humanize %}
+{% load i18n %}
+
+{% include 'ABC/header.html' %}
+{% include 'ABC/navbar.html' %}
+{% include 'ABC/page_header.html' with title='New Order' %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+
+    </div>
+    <div class="panel-body">
+<form class="empty-form" action="{% url 'add_item' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <fieldset>
+        <legend>{% trans 'Order Information' %}</legend>
+        <label for="name">{% trans 'Name' %}</label>
+        <div class="input-group">
+            <input type="text" name="name" id="name" class="form-control" placeholder="Name" size="80" aria-describedby="basic-addon1">
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="description">{% trans 'Description' %}</label>
+                <div class="input-group">
+                    <textarea id="description" name="description" class="form-control" placeholder="Description" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label for="notes">{% trans 'Notes' %}</label>
+                <div class="input-group">
+                    <textarea id="notes" name="notes" class="form-control" placeholder="Notes" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-lg-3">
+            <label for="stock">{% trans 'Stock' %}</label>
+                <div class="input-group">
+                    <span class="input-group-addon">#</span>
+                    <input type="number" name="stock" id="stock" style="width:150px" class="form-control" placeholder="Stock" aria-describedby="basic-addon2">
+                </div>
+            </div>
+            <div class="col-lg-3">
+            <label for="cost_price">{% trans 'Cost price' %}</label>
+                <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    <input type="text" name="cost_price" id="cost_price" style="width:150px" class="form-control" placeholder="Cost price" aria-describedby="basic-addon2">
+                </div>
+            </div>
+            <div class="col-lg-3">
+            <label for="retail_price">{% trans 'Retail price' %}</label>
+                <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    <input type="text" name="retail_price" id="retail_price" style="width:150px" class="form-control" placeholder="Retail price" aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-lg-3">
+                <label for="thumbnail">{% trans 'Thumbnail' %}</label>
+                <div class="input-group">
+                    <input type="file" name="thumbnail" id="thumbnail" class="form-control" aria-describedby="basic-addon3">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <label for="image1">{% trans 'Picture #1' %}</label>
+                <div class="input-group">
+                    <input type="file" name="image1" id="image1" class="form-control" aria-describedby="basic-addon3">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <label for="image2">{% trans 'Picture #2' %}</label>
+                <div class="input-group">
+                    <input type="file" name="image2" id="image2" class="form-control" aria-describedby="basic-addon3">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <label for="image3">{% trans 'Picture #3' %}</label>
+                <div class="input-group">
+                    <input type="file" name="image3" id="image3" class="form-control" aria-describedby="basic-addon3">
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-lg-2">
+                <label for="provider">{% trans 'Provider' %}</label>
+                <div class="input-group">
+                    <select name="provider" id="provider" class="form-control" aria-describedby="basic-addon3">
+                        <option>{% trans 'Select Provider' %}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <label for="vat_type">{% trans 'VAT Type' %}</label>
+                <div class="input-group">
+                    <select name="vat_type" id="vat_type" class="form-control" aria-describedby="basic-addon3">
+                        <option>{% trans 'Select VAT Type' %}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
+        <input type="hidden" name="mode" value="complete"/>
+    </fieldset>
+    </form>
+    </div>
+</div>
+
+<script>
+    var config = {};
+    config.placeholder = 'Description';
+    config.width = 500;
+    config.height = 150;
+    CKEDITOR.replace('description', config);
+    var config = {};
+    config.placeholder = 'Notes';
+    config.width = 500;
+    config.height = 150;
+    CKEDITOR.replace('notes', config);
+</script>
+
+
+{% include 'ABC/footer.html' %}
