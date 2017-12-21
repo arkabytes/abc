@@ -1,3 +1,6 @@
+{% load static %}
+{% load i18n %}
+
 <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse">
         <ul class="nav" id="side-menu">
@@ -10,37 +13,34 @@
                     </button>
                 </span>
                 </div>
-                <!-- /input-group -->
             </li>
             <li>
-                <a href="{% url 'index' %}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                <a href="{% url 'index' %}"><img src="{% static 'ABC/icons/inicio32.png' %}"/> {% trans 'Dashboard' %}</a>
             </li>
             <li>
-                <a href="{% url 'customers' %}"><i class="fa fa-user fa-fw"></i> Customers</a>
+                <a href="{% url 'customers' %}"><img src="{% static 'ABC/icons/usuario32.png' %}"/> {% trans 'Customers' %}</a>
             </li>
             <li>
-                <a href="{% url 'providers' %}"><i class="fa fa-briefcase fa-fw"></i> Providers</a>
+                <a href="{% url 'providers' %}"><img src="{% static 'ABC/icons/proveedor32.png' %}"/> {% trans 'Providers' %}</a>
             </li>
             <li>
-                <a href="{% url 'items' %}"><i class="fa fa-trophy fa-fw"></i> Items</a>
+                <a href="{% url 'items' %}"><img src="{% static 'ABC/icons/cesta32.png' %}"/> {% trans 'Items' %}</a>
             </li>
             <li>
-                <a href="{% url 'orders' %}"><i class="fa fa-shopping-cart fa-fw"></i> Orders</a>
+                <a href="{% url 'orders' %}"><img src="{% static 'ABC/icons/pedidos32.png' %}"/> {% trans 'Orders' %}</a>
             </li>
             <li>
-                <a href="{% url 'invoices' %}"><i class="fa fa-inbox fa-fw"></i> Invoices</a>
+                <a href="{% url 'invoices' %}"><img src="{% static 'ABC/icons/factura32.png' %}"/> {% trans 'Invoices' %}</a>
             </li>
             <li>
-                <a href="{% url 'tasks' %}"><i class="fa fa-gears fa-fw"></i> Tasks</a>
+                <a href="{% url 'tasks' %}"><img src="{% static 'ABC/icons/agenda32.png' %}"/> {% trans 'Tasks' %}</a>
             </li>
             <li>
-                <a href="{% url 'events' %}"><i class="fa fa-calendar fa-fw"></i> Events</a>
+                <a href="{% url 'events' %}"><img src="{% static 'ABC/icons/eventos32.png' %}"/> {% trans 'Events' %}</a>
             </li>
             <li>
-                <a href="{% url 'master_tables' %}"><i class="fa fa-table fa-fw"></i> Master tables</a>
+                <a href="{% url 'master_tables' %}"><img src="{% static 'ABC/icons/carpeta32.png' %}"/> {% trans 'Master Tables' %}</a>
             </li>
         </ul>
     </div>
-    <!-- /.sidebar-collapse -->
 </div>
-<!-- /.navbar-static-side -->

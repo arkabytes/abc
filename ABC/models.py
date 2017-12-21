@@ -29,7 +29,7 @@ class DeliveryType(models.Model):
 
 
 class Customer(models.Model):
-    cif = models.CharField(max_length=25,unique=True)
+    cif = models.CharField(max_length=25)
     company_name = models.CharField(max_length=50,unique=True)
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
@@ -40,9 +40,9 @@ class Customer(models.Model):
     country = models.CharField(max_length=100)
     phone = models.CharField(max_length=100)
     fax = models.CharField(max_length=100)
-    email = models.EmailField(default=None)
+    email = models.EmailField(default=None,null=True)
     web = models.URLField(default='http://')
-    notes = models.TextField(default=None)
+    notes = models.TextField(default=None,null=True)
 
     def __str__(self):
         return self.company_name
@@ -51,7 +51,7 @@ class Customer(models.Model):
 class Provider(models.Model):
     name = models.CharField(max_length=50,unique=True)
     contact_name = models.CharField(max_length=100)
-    cif = models.CharField(max_length=25,unique=True)
+    cif = models.CharField(max_length=25)
     address = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     province = models.CharField(max_length=100)

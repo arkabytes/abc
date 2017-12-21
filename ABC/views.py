@@ -5,6 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from arkaABC.settings import ITEMS_PER_PAGE
 from .forms import ItemQuickForm, ItemForm
+from .forms import CustomerQuickForm, CustomerForm
 from django.shortcuts import render
 
 
@@ -91,7 +92,30 @@ def new_customer(request):
 
 
 def add_customer(request):
-    pass
+    if request.method == 'POST':
+        if request.POST['mode'] == 'quick':
+            # Add a new customer in quick mode
+            form = CustomerQuickForm(request.POST, request.FILES)
+            if form.is_valid():
+                the_customer = Customer()
+                the_customer.company_name = form.cleaned_data['company_name']
+                the_customer.name = form.cleaned_data['name']
+                the_customer.email = form.cleaned_data['email']
+                the_customer.save()
+
+            return HttpResponseRedirect(reverse('customers'))
+        else:
+            # Add a new customer in complete mode (with every field filled)
+            form = CustomerForm(request.POST, request.FILES)
+            if form.is_valid():
+                the_customer = Customer()
+                the_customer.company_name = form.cleaned_data['company_name']
+                the_customer.name = form.cleaned_data['name']
+                the_customer.save()
+            else:
+                return render(request, 'ABC/new_customer.html', {'form':form})
+
+            return HttpResponseRedirect(reverse('new_customer'))
 
 
 def delete_customer(request, customer_id):
@@ -101,7 +125,9 @@ def delete_customer(request, customer_id):
 
 
 def customers(request):
-    return render(request, 'ABC/customers.html')
+    all_customers = Customer.objects.order_by('name')
+    context = {'customers': all_customers}
+    return render(request, 'ABC/customers.html', context)
 
 
 def new_provider(request):

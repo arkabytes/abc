@@ -16,20 +16,20 @@
         <legend>{% trans 'Item Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>
         <div class="input-group">
-            <input type="text" name="name" id="name" class="form-control" placeholder="Name" size="80" aria-describedby="basic-addon1">
+            <input type="text" name="name" id="name" class="form-control" placeholder="{% trans 'Name' %}" size="80" aria-describedby="basic-addon1">
         </div>
         <br/>
         <div class="row">
             <div class="col-lg-6">
                 <label for="description">{% trans 'Description' %}</label>
                 <div class="input-group">
-                    <textarea id="description" name="description" class="form-control" placeholder="Description" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
+                    <textarea id="description" name="description" class="form-control" placeholder="{% trans 'Description' %}" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
                 </div>
             </div>
             <div class="col-lg-6">
                 <label for="notes">{% trans 'Notes' %}</label>
                 <div class="input-group">
-                    <textarea id="notes" name="notes" class="form-control" placeholder="Notes" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
+                    <textarea id="notes" name="notes" class="form-control" placeholder="{% trans 'Notes' %}" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
                 </div>
             </div>
         </div>
@@ -39,21 +39,21 @@
             <label for="stock">{% trans 'Stock' %}</label>
                 <div class="input-group">
                     <span class="input-group-addon">#</span>
-                    <input type="number" name="stock" id="stock" style="width:150px" class="form-control" placeholder="Stock" aria-describedby="basic-addon2">
+                    <input type="number" name="stock" id="stock" style="width:150px" class="form-control" placeholder="{% trans 'Stock' %}" aria-describedby="basic-addon2">
                 </div>
             </div>
             <div class="col-lg-3">
             <label for="cost_price">{% trans 'Cost price' %}</label>
                 <div class="input-group">
                     <span class="input-group-addon">$</span>
-                    <input type="text" name="cost_price" id="cost_price" style="width:150px" class="form-control" placeholder="Cost price" aria-describedby="basic-addon2">
+                    <input type="text" name="cost_price" id="cost_price" style="width:150px" class="form-control" placeholder="{% trans 'Coste price' %}" aria-describedby="basic-addon2">
                 </div>
             </div>
             <div class="col-lg-3">
             <label for="retail_price">{% trans 'Retail price' %}</label>
                 <div class="input-group">
                     <span class="input-group-addon">$</span>
-                    <input type="text" name="retail_price" id="retail_price" style="width:150px" class="form-control" placeholder="Retail price" aria-describedby="basic-addon2">
+                    <input type="text" name="retail_price" id="retail_price" style="width:150px" class="form-control" placeholder="{% trans 'Retail price' %}" aria-describedby="basic-addon2">
                 </div>
             </div>
         </div>
@@ -112,6 +112,10 @@
 </div>
 
 <script>
+    $( document ).ready(function() {
+      $( "#name" ).focus();
+    });
+
     var config = {};
     config.placeholder = 'Description';
     config.width = 500;

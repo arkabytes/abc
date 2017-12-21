@@ -3,7 +3,7 @@
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
-{% include 'ABC/page_header.html' with title='Tasks' new_link='new_task' tooltip='Add Task'  %}
+{% include 'ABC/page_header.html' with title='Tasks' icon='ABC/icons/anadirtarea32.png' new_link='new_task' tooltip='Add Task'  %}
 
 
 <div class="panel panel-default">
@@ -30,8 +30,8 @@
                 <td>{{ task.name }}</td>
                 <td>{{ task.description | safe | truncatewords:10 }}</td>
                 <td>{{ task.start_date}}</td>
-                <td><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
-                <td><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
+                <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                        href="{% url 'delete_task' task.id %}">{% trans 'Delete' %}</a></td>
             </tr>
         {% endfor %}

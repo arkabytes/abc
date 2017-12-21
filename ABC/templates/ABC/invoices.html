@@ -3,7 +3,7 @@
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
-{% include 'ABC/page_header.html' with title='Invoices'  new_link='new_invoice' tooltip='Add Invoice'  %}
+{% include 'ABC/page_header.html' with title='Invoices' icon='ABC/icons/anadirfactura32.png' new_link='new_invoice' tooltip='Add Invoice'  %}
 
 
 <div class="panel panel-default">
@@ -30,8 +30,8 @@
                 <td>{{ invoice.number }}</td>
                 <td>{{ invoice.date }}</td>
                 <td>{{ invoice.customer.name }}</td>
-                <td><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
-                <td><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
+                <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                        href="{% url 'delete_invoice' invoice.id %}">{% trans 'Delete' %}</a></td>
             </tr>
         {% endfor %}

@@ -17,32 +17,32 @@ urlpatterns = [
 
     url(r'new_provider/$', views.new_provider, name='new_provider'),
     url(r'add_provider/$', views.add_provider, name='add_provider'),
-    url(r'delete_provider/$', views.delete_provider, name='delete_provider'),
+    url(r'delete_provider/(?P<provider_id>[0-9]*)/$', views.delete_provider, name='delete_provider'),
     url(r'providers/$', views.providers, name='providers'),
 
     url(r'new_customer/$', views.new_customer, name='new_customer'),
     url(r'add_customer/$', views.add_customer, name='add_customer'),
-    url(r'delete_customer/$', views.delete_customer, name='delete_customer'),
+    url(r'delete_customer/(?P<customer_id>[0-9]*)/$', views.delete_customer, name='delete_customer'),
     url(r'customers/$', views.customers, name='customers'),
 
     url(r'new_order/$', views.new_order, name='new_order'),
     url(r'add_order/$', views.add_order, name='add_order'),
-    url(r'delete_order/$', views.delete_order, name='delete_order'),
+    url(r'delete_order/(?P<order_id>[0-9]*)/$', views.delete_order, name='delete_order'),
     url(r'orders/$', views.orders, name='orders'),
 
     url(r'new_invoice/$', views.new_invoice, name='new_invoice'),
     url(r'add_invoice/$', views.add_invoice, name='add_invoice'),
-    url(r'delete_invoice/$', views.delete_invoice, name='delete_invoice'),
+    url(r'delete_invoice/(?P<invoice_id>[0-9]*)/$', views.delete_invoice, name='delete_invoice'),
     url(r'invoices/$', views.invoices, name='invoices'),
 
     url(r'new_event/$', views.new_event, name='new_event'),
     url(r'add_event/$', views.add_event, name='add_event'),
-    url(r'delete_event/$', views.delete_event, name='delete_event'),
+    url(r'delete_event/(?P<event_id>[0-9]*)/$', views.delete_event, name='delete_event'),
     url(r'events/$', views.events, name='events'),
 
     url(r'new_task/$', views.new_task, name='new_task'),
     url(r'add_task/$', views.add_task, name='add_task'),
-    url(r'delete_task/$', views.delete_task, name='delete_task'),
+    url(r'delete_task/(?P<task_id>[0-9]*)/$', views.delete_task, name='delete_task'),
     url(r'tasks/$', views.tasks, name='tasks'),
 
     url(r'master_tables/$', views.master_tables, name='master_tables'),

@@ -3,7 +3,7 @@
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
-{% include 'ABC/page_header.html' with title='Customers'  new_link='new_customer' tooltip='Add Customer'  %}
+{% include 'ABC/page_header.html' with title='Customers' icon='ABC/icons/anadirusuario32.png' new_link='new_customer' tooltip='Add Customer'  %}
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -29,8 +29,8 @@
                 <td>{{ customer.name }}</td>
                 <td>{{ customer.company_name }}</td>
                 <td>{{ customer.email }}</td>
-                <td><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
-                <td><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
+                <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                        href="{% url 'delete_customer' customer.id %}">{% trans 'Delete' %}</a></td>
             </tr>
         {% endfor %}

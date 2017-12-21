@@ -4,7 +4,7 @@
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
-{% include 'ABC/page_header.html' with title='Items' new_link='new_item' tooltip='Add Item' %}
+{% include 'ABC/page_header.html' with title='Items' icon='ABC/icons/anadircesta32.png' new_link='new_item' tooltip='Add Item' %}
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -26,12 +26,12 @@
         {% if items %}
         {% for item in items %}
             <tr>
-                <td>{{ item.id }}</td>
+                <td class="text-center">{{ item.id }}</td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.description | safe | truncatewords:10}}</td>
-                <td>{{ item.retail_price | floatformat:2 | intcomma}}</td>
-                <td><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
-                <td><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
+                <td>{{ item.retail_price | floatformat:2 | intcomma}} €</td>
+                <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                        href="{% url 'delete_item' item.id %}">{% trans 'Delete' %}</a></td>
             </tr>
         {% endfor %}
@@ -46,7 +46,7 @@
         <fieldset>
             <legend></legend>
             <label for="inputName" class="sr-only">{% trans 'Name' %}</label>
-            <input type="text" name="name" id="inputName" class="form-control" placeholder="{% trans 'Name' %}" required autofocus>
+            <input type="text" name="name" id="inputName" class="form-control" placeholder="{% trans 'Name' %}" required autofocus/>
             <label for="inputNumber" class="sr-only">{% trans 'Description' %}</label>
             <input type="text" name="description" id="inputName"  class="form-control" placeholder="{% trans 'Description' %}">
             <label for="inputNumber" class="sr-only">{% trans 'Retail price' %}</label>
