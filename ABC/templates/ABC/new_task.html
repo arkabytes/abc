@@ -11,95 +11,103 @@
 
     </div>
     <div class="panel-body">
-<form class="empty-form" action="{% url 'add_item' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <form class="empty-form" action="{% url 'add_task' %}" method="post">{% csrf_token %}
     <fieldset>
         <legend>{% trans 'Task Information' %}</legend>
-        <label for="name">{% trans 'Name' %}</label>
-        <div class="input-group">
-            <input type="text" name="name" id="name" class="form-control" placeholder="Name" size="80" aria-describedby="basic-addon1">
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="name">{% trans 'Name' %}</label>
+                <div class="input-group">
+                    <input type="text" name="name" id="name" class="form-control" placeholder="{% trans 'Name' %}" size="50" aria-describedby="basic-addon1">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label for="state">{% trans 'State' %}</label>
+                <div class="input-group">
+                    <select name="state" id="state">
+                        <option>{% trans 'To do' %}</option>
+                        <option>{% trans 'Doing' %}</option>
+                        <option>{% trans 'Done' %}</option>
+                        <option>{% trans 'Discarded' %}</option>
+                    </select>
+                </div>
+            </div>
         </div>
+
         <br/>
         <div class="row">
             <div class="col-lg-6">
                 <label for="description">{% trans 'Description' %}</label>
                 <div class="input-group">
-                    <textarea id="description" name="description" class="form-control" placeholder="Description" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
+                    <textarea id="description" name="description" class="form-control" placeholder="{% trans 'Description' %}" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
                 </div>
             </div>
             <div class="col-lg-6">
-                <label for="notes">{% trans 'Notes' %}</label>
+                <label for="description">{% trans 'Notice' %}</label>
                 <div class="input-group">
-                    <textarea id="notes" name="notes" class="form-control" placeholder="Notes" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
+                    <textarea id="notice" name="notice" class="form-control" placeholder="{% trans 'Notice' %}" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
                 </div>
             </div>
         </div>
         <br/>
         <div class="row">
             <div class="col-lg-3">
-            <label for="stock">{% trans 'Stock' %}</label>
+                <label for="date">{% trans 'Date' %}</label>
                 <div class="input-group">
                     <span class="input-group-addon">#</span>
-                    <input type="number" name="stock" id="stock" style="width:150px" class="form-control" placeholder="Stock" aria-describedby="basic-addon2">
+                    <input type="date" name="date" id="date" style="width:150px" class="form-control" placeholder="{% trans 'Date' %}" aria-describedby="basic-addon2">
                 </div>
             </div>
             <div class="col-lg-3">
-            <label for="cost_price">{% trans 'Cost price' %}</label>
+                <label for="start_date">{% trans 'Start Date' %}</label>
                 <div class="input-group">
                     <span class="input-group-addon">$</span>
-                    <input type="text" name="cost_price" id="cost_price" style="width:150px" class="form-control" placeholder="Cost price" aria-describedby="basic-addon2">
+                    <input type="date" name="start_date" id="start_date" style="width:150px" class="form-control" placeholder="{% trans 'Start Date' %}" aria-describedby="basic-addon2">
                 </div>
             </div>
             <div class="col-lg-3">
-            <label for="retail_price">{% trans 'Retail price' %}</label>
+                <label for="finish_date">{% trans 'Finish Date' %}</label>
                 <div class="input-group">
                     <span class="input-group-addon">$</span>
-                    <input type="text" name="retail_price" id="retail_price" style="width:150px" class="form-control" placeholder="Retail price" aria-describedby="basic-addon2">
+                    <input type="date" name="finish_date" id="finish_date" style="width:150px" class="form-control" placeholder="{% trans 'Finish Date' %}" aria-describedby="basic-addon2">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <label for="notice_date">{% trans 'Notice Date' %}</label>
+                <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    <input type="date" name="notice_date" id="notice_date" style="width:150px" class="form-control" placeholder="{% trans 'Notice Date' %}" aria-describedby="basic-addon2">
                 </div>
             </div>
         </div>
         <br/>
         <div class="row">
-            <div class="col-lg-3">
-                <label for="thumbnail">{% trans 'Thumbnail' %}</label>
-                <div class="input-group">
-                    <input type="file" name="thumbnail" id="thumbnail" class="form-control" aria-describedby="basic-addon3">
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <label for="image1">{% trans 'Picture #1' %}</label>
-                <div class="input-group">
-                    <input type="file" name="image1" id="image1" class="form-control" aria-describedby="basic-addon3">
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <label for="image2">{% trans 'Picture #2' %}</label>
-                <div class="input-group">
-                    <input type="file" name="image2" id="image2" class="form-control" aria-describedby="basic-addon3">
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <label for="image3">{% trans 'Picture #3' %}</label>
-                <div class="input-group">
-                    <input type="file" name="image3" id="image3" class="form-control" aria-describedby="basic-addon3">
-                </div>
-            </div>
+
         </div>
         <br/>
         <div class="row">
-            <div class="col-lg-2">
+            <div class="col-lg-3">
+                <label for="customer">{% trans 'Customer' %}</label>
+                <div class="input-group">
+                    <input type="text" name="customer" id="customer" class="form-control" placeholder="{% trans 'Customer' %}" aria-describedby="basic-addon3">
+                </div>
+            </div>
+            <div class="col-lg-3">
                 <label for="provider">{% trans 'Provider' %}</label>
                 <div class="input-group">
-                    <select name="provider" id="provider" class="form-control" aria-describedby="basic-addon3">
-                        <option>{% trans 'Select Provider' %}</option>
-                    </select>
+                    <input type="text" name="provider" id="provider" class="form-control" placeholder="{% trans 'Provider' %}" aria-describedby="basic-addon3">
                 </div>
             </div>
-            <div class="col-lg-2">
-                <label for="vat_type">{% trans 'VAT Type' %}</label>
+            <div class="col-lg-3">
+                <label for="order">{% trans 'Order' %}</label>
                 <div class="input-group">
-                    <select name="vat_type" id="vat_type" class="form-control" aria-describedby="basic-addon3">
-                        <option>{% trans 'Select VAT Type' %}</option>
-                    </select>
+                    <input type="text" name="order" id="order" class="form-control" placeholder="{% trans 'Order' %}" aria-describedby="basic-addon3">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <label for="location">{% trans 'Location' %}</label>
+                <div class="input-group">
+                    <input type="text" name="location" id="location" class="form-control" placeholder="{% trans 'Location' %}" aria-describedby="basic-addon3">
                 </div>
             </div>
         </div>
@@ -118,10 +126,10 @@
     config.height = 150;
     CKEDITOR.replace('description', config);
     var config = {};
-    config.placeholder = 'Notes';
+    config.placeholder = 'Notice';
     config.width = 500;
     config.height = 150;
-    CKEDITOR.replace('notes', config);
+    CKEDITOR.replace('notice', config);
 </script>
 
 
