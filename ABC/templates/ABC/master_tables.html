@@ -8,7 +8,9 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <strong>Delivery Types</strong> <a class="btn btn-sm btn-default" href="{% url 'new_delivery_type' %}"><img src="{% static 'ABC/icons/anadirformaenvio32.png' %}"/></a>
+        <strong>Delivery Types</strong>
+            <a class="btn btn-sm btn-default" href="{% url 'new_delivery_type' %}" title="{% trans 'Add Delivery Type' %}">
+                <img src="{% static 'ABC/icons/anadirformaenvio32.png' %}"/></a>
     </div>
     <div class="panel-body">
     <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-abc">
@@ -43,7 +45,9 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <strong>Payment Types</strong> <a class="btn btn-sm btn-default" href="{% url 'new_payment_type' %}"><img src="{% static 'ABC/icons/anadirformapago32.png' %}"/></a>
+        <strong>Payment Types</strong>
+            <a class="btn btn-sm btn-default" href="{% url 'new_payment_type' %}" title="{% trans 'Add Payment Type' %}">
+                <img src="{% static 'ABC/icons/anadirformapago32.png' %}"/></a>
     </div>
     <div class="panel-body">
     <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-abc2">
@@ -78,7 +82,9 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <strong>VAT Types</strong> <a class="btn btn-sm btn-default" href="{% url 'new_vat_type' %}"><img src="{% static 'ABC/icons/anadirtipoiva32.png' %}"/></a>
+        <strong>VAT Types</strong>
+            <a class="btn btn-sm btn-default" href="{% url 'new_vat_type' %}" title="{% trans 'Add VAT Type' %}">
+                <img src="{% static 'ABC/icons/anadirtipoiva32.png' %}"/></a>
     </div>
     <div class="panel-body">
     <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-abc3">

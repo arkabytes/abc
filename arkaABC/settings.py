@@ -127,6 +127,7 @@ MEDIA_URL = '/'
 
 # Where files are uploaded
 MEDIA_ROOT = '/Users/Santi/Projects/abc/ABC/static/ABC'
+#MEDIA_ROOT = '/home/astable/Projects/abc/ABC/static/ABC'
 
 # Global constants
 ITEMS_PER_PAGE = 5
