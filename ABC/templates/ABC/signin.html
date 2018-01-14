@@ -1,12 +1,29 @@
 {% load static %}
 {% load i18n %}
 
-<div class="container">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'ABC/img/logo.ico' %}">
 
-    <form class="form-signin">
-        <h2 class="form-signin-heading">{% trans 'Log in' %}</h2>
-        <label for="inputEmail" class="sr-only">{% trans 'E-mail address' %}</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="{% trans 'E-mail address' %}" required autofocus>
+    <title>ABC-ERP</title>
+
+    <link href="{% static 'ABC/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'ABC/css/signin.css' %}" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <form class="form-signin">
+        <h2 class="form-signin-heading">{% trans 'Please sign in' %}</h2>
+        <label for="inputEmail" class="sr-only">{% trans 'Email address' %}</label>
+        <input type="email" id="inputEmail" class="form-control" placeholder="{% trans 'Email address' %}" required autofocus>
         <label for="inputPassword" class="sr-only">{% trans 'Password' %}</label>
         <input type="password" id="inputPassword" class="form-control" placeholder="{% trans 'Password' %}" required>
         <div class="checkbox">
@@ -14,6 +31,9 @@
             <input type="checkbox" value="remember-me"> {% trans 'Remember me' %}
           </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">{% trans 'Log in' %}</button>
-    </form>
-</div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">{% trans 'Sign in' %}</button>
+      </form>
+
+    </div>
+  </body>
+</html>

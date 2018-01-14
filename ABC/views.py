@@ -1,12 +1,14 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
-from ABC.models import Item, Customer, Provider
+from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from reportlab.pdfgen import canvas
+from io import BytesIO
 
+from ABC.models import Item, Customer, Provider, VatType
 from arkaABC.settings import ITEMS_PER_PAGE
 from .forms import ItemQuickForm, ItemForm
-from .forms import CustomerQuickForm, CustomerForm
-from django.shortcuts import render
+from .forms import CustomerQuickForm, CustomerForm, VatTypeForm
 
 
 def index(request):
@@ -87,6 +89,12 @@ def items(request):
     return render(request, 'ABC/items.html', context)
 
 
+def customer(request, customer_id):
+    the_customer = Item.objects.get(id=customer_id)
+    context = {'the_customer': the_customer}
+    return render(request, 'ABC/customer.html', context)
+
+
 def new_customer(request):
     return render(request, 'ABC/new_customer.html')
 
@@ -122,6 +130,24 @@ def delete_customer(request, customer_id):
     a_customer = Customer.objects.get(id=customer_id)
     a_customer.delete()
     return HttpResponseRedirect(reverse('customers'))
+
+
+def report_customers(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="customers.pdf"'
+
+    buffer = BytesIO()
+
+    can = canvas.Canvas(buffer)
+    can.drawString(0, 0, "Customers")
+    can.showPage()
+    can.save()
+
+    pdf = buffer.getvalue()
+    buffer.close()
+    response.write(pdf)
+
+    return response
 
 
 def customers(request):
@@ -245,7 +271,18 @@ def new_vat_type(request):
 
 
 def add_vat_type(request):
-    pass;
+    if request.method == 'POST':
+        # Add a new VAT Type
+        form = VatTypeForm(request.POST, request.FILES)
+        if form.is_valid():
+            the_vat_type = VatType()
+            the_vat_type.name = form.cleaned_data['name']
+            the_vat_type.rate = form.cleaned_data['rate']
+            the_vat_type.save()
+        else:
+            return render(request, 'ABC/new_vat_type.html', {'form':form})
+
+        return HttpResponseRedirect(reverse('new_vat_type'))
 
 
 def delete_vat_type(request):

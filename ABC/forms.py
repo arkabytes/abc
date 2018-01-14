@@ -1,5 +1,5 @@
 from django import forms
-from .models import Item, Customer
+from .models import Item, Customer, VatType
 
 
 class ItemQuickForm(forms.ModelForm):
@@ -25,3 +25,9 @@ class CustomerForm(forms.ModelForm):
     class Meta:
         fields = ('company_name', 'name')
         model = Customer
+
+
+class VatTypeForm(forms.ModelForm):
+    class Meta:
+        fields = ('name', 'rate')
+        model = VatType

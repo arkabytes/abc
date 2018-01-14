@@ -13,7 +13,6 @@ urlpatterns = [
     url(r'^delete_item/(?P<item_id>[0-9]*)/$', views.delete_item, name='delete_item'),
     url(r'^item/(?P<item_id>[0-9]*)/$', views.item, name='item'),
     url(r'items/$', views.items, name='items'),
-    url(r'^items/(?P<item_pos>[0-9]*)/$', views.items, name='items'),
 
     url(r'new_provider/$', views.new_provider, name='new_provider'),
     url(r'add_provider/$', views.add_provider, name='add_provider'),
@@ -23,6 +22,7 @@ urlpatterns = [
     url(r'new_customer/$', views.new_customer, name='new_customer'),
     url(r'add_customer/$', views.add_customer, name='add_customer'),
     url(r'delete_customer/(?P<customer_id>[0-9]*)/$', views.delete_customer, name='delete_customer'),
+    url(r'report_customers/$', views.report_customers, name='report_customers'),
     url(r'customers/$', views.customers, name='customers'),
 
     url(r'new_order/$', views.new_order, name='new_order'),
