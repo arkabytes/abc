@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^delete_item/(?P<item_id>[0-9]*)/$', views.delete_item, name='delete_item'),
     url(r'^item/(?P<item_id>[0-9]*)/$', views.item, name='item'),
     url(r'items/$', views.items, name='items'),
+    url(r'^autocomplete_item/$', views.autocomplete_item, name='autocomplete_item'),
 
     url(r'new_provider/$', views.new_provider, name='new_provider'),
     url(r'add_provider/$', views.add_provider, name='add_provider'),
@@ -24,6 +25,7 @@ urlpatterns = [
     url(r'delete_customer/(?P<customer_id>[0-9]*)/$', views.delete_customer, name='delete_customer'),
     url(r'report_customers/$', views.report_customers, name='report_customers'),
     url(r'customers/$', views.customers, name='customers'),
+    url(r'^autocomplete_customer/$', views.autocomplete_customer, name='autocomplete_customer'),
 
     url(r'new_order/$', views.new_order, name='new_order'),
     url(r'add_order/$', views.add_order, name='add_order'),

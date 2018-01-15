@@ -6,12 +6,76 @@
 {% include 'ABC/navbar.html' %}
 {% include 'ABC/page_header.html' with title='New Order' %}
 
+<script type="text/javascript">
+    function remove_item(element) {
+        alert(element.value);
+    }
+
+    jQuery(document).ready(function() {
+        $('#add_order').keydown(function(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        $('#add_item').autocomplete({
+            source: "{% url 'autocomplete_item' %}",
+            minLength: 2,
+            select: function(event, ui) {
+
+                var code = "<tr><td class=\"col-sm-8 col-md-6\"><div class=\"media\"><a class=\"thumbnail pull-left\" href=\"#\">" +
+                "<img class=\"media-object\" src=\"http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png\" style=\"width: 72px; height: 72px;\"> </a>" +
+                "<div class=\"media-body\">" +
+                "<h4 class=\"media-heading\" style=\"margin-left:5px\"><a href=\"#\"><item_name></a></h4>" +
+                "<h5 class=\"media-heading\" style=\"margin-left:5px\"> by <a href=\"#\"><provider_name></a></h5>" +
+                "<span style=\"margin-left:5px\">Status: </span><span class=\"text-success\"><strong><availability></strong></span></div></div></td>" +
+                "<td class=\"col-sm-1 col-md-1\" style=\"text-align: center\">" +
+                "<input type=\"number\" class=\"form-control\" id=\"quantity\" value=\"1\"></td>" +
+                "<td class=\"col-sm-1 col-md-1 text-center\"><strong><retail_price></strong></td>" +
+                "<td class=\"col-sm-1 col-md-1 text-center\"><strong><total></strong></td>" +
+                "<td class=\"col-sm-1 col-md-1\">" +
+                "<button type=\"button\" onclick=\"javascript:remove_item(this);\" value=\"<item_id>\" class=\"btn btn-danger\">" +
+                "<span class=\"glyphicon glyphicon-remove\"></span> Remove" +
+                "</button></td></tr>";
+
+                code = code.replace("<item_name>", ui.item.name);
+                code = code.replace("<item_id>", ui.item.id);
+                code = code.replace("<availability>", ui.item.availability);
+                code = code.replace("<retail_price>", ui.item.retail_price);
+                code = code.replace("<total>", ui.item.retail_price);
+                //code = code.replace("<provider_name>", ui.item.provider_name);
+
+                event.preventDefault();
+                $('#details_body').prepend(code);
+                $('#add_item').val('');
+                return false;
+            }
+        })
+        .autocomplete("instance")._renderItem = function( ul, item ) {
+            return $("<li>")
+                .append("<div><strong>" + item.label + "</strong><br>" + item.description + "</div>")
+                .appendTo(ul);
+        };
+
+        $('#customer').autocomplete({
+            source: "{% url 'autocomplete_customer' %}",
+            minLength: 2,
+
+        }).autocomplete("instance")._renderItem = function( ul, item ) {
+            return $("<li>")
+                .append("<div><strong>" + item.label + "</strong><br>" + item.company_name + "</div>")
+                .appendTo(ul);
+        };
+    });
+</script>
+
 <div class="panel panel-default">
     <div class="panel-heading">
 
     </div>
-    <div class="panel-body">
-<form class="empty-form" action="{% url 'add_order' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+<div class="panel-body">
+<form id="add_order" class="empty-form" action="{% url 'add_order' %}" method="post">{% csrf_token %}
     <fieldset>
         <legend>{% trans 'Order Information' %}</legend>
         <div class="row">
@@ -36,7 +100,7 @@
             <div class="col-lg-3">
                 <label for="state">{% trans 'Delivery Date' %}</label>
                 <div class="input-group">
-                    <select name="state" id="state">
+                    <select class="form-control" name="state" id="state">
                         <option>Unfinished</option>
                         <option>Pending</option>
                         <option>Ready</option>
@@ -51,19 +115,19 @@
             <div class="col-lg-3">
                 <label for="Customer">{% trans 'Customer' %}</label>
                 <div class="input-group">
-                    <input type="text" name="customer" id="customer" class="form-control" placeholder="{% trans 'Customer' %}" size="10" aria-describedby="basic-addon1">
+                    <input type="text" name="customer" id="customer" class="form-control" placeholder="{% trans 'Customer' %}" size="20" aria-describedby="basic-addon1">
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="delivery_type">{% trans 'Delivery Type' %}</label>
                 <div class="input-group">
-                    <input type="text" name="delivery_type" id="delivery_type" class="form-control" placeholder="{% trans 'Delivery Type' %}" size="10" aria-describedby="basic-addon1">
+                    <input type="text" name="delivery_type" id="delivery_type" class="form-control" placeholder="{% trans 'Delivery Type' %}" size="20" aria-describedby="basic-addon1">
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="payment_type">{% trans 'Payment Type' %}</label>
                 <div class="input-group">
-                    <input type="text" name="payment_type" id="payment_type" class="form-control" placeholder="{% trans 'Payment Type' %}" size="10" aria-describedby="basic-addon1">
+                    <input type="text" name="payment_type" id="payment_type" class="form-control" placeholder="{% trans 'Payment Type' %}" size="20" aria-describedby="basic-addon1">
                 </div>
             </div>
         </div>
@@ -80,18 +144,88 @@
     </fieldset>
     <fieldset>
         <legend>Details Information</legend>
-        <div class="row">
-            <div class="col-lg-3">
-                <label for="item">{% trans 'Item' %}</label>
-                <div class="input-group">
-                    <input type="text" name="item" id="item" class="form-control" placeholder="{% trans 'Item' %}" size="10" aria-describedby="basic-addon1">
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <button class="btn btn-primary btn-block">+</button>
-            </div>
+        <div class="container">
+            <input type="text" name="add_item" id="add_item" class="form-control" placeholder="{% trans 'Add Item' %}" size="30" aria-describedby="basic-addon1">
         </div>
-        <br>
+        <br/>
+        <div class="col-sm-12 col-md-10 col-md-offset-1">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th class="text-center">Price</th>
+                        <th class="text-center">Total</th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody id="details_body">
+                    <!--<tr>
+                        <td class="col-sm-8 col-md-6">
+                        <div class="media">
+                            <a class="thumbnail pull-left" href="#"> <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" style="width: 72px; height: 72px;"> </a>
+                            <div class="media-body">
+                                <h4 class="media-heading" style="margin-left:5px"><a href="#">An item</a></h4>
+                                <h5 class="media-heading" style="margin-left:5px"> by <a href="#">Arkabytes</a></h5>
+                                <span style="margin-left:5px">Status: </span><span class="text-success"><strong>In Stock</strong></span>
+                            </div>
+                        </div></td>
+                        <td class="col-sm-1 col-md-1" style="text-align: center">
+                        <input type="number" class="form-control" id="quantity" value="3">
+                        </td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong>$4.87</strong></td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong>$14.61</strong></td>
+                        <td class="col-sm-1 col-md-1">
+                        <button type="button" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove"></span> Remove
+                        </button></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-6">
+                        <div class="media">
+                            <a class="thumbnail pull-left" href="#">
+                                <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" style="width: 72px; height: 72px;"> </a>
+                            <div class="media-body">
+                                <h4 class="media-heading" style="margin-left:5px"><a href="#">Another Item</a></h4>
+                                <h5 class="media-heading" style="margin-left:5px"> by <a href="#">CDmon</a></h5>
+                                <span style="margin-left:5px">Status: </span><span class="text-warning"><strong>Leaves warehouse in 2 - 3 weeks</strong></span>
+                            </div>
+                        </div></td>
+                        <td class="col-md-1" style="text-align: center">
+                        <input type="number" class="form-control" id="quantity" value="2">
+                        </td>
+                        <td class="col-md-1 text-center"><strong>$4.99</strong></td>
+                        <td class="col-md-1 text-center"><strong>$9.98</strong></td>
+                        <td class="col-md-1">
+                        <button type="button" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove"></span> Remove
+                        </button></td>
+                    </tr>-->
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td><h5>Subtotal</h5></td>
+                        <td class="text-right"><h5><strong>$24.59</strong></h5></td>
+                    </tr>
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td><h5>Estimated shipping</h5></td>
+                        <td class="text-right"><h5><strong>$6.94</strong></h5></td>
+                    </tr>
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td><h3>Total</h3></td>
+                        <td class="text-right"><h3><strong>$31.53</strong></h3></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br/>
         <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
         <input type="hidden" name="mode" value="complete"/>
     </fieldset>

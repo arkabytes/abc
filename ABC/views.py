@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from reportlab.pdfgen import canvas
 from io import BytesIO
+import json
 
 from ABC.models import Item, Customer, Provider, VatType
 from arkaABC.settings import ITEMS_PER_PAGE
@@ -89,6 +90,33 @@ def items(request):
     return render(request, 'ABC/items.html', context)
 
 
+def autocomplete_item(request):
+    data = request.GET
+    content_data = data.get('term')
+    if content_data:
+        items = Item.objects.filter(name__contains=content_data)
+    else:
+        items = Item.objects.all()
+
+    results = []
+    for item in items:
+        item_json = {}
+        item_json['label'] = item.name
+        item_json['id'] = item.id
+        item_json['name'] = item.name
+        item_json['description'] = item.description
+        if item.stock > 0:
+            item_json['availability'] = 'In Stock'
+        else:
+            item_json['availability'] = 'Out of Stock'
+        item_json['retail_price'] = item.retail_price
+        results.append(item_json)
+
+    data = json.dumps(results)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+
 def customer(request, customer_id):
     the_customer = Item.objects.get(id=customer_id)
     context = {'the_customer': the_customer}
@@ -154,6 +182,27 @@ def customers(request):
     all_customers = Customer.objects.order_by('name')
     context = {'customers': all_customers}
     return render(request, 'ABC/customers.html', context)
+
+
+def autocomplete_customer(request):
+    data = request.GET
+    content_data = data.get('term')
+    if content_data:
+        customers = Customer.objects.filter(name__contains=content_data)
+    else:
+        customers = Customer.objects.all()
+
+    results = []
+    for customer in customers:
+        customer_json = {}
+        customer_json['label'] = customer.name
+        customer_json['name'] = customer.name
+        customer_json['company_name'] = customer.company_name
+        results.append(customer_json)
+
+    data = json.dumps(results)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
 
 
 def new_provider(request):
