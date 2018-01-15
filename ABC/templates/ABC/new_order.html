@@ -7,10 +7,25 @@
 {% include 'ABC/page_header.html' with title='New Order' %}
 
 <script type="text/javascript">
+    // Delete an item from the order cart
     function remove_item(element) {
-        alert(element.value);
+        // delete the tr node from the tbody of the order cart
+        var tr_node = element.parentNode.parentNode;
+        var tbody_node = tr_node.parentNode;
+        tbody_node.removeChild(tr_node);
+        $.ajax({
+            type: 'post',
+            url: '',
+            beforeSend: function() {
+
+            },
+            success: function(responseText) {
+
+            }
+        });
     }
 
+    // Disable the form submission in the case the user press the enter key
     jQuery(document).ready(function() {
         $('#add_order').keydown(function(event) {
             if (event.keyCode === 13) {
@@ -19,6 +34,7 @@
             }
         });
 
+        // autocomplete the item input adding a new item to the order cart with some extra information
         $('#add_item').autocomplete({
             source: "{% url 'autocomplete_item' %}",
             minLength: 2,
@@ -58,6 +74,7 @@
                 .appendTo(ul);
         };
 
+        // autocomplete the customer input
         $('#customer').autocomplete({
             source: "{% url 'autocomplete_customer' %}",
             minLength: 2,
