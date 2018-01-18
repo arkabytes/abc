@@ -21,7 +21,8 @@
         <br/>
         <label for="rate">{% trans 'Rate' %}</label>
         <div class="input-group">
-            <input type="number" name="rate" id="rate" class="form-control" placeholder="Rate" size="6" aria-describedby="basic-addon1">
+            <span class="input-group-addon">%</span>
+            <input type="number" name="rate" id="rate" style="width:120px" class="form-control" placeholder="Rate" size="6" aria-describedby="basic-addon1">
         </div>
         <br/>
         <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>

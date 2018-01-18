@@ -5,6 +5,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from reportlab.pdfgen import canvas
 from io import BytesIO
 import json
+import logging, logging.config
+import sys
 
 from ABC.models import Item, Customer, Provider, VatType
 from arkaABC.settings import ITEMS_PER_PAGE
@@ -17,6 +19,10 @@ def index(request):
 
 
 def signin(request):
+    return render(request, 'ABC/signin.html')
+
+
+def do_signin(request):
     return render(request, 'ABC/signin.html')
 
 
