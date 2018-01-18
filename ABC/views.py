@@ -1,12 +1,11 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth import authenticate, login, logout
 from reportlab.pdfgen import canvas
 from io import BytesIO
 import json
-import logging, logging.config
-import sys
 
 from ABC.models import Item, Customer, Provider, VatType
 from arkaABC.settings import ITEMS_PER_PAGE
@@ -15,15 +14,32 @@ from .forms import CustomerQuickForm, CustomerForm, VatTypeForm
 
 
 def index(request):
-    return render(request, 'ABC/index.html')
+    if request.user.is_authenticated:
+        return render(request, 'ABC/index.html')
+    else:
+        return redirect('signin')
 
 
 def signin(request):
     return render(request, 'ABC/signin.html')
 
 
-def do_signin(request):
-    return render(request, 'ABC/signin.html')
+def login_view(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return redirect('index')
+
+    context = {'message': 'Invalid Username/Password'}
+    # I should invoke directly to the view with the context
+    return render(request, 'ABC/signin.html', context)
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
 
 
 def item(request, item_id):
