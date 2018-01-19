@@ -1,0 +1,14 @@
+<script type="text/javascript">
+// autocomplete the customer input
+jQuery(document).ready(function() {
+    $('#customer').autocomplete({
+        source: "{% url 'autocomplete_customer' %}",
+        minLength: 2,
+
+    }).autocomplete("instance")._renderItem = function( ul, item ) {
+        return $("<li>")
+            .append("<div><strong>" + item.label + "</strong><br>" + item.company_name + "</div>")
+            .appendTo(ul);
+    };
+});
+</script>

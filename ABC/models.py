@@ -29,20 +29,20 @@ class DeliveryType(models.Model):
 
 
 class Customer(models.Model):
-    cif = models.CharField(max_length=25)
-    company_name = models.CharField(max_length=50,unique=True)
+    cif = models.CharField(max_length=25, blank=True)
+    company_name = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
-    address = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
-    province = models.CharField(max_length=100)
-    postal_code = models.IntegerField(default=0)
-    country = models.CharField(max_length=100)
-    phone = models.CharField(max_length=100)
-    fax = models.CharField(max_length=100)
-    email = models.EmailField(default=None,null=True)
-    web = models.URLField(default='http://')
-    notes = models.TextField(default=None,null=True)
+    address = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    province = models.CharField(max_length=100, blank=True)
+    postal_code = models.IntegerField(default=0, blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True)
+    phone = models.CharField(max_length=100, default='', blank=True)
+    fax = models.CharField(max_length=100, default='', blank=True)
+    email = models.EmailField(default=None, null=True)
+    web = models.URLField(default='http://', blank=True)
+    notes = models.TextField(default='', null=True, blank=True)
 
     def __str__(self):
         return self.company_name
@@ -51,24 +51,24 @@ class Customer(models.Model):
 class Provider(models.Model):
     name = models.CharField(max_length=50,unique=True)
     contact_name = models.CharField(max_length=100)
-    cif = models.CharField(max_length=25)
-    address = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
-    province = models.CharField(max_length=100)
-    postal_code = models.IntegerField(default=0)
-    country = models.CharField(max_length=50)
-    phone = models.CharField(max_length=50)
-    fax = models.CharField(max_length=50)
+    cif = models.CharField(max_length=25, unique=True, blank=True)
+    address = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    province = models.CharField(max_length=100, blank=True)
+    postal_code = models.IntegerField(default=0, null=True, blank=True)
+    country = models.CharField(max_length=50, blank=True)
+    phone = models.CharField(max_length=50, blank=True)
+    fax = models.CharField(max_length=50, blank=True)
     email = models.EmailField(default=None)
-    web = models.URLField(default='http://')
-    notes = models.TextField(default=None)
+    web = models.URLField(default='http://', blank=True)
+    notes = models.TextField(default=None, null=True, blank=True)
 
     def __str__(self):
         return self.name
 
 
 class Item(models.Model):
-    name = models.CharField(max_length=50,unique=True)
+    name = models.CharField(max_length=50, unique=True)
     description = models.TextField(default=None)
     stock = models.IntegerField(default=0)
     cost_price = models.FloatField(default=0)
@@ -78,8 +78,8 @@ class Item(models.Model):
     image2 = models.ImageField(upload_to='items')
     image3 = models.ImageField(upload_to='items')
     thumbnail = models.ImageField(upload_to='items')
-    provider = models.ForeignKey(Provider,null=True)
-    vat_type = models.ForeignKey(VatType,null=True)
+    provider = models.ForeignKey(Provider, null=True)
+    vat_type = models.ForeignKey(VatType, null=True)
 
     @classmethod
     def create(cls, name, description, price, thumbnail):

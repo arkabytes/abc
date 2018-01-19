@@ -1,6 +1,7 @@
 {% load static %}
 {% load humanize %}
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
@@ -11,6 +12,13 @@
 
     </div>
     <div class="panel-body">
+
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+                $('#cif').focus();
+            });
+        </script>
+
 <form class="empty-form" action="{% url 'add_customer' %}" method="post">{% csrf_token %}
     <fieldset>
         <legend>{% trans 'Customer Information' %}</legend>
@@ -18,25 +26,33 @@
             <div class="col-lg-3">
                 <label for="cif">{% trans 'CIF' %}</label>
                 <div class="input-group">
-                    <input type="text" id="cif" name="cif" class="form-control" placeholder="{% trans 'CIF' %}" size="40" aria-describedby="basic-addon1" required autofocus/>
+                    {% render_field form.cif class="form-control" id="cif" placeholder=form.cif.label.upper size="40" %}
+                    {{ form.cif.errors }}
+                    <!--<input type="text" id="cif" name="cif" class="form-control" placeholder="{% trans 'CIF' %}" size="40" aria-describedby="basic-addon1" autofocus/>-->
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="company_name">{% trans 'Company Name' %}</label>
                 <div class="input-group">
-                    <input type="text" id="company_name" name="company_name" class="form-control" placeholder="{% trans 'Company Name' %}" size="40" aria-describedby="basic-addon1"/>
+                    {% render_field form.company_name class="form-control" placeholder=form.company_name.label size="40" %}
+                    {{ form.company_name.errors }}
+                    <!--<input type="text" id="company_name" name="company_name" class="form-control" placeholder="{% trans 'Company Name' %}" size="40" aria-describedby="basic-addon1"/>-->
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="name">{% trans 'Name' %}</label>
                 <div class="input-group">
-                    <input type="text" id="name" name="name" class="form-control" placeholder="{% trans 'Name' %}" size="40" aria-describedby="basic-addon1"/>
+                    {{ form.name | add_class:'form-control' | attr:"size:40" }}
+                    {{ form.name.errors }}
+                    <!--<input type="text" id="name" name="name" class="form-control" placeholder="{% trans 'Name' %}" size="40" aria-describedby="basic-addon1" required/>-->
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="surname">{% trans 'Surname' %}</label>
                 <div class="input-group">
-                    <input type="text" id="surname" name="surname" class="form-control" placeholder="{% trans 'Surname' %}" size="40" aria-describedby="basic-addon1"/>
+                    {{ form.surname | add_class:'form-control' | attr:'size:40' }}
+                    {{ form.surname.errors }}
+                    <!--<input type="text" id="surname" name="surname" class="form-control" placeholder="{% trans 'Surname' %}" size="40" aria-describedby="basic-addon1" required/>-->
                 </div>
             </div>
         </div>
@@ -45,31 +61,41 @@
             <div class="col-lg-3">
                 <label for="address">{% trans 'Address' %}</label>
                 <div class="input-group">
-                    <input type="text" id="address" name="address" class="form-control" placeholder="{% trans 'Address' %}" size="40" aria-describedby="basic-addon1"/>
+                    {{ form.address | add_class:'form-control' | attr:'size:40' }}
+                    {{ form.address.errors }}
+                    <!--<input type="text" id="address" name="address" class="form-control" placeholder="{% trans 'Address' %}" size="40" aria-describedby="basic-addon1"/>-->
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="city">{% trans 'City' %}</label>
                 <div class="input-group">
-                    <input type="text" id="city" name="city" class="form-control" placeholder="{% trans 'City' %}" size="30" aria-describedby="basic-addon1"/>
+                    {{ form.city | add_class:'form-control' | attr:'size:30' }}
+                    {{ form.city.errors }}
+                    <!--<input type="text" id="city" name="city" class="form-control" placeholder="{% trans 'City' %}" size="30" aria-describedby="basic-addon1"/>-->
                 </div>
             </div>
             <div class="col-lg-2">
                 <label for="province">{% trans 'Province' %}</label>
                 <div class="input-group">
-                    <input type="text" id="province" name="province" class="form-control" placeholder="{% trans 'Province' %}" size="20" aria-describedby="basic-addon1"/>
+                    {{ form.province | add_class:'form-control' | attr:'size:20' }}
+                    {{ form.province.errors }}
+                    <!--<input type="text" id="province" name="province" class="form-control" placeholder="{% trans 'Province' %}" size="20" aria-describedby="basic-addon1"/>-->
                 </div>
             </div>
             <div class="col-lg-2">
                 <label for="postal_code">{% trans 'Postal Code' %}</label>
                 <div class="input-group">
-                    <input type="text" id="postal_code" name="postal_code" class="form-control" placeholder="{% trans 'Postal Code' %}" size="10" aria-describedby="basic-addon1"/>
+                    {{ form.postal_code | add_class:'form-control' | attr:'size:10' }}
+                    {{ form.postal_code.errors }}
+                    <!--<input type="text" id="postal_code" name="postal_code" class="form-control" placeholder="{% trans 'Postal Code' %}" size="10" aria-describedby="basic-addon1"/>-->
                 </div>
             </div>
             <div class="col-lg-2">
                 <label for="country">{% trans 'Country' %}</label>
                 <div class="input-group">
-                    <input type="text" id="country" name="country" class="form-control" placeholder="{% trans 'Country' %}" size="20" aria-describedby="basic-addon1"/>
+                    {{ form.country | add_class:'form-control' | attr:'size:20' }}
+                    {{ form.country.errors }}
+                    <!--<input type="text" id="country" name="country" class="form-control" placeholder="{% trans 'Country' %}" size="20" aria-describedby="basic-addon1"/>-->
                 </div>
             </div>
         </div>
@@ -78,26 +104,34 @@
             <div class="col-lg-3">
                 <label for="phone">{% trans 'Phone' %}</label>
                 <div class="input-group">
-                    <input type="text" name="phone" id="phone" class="form-control" placeholder="{% trans 'Phone' %}" size="15" aria-describedby="basic-addon3">
+                    {{ form.phone | add_class:'form-control' | attr:'size:15' }}
+                    {{ form.phone.errors }}
+                    <!--<input type="text" name="phone" id="phone" class="form-control" placeholder="{% trans 'Phone' %}" size="15" aria-describedby="basic-addon3">-->
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="fax">{% trans 'Fax' %}</label>
                 <div class="input-group">
-                    <input type="text" name="fax" id="fax" class="form-control" placeholder="{% trans 'Fax' %}" size="15" aria-describedby="basic-addon3">
+                    {{ form.fax | add_class:'form-control' | attr:'size:15' }}
+                    {{ form.fax.errors }}
+                    <!--<input type="text" name="fax" id="fax" class="form-control" placeholder="{% trans 'Fax' %}" size="15" aria-describedby="basic-addon3">-->
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="email">{% trans 'E-mail' %}</label>
                 <div class="input-group">
                     <span class="input-group-addon">@</span>
-                    <input type="text" name="email" id="email" class="form-control" style="width:250px" placeholder="{% trans 'E-mail' %}" aria-describedby="basic-addon3">
+                    {{ form.email | add_class:'form-control' }}
+                    {{ form.email.errors }}
+                    <!--<input type="text" name="email" id="email" class="form-control" style="width:250px" placeholder="{% trans 'E-mail' %}" aria-describedby="basic-addon3" required>-->
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="website">{% trans 'Website' %}</label>
                 <div class="input-group">
-                    <input type="url" name="website" id="website" class="form-control" placeholder="{% trans 'Website' %}" size="40" aria-describedby="basic-addon3">
+                    {{ form.web | add_class:'form-control' | attr:"size:40" }}
+                    {{ form.web.errors }}
+                    <!--<input type="url" name="web" id="website" class="form-control" placeholder="{% trans 'Website' %}" value="http://www.url.com" size="40" aria-describedby="basic-addon3">-->
                 </div>
             </div>
         </div>
@@ -106,7 +140,8 @@
             <div class="col-lg-12">
                 <label for="notes">{% trans 'Notes' %}</label>
                 <div class="input-group">
-                    <textarea id="notes" name="notes" class="form-control" placeholder="{% trans 'Notes' %}" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
+                    <textarea id="notes" name="notes" class="form-control" placeholder="{% trans 'Notes' %}" rows="5" cols="50" aria-describedby="basic-addon1">{{ form.notes.value }}</textarea>
+                    {{ form.notes.errors }}
                 </div>
             </div>
         </div>

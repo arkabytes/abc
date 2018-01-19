@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'ABC.apps.AbcConfig',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

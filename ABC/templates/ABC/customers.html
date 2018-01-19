@@ -5,6 +5,24 @@
 {% include 'ABC/navbar.html' %}
 {% include 'ABC/page_header.html' with title='Customers' icon='ABC/icons/anadirusuario32.png' new_link='new_customer' tooltip='Add Customer'  %}
 
+<script type="text/javascript">
+    function select_customer(customer_id) {
+        $.ajax({
+            url: "{% url 'customer_info' %}?customer_id=" + customer_id,
+            dataType: 'json',
+            success: function(data) {
+                $('#name').text(data['name']);
+                $('#location').text(data['location']);
+                $('#email').text(data['email']);
+                $('#web').text(" " + data['web']);
+            },
+            error: function(uno, dos, tres) {
+                alert("An error has occured while loading customer info");
+            }
+        });
+    }
+</script>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <a href="{% url 'report_customers' %}" title="{% trans 'All customers' %}"><img src="{% static 'ABC/icons/pdf32.png' %}"/></a>
@@ -26,7 +44,8 @@
             {% for customer in customers %}
                 <tr>
                     <td>{{ customer.id }}</td>
-                    <td><a data-toggle="modal" data-target="#info_customer" data-id="{{ customer.id }}" id="customer_info" href="#">{{ customer.name }}</a></td>
+                    <td><a data-toggle="modal" data-target="#info_customer" data-id="{{ customer.id }}" id="customer_info"
+                           onclick="javascript:select_customer({{ customer.id }})" href="#">{{ customer.name }} {{ customer.surname }}</a></td>
                     <td>{{ customer.company_name }}</td>
                     <td>{{ customer.email }}</td>
                     <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
@@ -56,12 +75,12 @@
                                     <img src="http://placehold.it/380x500" alt="" class="img-rounded img-responsive" />
                                 </div>
                                 <div class="col-sm-6 col-md-8" style="line-height: 17pt">
-                                    <h4>Federico Faci</h4>
-                                        <cite title="San Francisco, USA">Pina de Ebro, Zaragoza <i class="glyphicon glyphicon-map-marker"></i></cite>
+                                    <h4 id="name">Federico Faci</h4>
+                                        <cite id="location" title="Pina de Ebro, Zaragoza">Pina de Ebro, Zaragoza <i class="glyphicon glyphicon-map-marker"></i></cite>
                                     <p>
-                                        <i class="glyphicon glyphicon-envelope"></i> ffaci@gmail.com
+                                        <span id="email"><i class="glyphicon glyphicon-envelope"></i> ffaci@gmail.com</span>
                                         <br />
-                                        <i class="glyphicon glyphicon-globe"></i><a href="http://www.jquery2dotnet.com"> http://www.sekano.net</a>
+                                        <i class="glyphicon glyphicon-globe"></i><a id="web" href="http://www.jquery2dotnet.com"> http://www.sekano.net</a>
                                         <br />
                                         <i class="glyphicon glyphicon-gift"></i> 11 Septiembre 2010
                                     </p>
@@ -108,7 +127,7 @@
             <label for="inputName" class="sr-only">{% trans 'Name' %}</label>
             <input type="text" name="name" id="inputName" class="form-control" placeholder="{% trans 'Name' %}" required autofocus>
             <label for="inputNumber" class="sr-only">{% trans 'Company Name' %}</label>
-            <input type="text" name="company_name" id="inputName"  class="form-control" placeholder="{% trans 'Company Name' %}">
+            <input type="text" name="company_name" id="inputName"  class="form-control" placeholder="{% trans 'Company Name' %}" required>
             <label for="inputNumber" class="sr-only">{% trans 'Email Address' %}</label>
             <input type="text" name="email" id="inputNumber" class="form-control" placeholder="{% trans 'E-mail Address' %}" required>
             <input type="hidden" name="mode" value="quick"/>

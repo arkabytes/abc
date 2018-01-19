@@ -7,10 +7,10 @@ from reportlab.pdfgen import canvas
 from io import BytesIO
 import json
 
-from ABC.models import Item, Customer, Provider, VatType
+from ABC.models import Item, Customer, Provider, VatType, PaymentType, DeliveryType
 from arkaABC.settings import ITEMS_PER_PAGE
 from .forms import ItemQuickForm, ItemForm
-from .forms import CustomerQuickForm, CustomerForm, VatTypeForm
+from .forms import CustomerQuickForm, CustomerForm, VatTypeForm, PaymentTypeForm, DeliveryTypeForm, ProviderForm, ProviderQuickForm
 
 
 def index(request):
@@ -146,7 +146,8 @@ def customer(request, customer_id):
 
 
 def new_customer(request):
-    return render(request, 'ABC/new_customer.html')
+    form = CustomerForm()
+    return render(request, 'ABC/new_customer.html', {'form': form})
 
 
 def add_customer(request):
@@ -167,8 +168,20 @@ def add_customer(request):
             form = CustomerForm(request.POST, request.FILES)
             if form.is_valid():
                 the_customer = Customer()
+                the_customer.cif = form.cleaned_data['cif']
                 the_customer.company_name = form.cleaned_data['company_name']
                 the_customer.name = form.cleaned_data['name']
+                the_customer.surname = form.cleaned_data['surname']
+                the_customer.address = form.cleaned_data['address']
+                the_customer.city = form.cleaned_data['city']
+                the_customer.province = form.cleaned_data['province']
+                the_customer.postal_code = form.cleaned_data['postal_code']
+                the_customer.country = form.cleaned_data['country']
+                the_customer.phone = form.cleaned_data['phone']
+                the_customer.fax = form.cleaned_data['fax']
+                the_customer.email = form.cleaned_data['email']
+                the_customer.web = form.cleaned_data['web']
+                the_customer.notes = form.cleaned_data['notes']
                 the_customer.save()
             else:
                 return render(request, 'ABC/new_customer.html', {'form':form})
@@ -207,8 +220,7 @@ def customers(request):
 
 
 def autocomplete_customer(request):
-    data = request.GET
-    content_data = data.get('term')
+    content_data = request.GET.get('term')
     if content_data:
         customers = Customer.objects.filter(name__contains=content_data)
     else:
@@ -223,8 +235,22 @@ def autocomplete_customer(request):
         results.append(customer_json)
 
     data = json.dumps(results)
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype)
+    return HttpResponse(data, 'application/json')
+
+
+def customer_info(request):
+
+    customer_id = request.GET.get('customer_id')
+    customer = Customer.objects.get(pk=customer_id)
+    customer_json = {}
+    customer_json['name'] = customer.name
+    customer_json['company_name'] = customer.company_name
+    customer_json['location'] = customer.city + ", " + customer.province
+    customer_json['email'] = customer.email
+    customer_json['web'] = customer.web
+
+    data = json.dumps(customer_json)
+    return HttpResponse(data, 'application/json')
 
 
 def new_provider(request):
@@ -232,7 +258,42 @@ def new_provider(request):
 
 
 def add_provider(request):
-    pass
+    if request.method == 'POST':
+        if request.POST['mode'] == 'quick':
+            # Add a new provider in quick mode
+            form = ProviderQuickForm(request.POST, request.FILES)
+            if form.is_valid():
+                the_provider = Provider()
+                the_provider.name = form.cleaned_data['name']
+                the_provider.contact_name = form.cleaned_data['contact_name']
+                the_provider.email = form.cleaned_data['email']
+                the_provider.save()
+
+            return HttpResponseRedirect(reverse('providers'))
+        else:
+            # Add a new provider in complete mode (with every field filled)
+            form = ProviderForm(request.POST, request.FILES)
+            if form.is_valid():
+                the_provider = Provider()
+                the_provider.cif = form.cleaned_data['cif']
+                the_provider.name = form.cleaned_data['name']
+                the_provider.contact_name = form.cleaned_data['contact_name']
+                the_provider.address = form.cleaned_data['address']
+                the_provider.city = form.cleaned_data['city']
+                the_provider.province = form.cleaned_data['province']
+                the_provider.postal_code = form.cleaned_data['postal_code']
+                the_provider.country = form.cleaned_data['country']
+                the_provider.phone = form.cleaned_data['phone']
+                the_provider.fax = form.cleaned_data['fax']
+                the_provider.email = form.cleaned_data['email']
+                the_provider.web = form.cleaned_data['web']
+                the_provider.notes = form.cleaned_data['notes']
+                the_provider.save()
+            else:
+                print(form.errors)
+                return render(request, 'ABC/new_provider.html', {'form':form})
+
+            return HttpResponseRedirect(reverse('new_provider'))
 
 
 def delete_provider(request, provider_id):
@@ -242,7 +303,9 @@ def delete_provider(request, provider_id):
 
 
 def providers(request):
-    return render(request, 'ABC/providers.html')
+    providers = Provider.objects.all()
+    context = {'providers': providers}
+    return render(request, 'ABC/providers.html', context)
 
 
 def new_order(request):
@@ -310,7 +373,12 @@ def delete_task(request):
 
 
 def master_tables(request):
-    return render(request, 'ABC/master_tables.html')
+
+    vat_types = VatType.objects.all();
+    delivery_types = DeliveryType.objects.all();
+    payment_types = PaymentType.objects.all();
+    context = {'vat_types': vat_types, 'delivery_types': delivery_types, 'payment_types': payment_types}
+    return render(request, 'ABC/master_tables.html', context)
 
 
 def new_delivery_type(request):
@@ -318,11 +386,26 @@ def new_delivery_type(request):
 
 
 def add_delivery_type(request):
-    pass;
+    if request.method == 'POST':
+        # Add a new Payment Type
+        form = DeliveryTypeForm(request.POST, request.FILES)
+        if form.is_valid():
+            the_delivery_type = DeliveryType()
+            the_delivery_type.name = form.cleaned_data['name']
+            the_delivery_type.description = form.cleaned_data['description']
+            the_delivery_type.cost = form.cleaned_data['cost']
+            the_delivery_type.days = form.cleaned_data['days']
+            the_delivery_type.save()
+        else:
+            return render(request, 'ABC/new_delivery_type.html', {'form':form})
+
+        return HttpResponseRedirect(reverse('new_delivery_type'))
 
 
-def delete_delivery_type(request):
-    pass
+def delete_delivery_type(request, delivery_type_id):
+    delivery_type = DeliveryType.objects.get(pk=delivery_type_id)
+    delivery_type.delete()
+    return redirect('master_tables')
 
 
 def new_payment_type(request):
@@ -330,11 +413,25 @@ def new_payment_type(request):
 
 
 def add_payment_type(request):
-    pass;
+    if request.method == 'POST':
+        # Add a new Payment Type
+        form = PaymentTypeForm(request.POST, request.FILES)
+        if form.is_valid():
+            the_payment_type = PaymentType()
+            the_payment_type.name = form.cleaned_data['name']
+            the_payment_type.description = form.cleaned_data['description']
+            the_payment_type.cost = form.cleaned_data['cost']
+            the_payment_type.save()
+        else:
+            return render(request, 'ABC/new_payment_type.html', {'form':form})
+
+        return HttpResponseRedirect(reverse('new_payment_type'))
 
 
-def delete_payment_type(request):
-    pass
+def delete_payment_type(request, payment_type_id):
+    payment_type = PaymentType.objects.get(pk=payment_type_id)
+    payment_type.delete()
+    return redirect('master_tables')
 
 
 def new_vat_type(request):
@@ -356,5 +453,8 @@ def add_vat_type(request):
         return HttpResponseRedirect(reverse('new_vat_type'))
 
 
-def delete_vat_type(request):
-    pass
+def delete_vat_type(request, vat_type_id):
+
+    vat_type = VatType.objects.get(pk=vat_type_id)
+    vat_type.delete()
+    return redirect('master_tables')

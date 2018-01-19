@@ -11,7 +11,7 @@
 
     </div>
     <div class="panel-body">
-<form class="empty-form" action="{% url 'add_vat_type' %}" method="post">{% csrf_token %}
+    <form class="empty-form" action="{% url 'add_vat_type' %}" method="post">{% csrf_token %}
     <fieldset>
         <legend>{% trans 'VAT Type Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>
