@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone
 
 class VatType(models.Model):
     name = models.CharField(max_length=25,unique=True)
@@ -11,7 +11,7 @@ class VatType(models.Model):
 
 class PaymentType(models.Model):
     name = models.CharField(max_length=25,unique=True)
-    description = models.TextField(default=None)
+    description = models.TextField(default='')
     cost = models.FloatField(default=0)
 
     def __str__(self):
@@ -20,7 +20,7 @@ class PaymentType(models.Model):
 
 class DeliveryType(models.Model):
     name = models.CharField(max_length=25,unique=True)
-    description = models.TextField(default=None)
+    description = models.TextField(default='')
     cost = models.FloatField(default=0)
     days = models.PositiveSmallIntegerField(default=1)
 
@@ -61,7 +61,7 @@ class Provider(models.Model):
     fax = models.CharField(max_length=50, blank=True)
     email = models.EmailField(default=None)
     web = models.URLField(default='http://', blank=True)
-    notes = models.TextField(default=None, null=True, blank=True)
+    notes = models.TextField(default='', null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -69,11 +69,11 @@ class Provider(models.Model):
 
 class Item(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    description = models.TextField(default=None)
+    description = models.TextField(default='')
     stock = models.IntegerField(default=0)
     cost_price = models.FloatField(default=0)
     retail_price = models.FloatField(default=0)
-    notes = models.TextField(default=None,null=True)
+    notes = models.TextField(default='', null=True)
     image1 = models.ImageField(upload_to='items')
     image2 = models.ImageField(upload_to='items')
     image3 = models.ImageField(upload_to='items')
@@ -91,13 +91,13 @@ class Item(models.Model):
 
 
 class Event(models.Model):
-    name = models.CharField(max_length=50,unique=True)
-    description = models.TextField(default=None)
-    date = models.DateTimeField
-    location = models.CharField(max_length=100)
-    customer = models.ForeignKey(Customer)
-    provider = models.ForeignKey(Provider)
-    notice_date = models.DateTimeField
+    name = models.CharField(max_length=50, unique=True)
+    description = models.TextField(default='')
+    date = models.DateTimeField(default=timezone.datetime.now)
+    location = models.CharField(max_length=100, null=True, blank=True)
+    customer = models.ForeignKey(Customer, null=True, blank=True)
+    provider = models.ForeignKey(Provider, null=True, blank=True)
+    notice_date = models.DateTimeField(default=timezone.datetime.now, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -105,10 +105,10 @@ class Event(models.Model):
 
 class Order(models.Model):
     number = models.CharField(max_length=20,unique=True)
-    date = models.DateField
-    delivery_date = models.DateField
+    date = models.DateField(default=timezone.now)
+    delivery_date = models.DateField(default=timezone.now)
     state = models.CharField(max_length=50)
-    notes = models.TextField(default=None)
+    notes = models.TextField(default='')
     tax_base = models.FloatField(default=0)
     vat = models.FloatField(default=0)
     amount = models.FloatField(default=0)
@@ -116,7 +116,7 @@ class Order(models.Model):
     delivery_cost = models.FloatField(default=0)
     payment_cost = models.FloatField(default=0)
     document = models.FileField(upload_to='orders',default=None)
-    delivery_days = models.PositiveSmallIntegerField
+    delivery_days = models.PositiveSmallIntegerField(default=0)
     delivery_type = models.ForeignKey(DeliveryType)
     payment_type = models.ForeignKey(PaymentType)
     finished = models.BooleanField(default=False)
@@ -128,13 +128,13 @@ class Order(models.Model):
 class OrderDetail(models.Model):
     item = models.ForeignKey(Item)
     item_name = models.CharField(max_length=100)
-    description = models.TextField(default=None)
+    description = models.TextField(default='')
     price = models.FloatField(default=0)
     quantity = models.PositiveSmallIntegerField(default=1)
     discount = models.FloatField(default=0)
     subtotal = models.FloatField(default=0)
     vat = models.FloatField(default=0)
-    notes = models.TextField(default=None)
+    notes = models.TextField(default='')
     order = models.ForeignKey(Order)
 
     def __str__(self):
@@ -143,10 +143,10 @@ class OrderDetail(models.Model):
 
 class Invoice(models.Model):
     number = models.CharField(max_length=20,unique=True)
-    date = models.DateField
-    due_date = models.DateField
+    date = models.DateField(default=timezone.now)
+    due_date = models.DateField(default=timezone.now)
     state = models.CharField(max_length=50)
-    notes = models.TextField(default=None)
+    notes = models.TextField(default='')
     tax_base = models.FloatField(default=0)
     vat = models.FloatField(default=0)
     amount = models.FloatField(default=0)
@@ -167,13 +167,13 @@ class Invoice(models.Model):
 class InvoiceDetail(models.Model):
     item = models.ForeignKey(Item)
     item_name = models.CharField(max_length=100)
-    description = models.TextField(default=None)
+    description = models.TextField(default='')
     price = models.FloatField(default=0)
     quantity = models.PositiveSmallIntegerField(default=1)
     discount = models.FloatField(default=0)
     subtotal = models.FloatField(default=0)
     vat = models.FloatField(default=0)
-    notes = models.TextField(default=None)
+    notes = models.TextField(default='')
     invoice = models.ForeignKey(Invoice)
 
     def __str__(self):
@@ -182,17 +182,17 @@ class InvoiceDetail(models.Model):
 
 class Task(models.Model):
     name = models.CharField(max_length=50,unique=True)
-    description = models.TextField(default=None)
-    date = models.DateField
-    start_date = models.DateTimeField
-    finish_date = models.DateTimeField
-    location = models.CharField(max_length=50)
-    customer = models.ForeignKey(Customer)
-    provider = models.ForeignKey(Provider)
-    order = models.ForeignKey(Order)
+    description = models.TextField(default='')
+    date = models.DateField(default=timezone.datetime.now)
+    start_date = models.DateTimeField(default=timezone.datetime.now, null=True, blank=True)
+    finish_date = models.DateTimeField(default=timezone.datetime.now, null=True, blank=True)
+    location = models.CharField(max_length=50, null=True, blank=True)
+    customer = models.ForeignKey(Customer, null=True, blank=True)
+    provider = models.ForeignKey(Provider, null=True, blank=True)
+    order = models.ForeignKey(Order, null=True, blank=True)
     state = models.CharField(max_length=50)
-    notice = models.TextField(default=None)
-    notice_date = models.DateTimeField
+    notice = models.TextField(default='', null=True, blank=True)
+    notice_date = models.DateTimeField(default=timezone.datetime.now, null=True, blank=True)
 
     def __str__(self):
         return self.name

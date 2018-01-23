@@ -1,5 +1,4 @@
-from django.http import HttpResponseRedirect, HttpResponse
-from django.urls import reverse
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
@@ -8,16 +7,17 @@ from io import BytesIO
 import json
 
 from ABC.models import Item, Customer, Provider, VatType, PaymentType, DeliveryType
+from ABC.models import Event, Task, Order, Invoice
 from arkaABC.settings import ITEMS_PER_PAGE
-from .forms import ItemQuickForm, ItemForm
+from .forms import ItemQuickForm, ItemForm, OrderForm, InvoiceForm, TaskForm, EventForm, TaskQuickForm
 from .forms import CustomerQuickForm, CustomerForm, VatTypeForm, PaymentTypeForm, DeliveryTypeForm, ProviderForm, ProviderQuickForm
 
 
 def index(request):
-    if request.user.is_authenticated:
-        return render(request, 'ABC/index.html')
-    else:
-        return redirect('signin')
+    ##if request.user.is_authenticated:
+    return render(request, 'ABC/index.html')
+    ##else:
+    ##    return redirect('signin')
 
 
 def signin(request):
@@ -39,17 +39,19 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse('index'))
+    return redirect('index')
 
 
 def item(request, item_id):
-    the_item = Item.objects.get(id=item_id)
-    context = {'the_item': the_item}
+    item = Item.objects.get(id=item_id)
+    context = {'the_item': item}
     return render(request, 'ABC/item.html', context)
 
 
 def new_item(request):
-    return render(request, 'ABC/new_item.html')
+    form = ItemForm()
+    context = {'form': form}
+    return render(request, 'ABC/new_item.html', context)
 
 
 def add_item(request):
@@ -58,49 +60,49 @@ def add_item(request):
             # Add a new item in quick mode
             form = ItemQuickForm(request.POST, request.FILES)
             if form.is_valid():
-                the_item = Item()
-                the_item.name = form.cleaned_data['name']
-                the_item.description = form.cleaned_data['description']
-                the_item.retail_price = form.cleaned_data['retail_price']
-                the_item.thumbnail = form.cleaned_data['thumbnail']
-                the_item.save()
+                item = Item()
+                item.name = form.cleaned_data['name']
+                item.description = form.cleaned_data['description']
+                item.retail_price = form.cleaned_data['retail_price']
+                item.thumbnail = form.cleaned_data['thumbnail']
+                item.save()
 
-            return HttpResponseRedirect(reverse('items'))
+            return redirect('items')
         else:
             # Add a new item in complete mode (with every field filled)
             form = ItemForm(request.POST, request.FILES)
             if form.is_valid():
-                the_item = Item()
-                the_item.name = form.cleaned_data['name']
-                the_item.description = form.cleaned_data['description']
-                the_item.notes = form.cleaned_data['notes']
-                the_item.stock = form.cleaned_data['stock']
-                the_item.cost_price = form.cleaned_data['cost_price']
-                the_item.retail_price = form.cleaned_data['retail_price']
-                the_item.thumbnail = form.cleaned_data['thumbnail']
-                the_item.image1 = form.cleaned_data['image1']
-                the_item.image2 = form.cleaned_data['image2']
-                the_item.image3 = form.cleaned_data['image3']
-                # the_item.provider =
-                # the_item.vat_type =
-                the_item.save()
+                item = Item()
+                item.name = form.cleaned_data['name']
+                item.description = form.cleaned_data['description']
+                item.notes = form.cleaned_data['notes']
+                item.stock = form.cleaned_data['stock']
+                item.cost_price = form.cleaned_data['cost_price']
+                item.retail_price = form.cleaned_data['retail_price']
+                item.thumbnail = form.cleaned_data['thumbnail']
+                item.image1 = form.cleaned_data['image1']
+                item.image2 = form.cleaned_data['image2']
+                item.image3 = form.cleaned_data['image3']
+                # item.provider =
+                # item.vat_type =
+                item.save()
             else:
                 return render(request, 'ABC/new_item.html', {'form':form})
 
-            return HttpResponseRedirect(reverse('new_item'))
+            return redirect('new_item')
 
 
 def delete_item(request, item_id):
-    an_item = Item.objects.get(id=item_id)
-    an_item.delete()
-    return HttpResponseRedirect(reverse('items'))
+    item = Item.objects.get(id=item_id)
+    item.delete()
+    return redirect('items')
 
 
 def items(request):
-    all_items = Item.objects.order_by('name')
+    items = Item.objects.order_by('name')
     page = request.GET.get('page', 1)
 
-    paginator = Paginator(all_items, ITEMS_PER_PAGE)
+    paginator = Paginator(items, ITEMS_PER_PAGE)
     try:
         items = paginator.page(page)
     except PageNotAnInteger:
@@ -140,14 +142,15 @@ def autocomplete_item(request):
 
 
 def customer(request, customer_id):
-    the_customer = Item.objects.get(id=customer_id)
-    context = {'the_customer': the_customer}
+    customer = Customer.objects.get(id=customer_id)
+    context = {'customer': customer}
     return render(request, 'ABC/customer.html', context)
 
 
 def new_customer(request):
     form = CustomerForm()
-    return render(request, 'ABC/new_customer.html', {'form': form})
+    context = {'form': form}
+    return render(request, 'ABC/new_customer.html', context)
 
 
 def add_customer(request):
@@ -156,43 +159,43 @@ def add_customer(request):
             # Add a new customer in quick mode
             form = CustomerQuickForm(request.POST, request.FILES)
             if form.is_valid():
-                the_customer = Customer()
-                the_customer.company_name = form.cleaned_data['company_name']
-                the_customer.name = form.cleaned_data['name']
-                the_customer.email = form.cleaned_data['email']
-                the_customer.save()
+                customer = Customer()
+                customer.company_name = form.cleaned_data['company_name']
+                customer.name = form.cleaned_data['name']
+                customer.email = form.cleaned_data['email']
+                customer.save()
 
-            return HttpResponseRedirect(reverse('customers'))
+            return redirect('customers')
         else:
             # Add a new customer in complete mode (with every field filled)
             form = CustomerForm(request.POST, request.FILES)
             if form.is_valid():
-                the_customer = Customer()
-                the_customer.cif = form.cleaned_data['cif']
-                the_customer.company_name = form.cleaned_data['company_name']
-                the_customer.name = form.cleaned_data['name']
-                the_customer.surname = form.cleaned_data['surname']
-                the_customer.address = form.cleaned_data['address']
-                the_customer.city = form.cleaned_data['city']
-                the_customer.province = form.cleaned_data['province']
-                the_customer.postal_code = form.cleaned_data['postal_code']
-                the_customer.country = form.cleaned_data['country']
-                the_customer.phone = form.cleaned_data['phone']
-                the_customer.fax = form.cleaned_data['fax']
-                the_customer.email = form.cleaned_data['email']
-                the_customer.web = form.cleaned_data['web']
-                the_customer.notes = form.cleaned_data['notes']
-                the_customer.save()
+                customer = Customer()
+                customer.cif = form.cleaned_data['cif']
+                customer.company_name = form.cleaned_data['company_name']
+                customer.name = form.cleaned_data['name']
+                customer.surname = form.cleaned_data['surname']
+                customer.address = form.cleaned_data['address']
+                customer.city = form.cleaned_data['city']
+                customer.province = form.cleaned_data['province']
+                customer.postal_code = form.cleaned_data['postal_code']
+                customer.country = form.cleaned_data['country']
+                customer.phone = form.cleaned_data['phone']
+                customer.fax = form.cleaned_data['fax']
+                customer.email = form.cleaned_data['email']
+                customer.web = form.cleaned_data['web']
+                customer.notes = form.cleaned_data['notes']
+                customer.save()
             else:
                 return render(request, 'ABC/new_customer.html', {'form':form})
 
-            return HttpResponseRedirect(reverse('new_customer'))
+            return redirect('new_customer')
 
 
 def delete_customer(request, customer_id):
-    a_customer = Customer.objects.get(id=customer_id)
-    a_customer.delete()
-    return HttpResponseRedirect(reverse('customers'))
+    customer = Customer.objects.get(id=customer_id)
+    customer.delete()
+    return redirect('customers')
 
 
 def report_customers(request):
@@ -214,8 +217,8 @@ def report_customers(request):
 
 
 def customers(request):
-    all_customers = Customer.objects.order_by('name')
-    context = {'customers': all_customers}
+    customers = Customer.objects.order_by('name')
+    context = {'customers': customers}
     return render(request, 'ABC/customers.html', context)
 
 
@@ -239,7 +242,6 @@ def autocomplete_customer(request):
 
 
 def customer_info(request):
-
     customer_id = request.GET.get('customer_id')
     customer = Customer.objects.get(pk=customer_id)
     customer_json = {}
@@ -254,7 +256,9 @@ def customer_info(request):
 
 
 def new_provider(request):
-    return render(request, 'ABC/new_provider.html')
+    form = ProviderForm()
+    context = {'form': form}
+    return render(request, 'ABC/new_provider.html', context)
 
 
 def add_provider(request):
@@ -263,43 +267,43 @@ def add_provider(request):
             # Add a new provider in quick mode
             form = ProviderQuickForm(request.POST, request.FILES)
             if form.is_valid():
-                the_provider = Provider()
-                the_provider.name = form.cleaned_data['name']
-                the_provider.contact_name = form.cleaned_data['contact_name']
-                the_provider.email = form.cleaned_data['email']
-                the_provider.save()
+                provider = Provider()
+                provider.name = form.cleaned_data['name']
+                provider.contact_name = form.cleaned_data['contact_name']
+                provider.email = form.cleaned_data['email']
+                provider.save()
 
-            return HttpResponseRedirect(reverse('providers'))
+            return redirect('providers')
         else:
             # Add a new provider in complete mode (with every field filled)
             form = ProviderForm(request.POST, request.FILES)
             if form.is_valid():
-                the_provider = Provider()
-                the_provider.cif = form.cleaned_data['cif']
-                the_provider.name = form.cleaned_data['name']
-                the_provider.contact_name = form.cleaned_data['contact_name']
-                the_provider.address = form.cleaned_data['address']
-                the_provider.city = form.cleaned_data['city']
-                the_provider.province = form.cleaned_data['province']
-                the_provider.postal_code = form.cleaned_data['postal_code']
-                the_provider.country = form.cleaned_data['country']
-                the_provider.phone = form.cleaned_data['phone']
-                the_provider.fax = form.cleaned_data['fax']
-                the_provider.email = form.cleaned_data['email']
-                the_provider.web = form.cleaned_data['web']
-                the_provider.notes = form.cleaned_data['notes']
-                the_provider.save()
+                provider = Provider()
+                provider.cif = form.cleaned_data['cif']
+                provider.name = form.cleaned_data['name']
+                provider.contact_name = form.cleaned_data['contact_name']
+                provider.address = form.cleaned_data['address']
+                provider.city = form.cleaned_data['city']
+                provider.province = form.cleaned_data['province']
+                provider.postal_code = form.cleaned_data['postal_code']
+                provider.country = form.cleaned_data['country']
+                provider.phone = form.cleaned_data['phone']
+                provider.fax = form.cleaned_data['fax']
+                provider.email = form.cleaned_data['email']
+                provider.web = form.cleaned_data['web']
+                provider.notes = form.cleaned_data['notes']
+                provider.save()
             else:
                 print(form.errors)
                 return render(request, 'ABC/new_provider.html', {'form':form})
 
-            return HttpResponseRedirect(reverse('new_provider'))
+            return redirect('new_provider')
 
 
 def delete_provider(request, provider_id):
-    a_provider = Provider.objects.get(id=provider_id)
-    a_provider.delete()
-    return HttpResponseRedirect(reverse('providers'))
+    provider = Provider.objects.get(id=provider_id)
+    provider.delete()
+    return redirect('providers')
 
 
 def providers(request):
@@ -309,71 +313,144 @@ def providers(request):
 
 
 def new_order(request):
-    return render(request, 'ABC/new_order.html')
+    form = OrderForm()
+    context = {'form': form}
+    return render(request, 'ABC/new_order.html', context)
 
 
 def orders(request):
-    return render(request, 'ABC/orders.html')
+    orders = Order.objects.all()
+    context = {'orders': orders}
+    return render(request, 'ABC/orders.html', context)
 
 
 def add_order(request):
     pass;
 
 
-def delete_order(request):
-    pass;
+def delete_order(request, order_id):
+    order = Order.objects.get(pk=order_id)
+    order.delete()
+    return redirect('orders')
 
 
 def new_invoice(request):
-    return render(request, 'ABC/new_invoice.html')
+    form = InvoiceForm()
+    context = {'form': form}
+    return render(request, 'ABC/new_invoice.html', context)
 
 
 def invoices(request):
-    return render(request, 'ABC/invoices.html')
+    invoices = Invoice.objects.all()
+    context = {'invoices': invoices}
+    return render(request, 'ABC/invoices.html', context)
 
 
 def add_invoice(request):
     pass;
 
 
-def delete_invoice(request):
-    pass;
+def delete_invoice(request, invoice_id):
+    invoice = Invoice.objects.get(pk=invoice_id)
+    invoice.delete()
+    return redirect('invoices')
 
 
 def new_event(request):
-    return render(request, 'ABC/new_event.html')
+    form = EventForm()
+    context = {'form': form}
+    return render(request, 'ABC/new_event.html', context)
 
 
 def events(request):
-    return render(request, 'ABC/events.html')
+    events = Event.objects.all()
+    context = {'events': events}
+    return render(request, 'ABC/events.html', context)
 
 
 def add_event(request):
-    pass;
+    if request.method == 'POST':
+        # Add a new event in complete mode (with every field filled)
+        form = EventForm(request.POST, request.FILES)
+        if form.is_valid():
+            event = Event()
+            event.name = form.cleaned_data['name']
+            event.description = form.cleaned_data['description']
+            event.date = form.cleaned_data['date']
+            event.location = form.cleaned_data['location']
+            event.customer = form.cleaned_data['customer']
+            event.provider = form.cleaned_data['provider']
+            event.notice_date = form.cleaned_data['notice_date']
+            event.save()
+        else:
+            print(form.errors)
+            return render(request, 'ABC/new_event.html', {'form':form})
 
+    return redirect('new_event')
 
-def delete_event(request):
-    pass;
+def delete_event(request, event_id):
+    event = Event.objects.get(pk=event_id)
+    event.delete()
+    return redirect('events')
 
 
 def new_task(request):
-    return render(request, 'ABC/new_task.html')
+    form = TaskForm()
+    context = {'form': form}
+    return render(request, 'ABC/new_task.html', context)
 
 
 def tasks(request):
-    return render(request, 'ABC/tasks.html')
+    tasks = Task.objects.all()
+    context = {'tasks': tasks}
+    return render(request, 'ABC/tasks.html', context)
 
 
 def add_task(request):
-    pass;
+    if request.method == 'POST':
+        if request.POST['mode'] == 'quick':
+            # Add a new task in quick mode
+            form = TaskQuickForm(request.POST, request.FILES)
+            if form.is_valid():
+                task = Task()
+                task.name = form.cleaned_data['name']
+                task.description = form.cleaned_data['description']
+                task.date = form.cleaned_data['date']
+                task.save()
+
+            return redirect('tasks')
+        else:
+            # Add a new task in complete mode (with every field filled)
+            form = TaskForm(request.POST, request.FILES)
+            if form.is_valid():
+                task = Task()
+                task.name = form.cleaned_data['name']
+                task.description = form.cleaned_data['description']
+                task.date = form.cleaned_data['date']
+                task.start_date = form.cleaned_data['start_date']
+                task.finish_date = form.cleaned_data['finish_date']
+                task.location = form.cleaned_data['location']
+                task.customer = form.cleaned_data['customer']
+                task.provider = form.cleaned_data['provider']
+                task.order = form.cleaned_data['order']
+                task.state = form.cleaned_data['state']
+                task.notice = form.cleaned_data['notice']
+                task.notice_date = form.cleaned_data['notice_date']
+                task.save()
+            else:
+                print(form.errors)
+                return render(request, 'ABC/new_task.html', {'form':form})
+
+        return redirect('new_task')
 
 
-def delete_task(request):
-    pass;
+def delete_task(request, task_id):
+    task = Task.objects.get(pk=task_id)
+    task.delete()
+    return redirect('tasks')
 
 
 def master_tables(request):
-
     vat_types = VatType.objects.all();
     delivery_types = DeliveryType.objects.all();
     payment_types = PaymentType.objects.all();
@@ -382,7 +459,9 @@ def master_tables(request):
 
 
 def new_delivery_type(request):
-    return render(request, 'ABC/new_delivery_type.html')
+    form = DeliveryTypeForm()
+    context = {'form': form}
+    return render(request, 'ABC/new_delivery_type.html', context)
 
 
 def add_delivery_type(request):
@@ -390,16 +469,17 @@ def add_delivery_type(request):
         # Add a new Payment Type
         form = DeliveryTypeForm(request.POST, request.FILES)
         if form.is_valid():
-            the_delivery_type = DeliveryType()
-            the_delivery_type.name = form.cleaned_data['name']
-            the_delivery_type.description = form.cleaned_data['description']
-            the_delivery_type.cost = form.cleaned_data['cost']
-            the_delivery_type.days = form.cleaned_data['days']
-            the_delivery_type.save()
+            delivery_type = DeliveryType()
+            delivery_type.name = form.cleaned_data['name']
+            delivery_type.description = form.cleaned_data['description']
+            delivery_type.cost = form.cleaned_data['cost']
+            delivery_type.days = form.cleaned_data['days']
+            delivery_type.save()
         else:
+            form.errors
             return render(request, 'ABC/new_delivery_type.html', {'form':form})
 
-        return HttpResponseRedirect(reverse('new_delivery_type'))
+        return redirect('new_delivery_type')
 
 
 def delete_delivery_type(request, delivery_type_id):
@@ -409,7 +489,9 @@ def delete_delivery_type(request, delivery_type_id):
 
 
 def new_payment_type(request):
-    return render(request, 'ABC/new_payment_type.html')
+    form = PaymentTypeForm()
+    context = {'form': form}
+    return render(request, 'ABC/new_payment_type.html', context)
 
 
 def add_payment_type(request):
@@ -417,15 +499,15 @@ def add_payment_type(request):
         # Add a new Payment Type
         form = PaymentTypeForm(request.POST, request.FILES)
         if form.is_valid():
-            the_payment_type = PaymentType()
-            the_payment_type.name = form.cleaned_data['name']
-            the_payment_type.description = form.cleaned_data['description']
-            the_payment_type.cost = form.cleaned_data['cost']
-            the_payment_type.save()
+            payment_type = PaymentType()
+            payment_type.name = form.cleaned_data['name']
+            payment_type.description = form.cleaned_data['description']
+            payment_type.cost = form.cleaned_data['cost']
+            payment_type.save()
         else:
             return render(request, 'ABC/new_payment_type.html', {'form':form})
 
-        return HttpResponseRedirect(reverse('new_payment_type'))
+        return redirect('new_payment_type')
 
 
 def delete_payment_type(request, payment_type_id):
@@ -435,7 +517,9 @@ def delete_payment_type(request, payment_type_id):
 
 
 def new_vat_type(request):
-    return render(request, 'ABC/new_vat_type.html')
+    form = VatTypeForm()
+    context = {'form': form}
+    return render(request, 'ABC/new_vat_type.html', context)
 
 
 def add_vat_type(request):
@@ -443,18 +527,17 @@ def add_vat_type(request):
         # Add a new VAT Type
         form = VatTypeForm(request.POST, request.FILES)
         if form.is_valid():
-            the_vat_type = VatType()
-            the_vat_type.name = form.cleaned_data['name']
-            the_vat_type.rate = form.cleaned_data['rate']
-            the_vat_type.save()
+            vat_type = VatType()
+            vat_type.name = form.cleaned_data['name']
+            vat_type.rate = form.cleaned_data['rate']
+            vat_type.save()
         else:
             return render(request, 'ABC/new_vat_type.html', {'form':form})
 
-        return HttpResponseRedirect(reverse('new_vat_type'))
+        return redirect('new_vat_type')
 
 
 def delete_vat_type(request, vat_type_id):
-
     vat_type = VatType.objects.get(pk=vat_type_id)
     vat_type.delete()
     return redirect('master_tables')

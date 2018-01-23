@@ -17,7 +17,7 @@
                 <th>#</th>
                 <th>{% trans 'Name' %}</th>
                 <th>{% trans 'Description' %}</th>
-                <th>{% trans 'Start Date' %}</th>
+                <th>{% trans 'Date' %}</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -29,7 +29,7 @@
                 <td>{{ task.id }}</td>
                 <td>{{ task.name }}</td>
                 <td>{{ task.description | safe | truncatewords:10 }}</td>
-                <td>{{ task.start_date}}</td>
+                <td>{{ task.date|date:'d F Y'}}</td>
                 <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
                 <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                        href="{% url 'delete_task' task.id %}">{% trans 'Delete' %}</a></td>
@@ -39,6 +39,24 @@
         </tbody>
     </table>
     </div>
+</div>
+
+<div class="container" style="margin-left:0px;width:25%">
+    <form class="form-anadir" action="{% url 'add_task' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            <legend></legend>
+            <label for="inputName" class="sr-only">{% trans 'Name' %}</label>
+            <input type="text" name="name" id="inputName" class="form-control" placeholder="{% trans 'Name' %}" required autofocus/>
+            <label for="inputNumber" class="sr-only">{% trans 'Description' %}</label>
+            <input type="text" name="description" id="description"  class="form-control" placeholder="{% trans 'Description' %}">
+            <label for="inputNumber" class="sr-only">{% trans 'Date' %}</label>
+            <input type="date" name="date" id="date" class="form-control" placeholder="{% trans 'Date' %}" required>
+            <input type="hidden" name="state" value="To Do"/>
+            <input type="hidden" name="mode" value="quick"/>
+            <button class="btn btn-primary btn-block" type="submit">{% trans 'Quick add' %}</button>
+        </fieldset>
+    </form>
 </div>
 
 

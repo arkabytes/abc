@@ -1,6 +1,7 @@
 {% load static %}
 {% load humanize %}
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
@@ -17,13 +18,17 @@
         <label for="name">{% trans 'Name' %}</label>
         <div class="input-group">
             <input type="text" name="name" id="name" class="form-control" placeholder="Name" size="50" aria-describedby="basic-addon1">
+            {{ form.name.errors }}
         </div>
         <br/>
         <div class="row">
             <div class="col-lg-6">
                 <label for="description">{% trans 'Description' %}</label>
                 <div class="input-group">
-                    <textarea id="description" name="description" class="form-control" placeholder="{% trans 'Description' %}" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
+                    <textarea id="description" name="description" class="form-control" placeholder="{% trans 'Description' %}" rows="5" cols="50" aria-describedby="basic-addon1">
+                        {{ form.description.value }}
+                    </textarea>
+                    {{ form.description.errors }}
                 </div>
             </div>
         </div>
@@ -31,8 +36,9 @@
         <label for="name">{% trans 'Cost' %}</label>
         <div class="input-group">
             <span class="input-group-addon">€</span>
-            <input type="number" name="cost" id="cost" style="width:120px" class="form-control" placeholder="{% trans 'Cost' %}" size="80" aria-describedby="basic-addon1">
+            {% render_field form.cost style='width:150px' class='form-control' style='width:150px' placeholder=form.cost.label %}
         </div>
+        {{ form.cost.errors }}
         <br/>
         <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
         <input type="hidden" name="mode" value="complete"/>

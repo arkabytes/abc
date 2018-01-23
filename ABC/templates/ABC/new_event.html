@@ -1,6 +1,7 @@
 {% load static %}
 {% load humanize %}
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
@@ -16,14 +17,18 @@
         <legend>{% trans 'Event Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>
         <div class="input-group">
-            <input type="text" name="name" id="name" class="form-control" placeholder="{% trans 'Name' %}" size="50" aria-describedby="basic-addon1">
+            {% render_field form.name class='form-control' placeholder=form.name.label size='50' id='name' %}
+            {{ form.name.errors }}
         </div>
         <br/>
         <div class="row">
             <div class="col-lg-6">
                 <label for="description">{% trans 'Description' %}</label>
                 <div class="input-group">
-                    <textarea id="description" name="description" class="form-control" placeholder="{% trans 'Description' %}" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
+                    <textarea id="description" name="description" class="form-control" placeholder="{% trans 'Description' %}" rows="5" cols="50" aria-describedby="basic-addon1">
+                        {{ form.description.value }}
+                    </textarea>
+                    {{ form.description.errors}}
                 </div>
             </div>
         </div>
@@ -32,7 +37,8 @@
             <div class="col-lg-3">
             <label for="stock">{% trans 'Date' %}</label>
                 <div class="input-group">
-                    <input type="date" name="date" id="date" size="30" class="form-control" placeholder="{% trans 'Date' %}" aria-describedby="basic-addon2">
+                    <input type="date" name="{{ form.date.label.lower }}" id="date" size="30" class="form-control" placeholder="{% trans 'Date' %}" aria-describedby="basic-addon2" value="{{ form.date.value }}">
+                    {{ form.date.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
@@ -44,7 +50,8 @@
             <div class="col-lg-3">
             <label for="retail_price">{% trans 'Location' %}</label>
                 <div class="input-group">
-                    <input type="text" name="location" id="location" size="30" class="form-control" placeholder="{% trans 'Location' %}" aria-describedby="basic-addon2">
+                    {% render_field form.location class='form-control' placeholder=form.location.label size='30' %}
+                    {{ form.location.errors }}
                 </div>
             </div>
         </div>
@@ -53,13 +60,15 @@
             <div class="col-lg-3">
                 <label for="customer">{% trans 'Customer' %}</label>
                 <div class="input-group">
-                    <input type="text" name="customer" id="customer" class="form-control" placeholder="{% trans 'Customer' %}" aria-describedby="basic-addon3">
+                    {% render_field form.customer class='form-control' placeholder=form.customer.label id='customer' %}
+                    {{ form.customer.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="provider">{% trans 'Provider' %}</label>
                 <div class="input-group">
-                    <input type="text" name="provider" id="provider" class="form-control" placeholder="{% trans 'Provider' %}" aria-describedby="basic-addon3">
+                    {% render_field form.provider class='form-control' placeholder=form.provider.label id='provider' %}
+                    {{ form.provider.errors }}
                 </div>
             </div>
         </div>

@@ -1,5 +1,6 @@
 from django import forms
 from .models import Item, Customer, VatType, DeliveryType, PaymentType, Provider
+from .models import Order, Task, Event, Invoice
 
 
 class ItemQuickForm(forms.ModelForm):
@@ -11,7 +12,7 @@ class ItemQuickForm(forms.ModelForm):
 class ItemForm(forms.ModelForm):
     class Meta:
         fields = ('name', 'description', 'notes', 'stock', 'cost_price', 'retail_price', 'thumbnail',
-                  'image1', 'image2', 'image3', )
+                  'image1', 'image2', 'image3', 'provider', 'vat_type')
         model = Item
 
 
@@ -57,3 +58,37 @@ class VatTypeForm(forms.ModelForm):
     class Meta:
         fields = ('name', 'rate')
         model = VatType
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        fields = ('number', 'date', 'delivery_date', 'state', 'notes', 'tax_base', 'vat', 'amount',
+                  'customer', 'delivery_cost', 'payment_cost', 'document', 'delivery_days',
+                  'delivery_type', 'payment_type', 'finished')
+        model = Order
+
+
+class InvoiceForm(forms.ModelForm):
+    class Meta:
+        fields = ('number', 'date', 'due_date', 'state', 'notes', 'tax_base', 'vat', 'amount',
+                  'customer_name', 'address', 'city', 'province', 'postal_code', 'document',
+                  'payment_type', 'order', 'customer')
+        model = Invoice
+
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        fields = ('name', 'description', 'date', 'location', 'customer', 'provider', 'notice_date')
+        model = Event
+
+
+class TaskForm(forms.ModelForm):
+    class Meta:
+        fields = ('name', 'description', 'date', 'start_date', 'finish_date', 'location', 'customer',
+                  'provider', 'order', 'state', 'notice', 'notice_date')
+        model = Task
+
+
+class TaskQuickForm(forms.ModelForm):
+    class Meta:
+        fields = ('name', 'description', 'date')
+        model = Task

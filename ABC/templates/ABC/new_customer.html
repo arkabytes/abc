@@ -42,7 +42,7 @@
             <div class="col-lg-3">
                 <label for="name">{% trans 'Name' %}</label>
                 <div class="input-group">
-                    {{ form.name | add_class:'form-control' | attr:"size:40" }}
+                    {% render_field form.name class='form-control' id=form.cif.label.lower placeholder=form.name.label size='40' %}
                     {{ form.name.errors }}
                     <!--<input type="text" id="name" name="name" class="form-control" placeholder="{% trans 'Name' %}" size="40" aria-describedby="basic-addon1" required/>-->
                 </div>

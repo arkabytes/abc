@@ -1,6 +1,7 @@
 {% load static %}
 {% load humanize %}
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
@@ -17,13 +18,17 @@
         <label for="name">{% trans 'Name' %}</label>
         <div class="input-group">
             <input type="text" name="name" id="name" class="form-control" placeholder="{% trans 'Name' %}" size="80" aria-describedby="basic-addon1">
+            {{ form.name.errors }}
         </div>
         <br/>
         <div class="row">
             <div class="col-lg-6">
                 <label for="description">{% trans 'Description' %}</label>
                 <div class="input-group">
-                    <textarea id="description" name="description" class="form-control" placeholder="{% trans 'Description' %}" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
+                    <textarea id="description" name="description" class="form-control" placeholder="{% trans 'Description' %}" rows="5" cols="50" aria-describedby="basic-addon1">
+                        {{ form.description.value }}
+                    </textarea>
+                    {{ form.description.errors }}
                 </div>
             </div>
         </div>
@@ -33,15 +38,17 @@
             <label for="stock">{% trans 'Days' %}</label>
                 <div class="input-group">
                     <span class="input-group-addon">#</span>
-                    <input type="number" name="days" id="days" style="width:120px" class="form-control" placeholder="{% trans 'Days' %}" aria-describedby="basic-addon2">
+                    {% render_field form.days type='number' style='width:120px' class='form-control' placeholder=form.days.label %}
                 </div>
+                {{ form.days.errors }}
             </div>
             <div class="col-lg-3">
             <label for="cost_price">{% trans 'Cost' %}</label>
                 <div class="input-group">
                     <span class="input-group-addon">€</span>
-                    <input type="number" name="cost" id="cost" style="width:120px" class="form-control" placeholder="{% trans 'Cost' %}" aria-describedby="basic-addon2">
+                    {% render_field form.cost type='number' style='width:120px' class='form-control' placeholder=form.cost.label %}
                 </div>
+                {{ form.cost.errors }}
             </div>
         </div>
         <br/>

@@ -1,6 +1,7 @@
 {% load static %}
 {% load humanize %}
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
@@ -16,20 +17,27 @@
         <legend>{% trans 'Item Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>
         <div class="input-group">
-            <input type="text" name="name" id="name" class="form-control" placeholder="{% trans 'Name' %}" size="80" aria-describedby="basic-addon1">
+            {% render_field form.name class='form-control' size='80' placeholder=form.name.label %}
+            {{ form.name.errors }}
         </div>
         <br/>
         <div class="row">
             <div class="col-lg-6">
                 <label for="description">{% trans 'Description' %}</label>
                 <div class="input-group">
-                    <textarea id="description" name="description" class="form-control" placeholder="{% trans 'Description' %}" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
+                    <textarea id="description" name="description" class="form-control" placeholder="{% trans 'Description' %}" rows="5" cols="50" aria-describedby="basic-addon1">
+                        {{ form.description.value }}
+                    </textarea>
+                    {{ form.description.errors }}
                 </div>
             </div>
             <div class="col-lg-6">
                 <label for="notes">{% trans 'Notes' %}</label>
                 <div class="input-group">
-                    <textarea id="notes" name="notes" class="form-control" placeholder="{% trans 'Notes' %}" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
+                    <textarea id="notes" name="notes" class="form-control" placeholder="{% trans 'Notes' %}" rows="5" cols="50" aria-describedby="basic-addon1">
+                        {{ form.notes.value }}
+                    </textarea>
+                    {{ form.notes.errors}}
                 </div>
             </div>
         </div>
@@ -39,22 +47,25 @@
             <label for="stock">{% trans 'Stock' %}</label>
                 <div class="input-group">
                     <span class="input-group-addon">#</span>
-                    <input type="number" name="stock" id="stock" style="width:150px" class="form-control" placeholder="{% trans 'Stock' %}" aria-describedby="basic-addon2">
+                    {% render_field form.stock class='form-control' style='width:150px' placeholder=form.stock.label %}
+                    {{ form.stock.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
             <label for="cost_price">{% trans 'Cost price' %}</label>
                 <div class="input-group">
                     <span class="input-group-addon">€</span>
-                    <input type="text" name="cost_price" id="cost_price" style="width:150px" class="form-control" placeholder="{% trans 'Coste price' %}" aria-describedby="basic-addon2">
+                    {% render_field form.cost_price style='width:150px' class='form-control' placeholder=form.cost_price.label %}
                 </div>
+                {{ form.cost_price.errors }}
             </div>
             <div class="col-lg-3">
             <label for="retail_price">{% trans 'Retail price' %}</label>
                 <div class="input-group">
                     <span class="input-group-addon">€</span>
-                    <input type="text" name="retail_price" id="retail_price" style="width:150px" class="form-control" placeholder="{% trans 'Retail price' %}" aria-describedby="basic-addon2">
+                    {% render_field form.retail_price style='width:150px' class='form-control' placeholder=form.retail_price.label %}
                 </div>
+                {{ form.retail_price.errors }}
             </div>
         </div>
         <br/>
@@ -62,25 +73,29 @@
             <div class="col-lg-3">
                 <label for="thumbnail">{% trans 'Thumbnail' %}</label>
                 <div class="input-group">
-                    <input type="file" name="thumbnail" id="thumbnail" class="form-control" aria-describedby="basic-addon3">
+                    {% render_field form.thumbnail type='file' class='form-control' %}
+                    {{ form.thumbnail.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="image1">{% trans 'Picture #1' %}</label>
                 <div class="input-group">
-                    <input type="file" name="image1" id="image1" class="form-control" aria-describedby="basic-addon3">
+                    {% render_field form.image1 type='file' class='form-control' %}
+                    {{ form.image1.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="image2">{% trans 'Picture #2' %}</label>
                 <div class="input-group">
-                    <input type="file" name="image2" id="image2" class="form-control" aria-describedby="basic-addon3">
+                    {% render_field form.image2 type='file' class='form-control' %}
+                    {{ form.image2.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="image3">{% trans 'Picture #3' %}</label>
                 <div class="input-group">
-                    <input type="file" name="image3" id="image3" class="form-control" aria-describedby="basic-addon3">
+                    {% render_field form.image3 type='file' class='form-control' %}
+                    {{ form.image3.errors }}
                 </div>
             </div>
         </div>
@@ -89,17 +104,15 @@
             <div class="col-lg-2">
                 <label for="provider">{% trans 'Provider' %}</label>
                 <div class="input-group">
-                    <select name="provider" id="provider" class="form-control" aria-describedby="basic-addon3">
-                        <option>{% trans 'Select Provider' %}</option>
-                    </select>
+                    {% render_field form.provider class='form-control' placeholder=form.provider.label %}
+                    {{ form.provider.errors }}
                 </div>
             </div>
             <div class="col-lg-2">
                 <label for="vat_type">{% trans 'VAT Type' %}</label>
                 <div class="input-group">
-                    <select name="vat_type" id="vat_type" class="form-control" aria-describedby="basic-addon3">
-                        <option>{% trans 'Select VAT Type' %}</option>
-                    </select>
+                    {% render_field form.vat_type class='form-control' placeholder=form.vat_type.label %}
+                    {{ form.vat_type.errors }}
                 </div>
             </div>
         </div>
