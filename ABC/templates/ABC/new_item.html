@@ -121,6 +121,14 @@
         <input type="hidden" name="mode" value="complete"/>
     </fieldset>
     </form>
+    {% if messages %}
+        {% for message in messages %}
+            <br/>
+            <div class="alert alert-success" role="alert">
+            {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
     </div>
 </div>
 

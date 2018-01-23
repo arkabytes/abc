@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from reportlab.pdfgen import canvas
 from io import BytesIO
 import json
@@ -89,6 +90,7 @@ def add_item(request):
             else:
                 return render(request, 'ABC/new_item.html', {'form':form})
 
+            messages.success('Item created successfully')
             return redirect('new_item')
 
 
@@ -189,6 +191,7 @@ def add_customer(request):
             else:
                 return render(request, 'ABC/new_customer.html', {'form':form})
 
+            messages.success('Customer created successfully')
             return redirect('new_customer')
 
 
@@ -250,6 +253,7 @@ def customer_info(request):
     customer_json['location'] = customer.city + ", " + customer.province
     customer_json['email'] = customer.email
     customer_json['web'] = customer.web
+    customer_json['phone'] = customer.phone
 
     data = json.dumps(customer_json)
     return HttpResponse(data, 'application/json')
@@ -294,9 +298,9 @@ def add_provider(request):
                 provider.notes = form.cleaned_data['notes']
                 provider.save()
             else:
-                print(form.errors)
                 return render(request, 'ABC/new_provider.html', {'form':form})
 
+            messages.success('Provider created successfully')
             return redirect('new_provider')
 
 
@@ -383,10 +387,11 @@ def add_event(request):
             event.notice_date = form.cleaned_data['notice_date']
             event.save()
         else:
-            print(form.errors)
             return render(request, 'ABC/new_event.html', {'form':form})
 
+    messages.success('Event created successfully')
     return redirect('new_event')
+
 
 def delete_event(request, event_id):
     event = Event.objects.get(pk=event_id)
@@ -438,9 +443,9 @@ def add_task(request):
                 task.notice_date = form.cleaned_data['notice_date']
                 task.save()
             else:
-                print(form.errors)
                 return render(request, 'ABC/new_task.html', {'form':form})
 
+        messages.success('Task created successfully')
         return redirect('new_task')
 
 
@@ -476,9 +481,9 @@ def add_delivery_type(request):
             delivery_type.days = form.cleaned_data['days']
             delivery_type.save()
         else:
-            form.errors
-            return render(request, 'ABC/new_delivery_type.html', {'form':form})
+            return render(request, 'ABC/new_delivery_type.html', {'form': form})
 
+        messages.success(request, 'Delivery Type created successfully')
         return redirect('new_delivery_type')
 
 
@@ -505,8 +510,9 @@ def add_payment_type(request):
             payment_type.cost = form.cleaned_data['cost']
             payment_type.save()
         else:
-            return render(request, 'ABC/new_payment_type.html', {'form':form})
+            return render(request, 'ABC/new_payment_type.html', {'form': form})
 
+        messages.success(request, 'Payment Type created successfully')
         return redirect('new_payment_type')
 
 
@@ -534,6 +540,7 @@ def add_vat_type(request):
         else:
             return render(request, 'ABC/new_vat_type.html', {'form':form})
 
+        messages.success(request, 'Vat Type created successfully')
         return redirect('new_vat_type')
 
 

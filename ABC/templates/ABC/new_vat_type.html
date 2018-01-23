@@ -1,6 +1,7 @@
 {% load static %}
 {% load humanize %}
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
@@ -16,19 +17,37 @@
         <legend>{% trans 'VAT Type Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>
         <div class="input-group">
-            <input type="text" name="name" id="name" class="form-control" placeholder="Name" size="50" aria-describedby="basic-addon1">
+            {% render_field form.name class='form-control' placeholder=form.name.label size='50' %}
+            {% if form.name.errors %}
+            <div class="alert alert-danger">
+                {{ form.name.errors }}
+            </div>
+            {% endif %}
         </div>
         <br/>
         <label for="rate">{% trans 'Rate' %}</label>
         <div class="input-group">
             <span class="input-group-addon">%</span>
-            <input type="number" name="rate" id="rate" style="width:120px" class="form-control" placeholder="Rate" size="6" aria-describedby="basic-addon1">
+            {% render_field form.rate class='form-control' style='width:120px' placeholder=form.name.label size='6' %}
         </div>
+        {% if form.rate.errors %}
+        <div class="alert alert-danger">
+            {{ form.rate.errors }}
+        </div>
+        {% endif %}
         <br/>
         <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
         <input type="hidden" name="mode" value="complete"/>
     </fieldset>
     </form>
+    {% if messages %}
+        {% for message in messages %}
+            <br/>
+            <div class="alert alert-success" role="alert">
+            {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
     </div>
 </div>
 

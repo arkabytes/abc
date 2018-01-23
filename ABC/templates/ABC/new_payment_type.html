@@ -17,8 +17,12 @@
         <legend>{% trans 'Payment Type Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>
         <div class="input-group">
-            <input type="text" name="name" id="name" class="form-control" placeholder="Name" size="50" aria-describedby="basic-addon1">
-            {{ form.name.errors }}
+            {% render_field form.name class='form-control' placeholder=form.name.label size='50' %}
+            {% if form.name.errors %}
+                <div class="alert alert-danger">
+                {{ form.name.errors }}
+                </div>
+            {% endif %}
         </div>
         <br/>
         <div class="row">
@@ -28,7 +32,11 @@
                     <textarea id="description" name="description" class="form-control" placeholder="{% trans 'Description' %}" rows="5" cols="50" aria-describedby="basic-addon1">
                         {{ form.description.value }}
                     </textarea>
-                    {{ form.description.errors }}
+                    {% if form.description.errors %}
+                    <div class="alert alert-danger">
+                        {{ form.description.errors }}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -38,12 +46,24 @@
             <span class="input-group-addon">€</span>
             {% render_field form.cost style='width:150px' class='form-control' style='width:150px' placeholder=form.cost.label %}
         </div>
-        {{ form.cost.errors }}
+        {% if form.cost.errors %}
+        <div class="alert alert-danger">
+            {{ form.cost.errors }}
+        </div>
+        {% endif %}
         <br/>
         <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
         <input type="hidden" name="mode" value="complete"/>
     </fieldset>
     </form>
+    {% if messages %}
+        {% for message in messages %}
+            <br/>
+            <div class="alert alert-success" role="alert">
+            {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
     </div>
 </div>
 

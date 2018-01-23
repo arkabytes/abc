@@ -17,8 +17,12 @@
         <legend>{% trans 'Delivery Type Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>
         <div class="input-group">
-            <input type="text" name="name" id="name" class="form-control" placeholder="{% trans 'Name' %}" size="80" aria-describedby="basic-addon1">
-            {{ form.name.errors }}
+            {% render_field form.name class='form-control' placeholder=form.name.label size='80' %}
+            {% if form.name.errors %}
+                <div class="alert alert-danger">
+                    {{ form.name.errors }}
+                </div>
+            {% endif %}
         </div>
         <br/>
         <div class="row">
@@ -28,7 +32,11 @@
                     <textarea id="description" name="description" class="form-control" placeholder="{% trans 'Description' %}" rows="5" cols="50" aria-describedby="basic-addon1">
                         {{ form.description.value }}
                     </textarea>
-                    {{ form.description.errors }}
+                    {% if form.description.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.description.errors }}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -40,7 +48,11 @@
                     <span class="input-group-addon">#</span>
                     {% render_field form.days type='number' style='width:120px' class='form-control' placeholder=form.days.label %}
                 </div>
-                {{ form.days.errors }}
+                {% if form.days.errors %}
+                    <div class="alert alert-danger">
+                    {{ form.days.errors }}
+                    </div>
+                {% endif %}
             </div>
             <div class="col-lg-3">
             <label for="cost_price">{% trans 'Cost' %}</label>
@@ -56,6 +68,14 @@
         <input type="hidden" name="mode" value="complete"/>
     </fieldset>
     </form>
+    {% if messages %}
+        {% for message in messages %}
+            <br/>
+            <div class="alert alert-success" role="alert">
+            {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
     </div>
 </div>
 

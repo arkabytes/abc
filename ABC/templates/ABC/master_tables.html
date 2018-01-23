@@ -103,7 +103,7 @@
                 <tr>
                     <td>{{ type.id }}</td>
                     <td>{{ type.name }}</td>
-                    <td>{{ type.rate | floatformat:2 | intcomma}} €</td>
+                    <td>{{ type.rate | floatformat:2 | intcomma}} %</td>
                     <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
                     <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                            href="{% url 'delete_vat_type' type.id %}">{% trans 'Delete' %}</a></td>

@@ -11,10 +11,11 @@
             url: "{% url 'customer_info' %}?customer_id=" + customer_id,
             dataType: 'json',
             success: function(data) {
-                $('#name').text(data['name']);
+                $('#name').text(data['name'] + ' (' + data['company_name'] +  ')');
                 $('#location').text(data['location']);
                 $('#email').text(data['email']);
                 $('#web').text(" " + data['web']);
+                $('#phone').text("" + data['phone']);
             },
             error: function(uno, dos, tres) {
                 alert("An error has occured while loading customer info");
@@ -76,13 +77,13 @@
                                 </div>
                                 <div class="col-sm-6 col-md-8" style="line-height: 17pt">
                                     <h4 id="name">Federico Faci</h4>
-                                        <cite id="location" title="Pina de Ebro, Zaragoza">Pina de Ebro, Zaragoza <i class="glyphicon glyphicon-map-marker"></i></cite>
+                                        <i class="glyphicon glyphicon-map-marker"></i> <cite id="location" title="Pina de Ebro, Zaragoza">Pina de Ebro, Zaragoza </cite>
                                     <p>
-                                        <span id="email"><i class="glyphicon glyphicon-envelope"></i> ffaci@gmail.com</span>
+                                        <i class="glyphicon glyphicon-envelope"></i> <span id="email">ffaci@gmail.com</span>
                                         <br />
                                         <i class="glyphicon glyphicon-globe"></i><a id="web" href="http://www.jquery2dotnet.com"> http://www.sekano.net</a>
                                         <br />
-                                        <i class="glyphicon glyphicon-gift"></i> 11 Septiembre 2010
+                                        <i class="glyphicon glyphicon-phone"></i> <span id="phone">11 Septiembre 2010</span>
                                     </p>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-primary">
