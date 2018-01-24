@@ -111,15 +111,7 @@
         </div>
     </div>
 </div>
-<script>
-    $(document).ready(function() {
-        $(document).on('click', '#customer_info', function(e) {
-            e.preventDefault();
-            customer_id = $(this).attr('data-id');
 
-        });
-    });
-</script>
 <div class="container" style="margin-left:0px;width:25%">
     <form class="form-anadir" action="{% url 'add_customer' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}

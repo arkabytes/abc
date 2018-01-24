@@ -57,6 +57,18 @@
             <button class="btn btn-primary btn-block" type="submit">{% trans 'Quick add' %}</button>
         </fieldset>
     </form>
+    {% if messages %}
+        {% for message in messages %}
+            <br/>
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" role="alert">
+            {% elif message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">
+            {% endif %}
+                    {{ message }}
+                </div>
+        {% endfor %}
+    {% endif %}
 </div>
 
 

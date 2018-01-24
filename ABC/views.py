@@ -4,6 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from reportlab.pdfgen import canvas
+from django.utils.safestring import mark_safe
 from io import BytesIO
 import json
 
@@ -60,37 +61,40 @@ def add_item(request):
         if request.POST['mode'] == 'quick':
             # Add a new item in quick mode
             form = ItemQuickForm(request.POST, request.FILES)
-            if form.is_valid():
-                item = Item()
-                item.name = form.cleaned_data['name']
-                item.description = form.cleaned_data['description']
-                item.retail_price = form.cleaned_data['retail_price']
-                item.thumbnail = form.cleaned_data['thumbnail']
-                item.save()
+            if not form.is_valid():
+                messages.error(request, 'Some errors has occurred')
+                return redirect('items')
 
+            item = Item()
+            item.name = form.cleaned_data['name']
+            item.description = form.cleaned_data['description']
+            item.retail_price = form.cleaned_data['retail_price']
+            item.thumbnail = form.cleaned_data['thumbnail']
+            item.save()
+            messages.success(request, 'Item created successfully')
             return redirect('items')
         else:
             # Add a new item in complete mode (with every field filled)
             form = ItemForm(request.POST, request.FILES)
-            if form.is_valid():
-                item = Item()
-                item.name = form.cleaned_data['name']
-                item.description = form.cleaned_data['description']
-                item.notes = form.cleaned_data['notes']
-                item.stock = form.cleaned_data['stock']
-                item.cost_price = form.cleaned_data['cost_price']
-                item.retail_price = form.cleaned_data['retail_price']
-                item.thumbnail = form.cleaned_data['thumbnail']
-                item.image1 = form.cleaned_data['image1']
-                item.image2 = form.cleaned_data['image2']
-                item.image3 = form.cleaned_data['image3']
-                # item.provider =
-                # item.vat_type =
-                item.save()
-            else:
-                return render(request, 'ABC/new_item.html', {'form':form})
+            if not form.is_valid():
+                messages.error(request, 'Some errors has occurred')
+                return render(request, 'ABC/new_item.html', {'form': form})
 
-            messages.success('Item created successfully')
+            item = Item()
+            item.name = form.cleaned_data['name']
+            item.description = form.cleaned_data['description']
+            item.notes = form.cleaned_data['notes']
+            item.stock = form.cleaned_data['stock']
+            item.cost_price = form.cleaned_data['cost_price']
+            item.retail_price = form.cleaned_data['retail_price']
+            item.thumbnail = form.cleaned_data['thumbnail']
+            item.image1 = form.cleaned_data['image1']
+            item.image2 = form.cleaned_data['image2']
+            item.image3 = form.cleaned_data['image3']
+            item.provider = form.cleaned_data['provider']
+            item.vat_type = form.cleaned_data['vat_type']
+            item.save()
+            messages.success(request, 'Item created successfully')
             return redirect('new_item')
 
 
@@ -136,11 +140,36 @@ def autocomplete_item(request):
         else:
             item_json['availability'] = 'Out of Stock'
         item_json['retail_price'] = item.retail_price
+        if item.provider is not None:
+            item_json['provider_name'] = item.provider.name
+        else:
+            item_json['provider_name'] = 'No provider'
         results.append(item_json)
 
     data = json.dumps(results)
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
+
+
+def item_info(request):
+    item_id = request.GET.get('item_id')
+    item = Item.objects.get(pk=item_id)
+    item_json = {}
+    item_json['name'] = item.name
+    item_json['description'] = mark_safe(item.description)
+    if item.provider is not None:
+        item_json['provider_name'] = item.provider.name
+    else:
+        item_json['provider_name'] = 'No provider'
+    item_json['cost_price'] = item.cost_price
+    item_json['retail_price'] = item.retail_price
+    if item.thumbnail is not None:
+        item_json['thumbnail'] = item.thumbnail.url
+    else:
+        item_json['thumbnail'] = 'item.png'
+
+    data = json.dumps(item_json)
+    return HttpResponse(data, 'application/json')
 
 
 def customer(request, customer_id):
@@ -160,38 +189,41 @@ def add_customer(request):
         if request.POST['mode'] == 'quick':
             # Add a new customer in quick mode
             form = CustomerQuickForm(request.POST, request.FILES)
-            if form.is_valid():
-                customer = Customer()
-                customer.company_name = form.cleaned_data['company_name']
-                customer.name = form.cleaned_data['name']
-                customer.email = form.cleaned_data['email']
-                customer.save()
+            if not form.is_valid():
+                messages.error(request, 'Some errors has occurred')
+                return redirect('customers')
 
+            customer = Customer()
+            customer.company_name = form.cleaned_data['company_name']
+            customer.name = form.cleaned_data['name']
+            customer.email = form.cleaned_data['email']
+            customer.save()
+            messages.success(request, 'Customer created successfully')
             return redirect('customers')
         else:
             # Add a new customer in complete mode (with every field filled)
             form = CustomerForm(request.POST, request.FILES)
-            if form.is_valid():
-                customer = Customer()
-                customer.cif = form.cleaned_data['cif']
-                customer.company_name = form.cleaned_data['company_name']
-                customer.name = form.cleaned_data['name']
-                customer.surname = form.cleaned_data['surname']
-                customer.address = form.cleaned_data['address']
-                customer.city = form.cleaned_data['city']
-                customer.province = form.cleaned_data['province']
-                customer.postal_code = form.cleaned_data['postal_code']
-                customer.country = form.cleaned_data['country']
-                customer.phone = form.cleaned_data['phone']
-                customer.fax = form.cleaned_data['fax']
-                customer.email = form.cleaned_data['email']
-                customer.web = form.cleaned_data['web']
-                customer.notes = form.cleaned_data['notes']
-                customer.save()
-            else:
-                return render(request, 'ABC/new_customer.html', {'form':form})
+            if not form.is_valid():
+                messages.error(request, 'Some errors has occurred')
+                return render(request, 'ABC/new_customer.html', {'form': form})
 
-            messages.success('Customer created successfully')
+            customer = Customer()
+            customer.cif = form.cleaned_data['cif']
+            customer.company_name = form.cleaned_data['company_name']
+            customer.name = form.cleaned_data['name']
+            customer.surname = form.cleaned_data['surname']
+            customer.address = form.cleaned_data['address']
+            customer.city = form.cleaned_data['city']
+            customer.province = form.cleaned_data['province']
+            customer.postal_code = form.cleaned_data['postal_code']
+            customer.country = form.cleaned_data['country']
+            customer.phone = form.cleaned_data['phone']
+            customer.fax = form.cleaned_data['fax']
+            customer.email = form.cleaned_data['email']
+            customer.web = form.cleaned_data['web']
+            customer.notes = form.cleaned_data['notes']
+            customer.save()
+            messages.success(request, 'Customer created successfully')
             return redirect('new_customer')
 
 
@@ -270,37 +302,40 @@ def add_provider(request):
         if request.POST['mode'] == 'quick':
             # Add a new provider in quick mode
             form = ProviderQuickForm(request.POST, request.FILES)
-            if form.is_valid():
-                provider = Provider()
-                provider.name = form.cleaned_data['name']
-                provider.contact_name = form.cleaned_data['contact_name']
-                provider.email = form.cleaned_data['email']
-                provider.save()
+            if not form.is_valid():
+                messages.error(request, 'Some errors occurred')
+                return redirect('providers')
 
+            provider = Provider()
+            provider.name = form.cleaned_data['name']
+            provider.contact_name = form.cleaned_data['contact_name']
+            provider.email = form.cleaned_data['email']
+            provider.save()
+            messages.success(request, 'Provider created successfully')
             return redirect('providers')
         else:
             # Add a new provider in complete mode (with every field filled)
             form = ProviderForm(request.POST, request.FILES)
-            if form.is_valid():
-                provider = Provider()
-                provider.cif = form.cleaned_data['cif']
-                provider.name = form.cleaned_data['name']
-                provider.contact_name = form.cleaned_data['contact_name']
-                provider.address = form.cleaned_data['address']
-                provider.city = form.cleaned_data['city']
-                provider.province = form.cleaned_data['province']
-                provider.postal_code = form.cleaned_data['postal_code']
-                provider.country = form.cleaned_data['country']
-                provider.phone = form.cleaned_data['phone']
-                provider.fax = form.cleaned_data['fax']
-                provider.email = form.cleaned_data['email']
-                provider.web = form.cleaned_data['web']
-                provider.notes = form.cleaned_data['notes']
-                provider.save()
-            else:
-                return render(request, 'ABC/new_provider.html', {'form':form})
+            if not form.is_valid():
+                messages.error(request, 'Some errors has occurred')
+                return render(request, 'ABC/new_provider.html', {'form': form})
 
-            messages.success('Provider created successfully')
+            provider = Provider()
+            provider.cif = form.cleaned_data['cif']
+            provider.name = form.cleaned_data['name']
+            provider.contact_name = form.cleaned_data['contact_name']
+            provider.address = form.cleaned_data['address']
+            provider.city = form.cleaned_data['city']
+            provider.province = form.cleaned_data['province']
+            provider.postal_code = form.cleaned_data['postal_code']
+            provider.country = form.cleaned_data['country']
+            provider.phone = form.cleaned_data['phone']
+            provider.fax = form.cleaned_data['fax']
+            provider.email = form.cleaned_data['email']
+            provider.web = form.cleaned_data['web']
+            provider.notes = form.cleaned_data['notes']
+            provider.save()
+            messages.success(request, 'Provider created successfully')
             return redirect('new_provider')
 
 
@@ -376,21 +411,21 @@ def add_event(request):
     if request.method == 'POST':
         # Add a new event in complete mode (with every field filled)
         form = EventForm(request.POST, request.FILES)
-        if form.is_valid():
-            event = Event()
-            event.name = form.cleaned_data['name']
-            event.description = form.cleaned_data['description']
-            event.date = form.cleaned_data['date']
-            event.location = form.cleaned_data['location']
-            event.customer = form.cleaned_data['customer']
-            event.provider = form.cleaned_data['provider']
-            event.notice_date = form.cleaned_data['notice_date']
-            event.save()
-        else:
-            return render(request, 'ABC/new_event.html', {'form':form})
+        if not form.is_valid():
+            messages.error(request, 'Some errors has occurred')
+            return render(request, 'ABC/new_event.html', {'form': form})
 
-    messages.success('Event created successfully')
-    return redirect('new_event')
+        event = Event()
+        event.name = form.cleaned_data['name']
+        event.description = form.cleaned_data['description']
+        event.date = form.cleaned_data['date']
+        event.location = form.cleaned_data['location']
+        event.customer = form.cleaned_data['customer']
+        event.provider = form.cleaned_data['provider']
+        event.notice_date = form.cleaned_data['notice_date']
+        event.save()
+        messages.success(request, 'Event created successfully')
+        return redirect('new_event')
 
 
 def delete_event(request, event_id):
@@ -416,37 +451,40 @@ def add_task(request):
         if request.POST['mode'] == 'quick':
             # Add a new task in quick mode
             form = TaskQuickForm(request.POST, request.FILES)
-            if form.is_valid():
-                task = Task()
-                task.name = form.cleaned_data['name']
-                task.description = form.cleaned_data['description']
-                task.date = form.cleaned_data['date']
-                task.save()
+            if not form.is_valid():
+                messages.error(request, 'Some errors has occurred')
+                return redirect('tasks')
 
+            task = Task()
+            task.name = form.cleaned_data['name']
+            task.description = form.cleaned_data['description']
+            task.date = form.cleaned_data['date']
+            task.save()
+            messages.success(request, 'Task cread successfully')
             return redirect('tasks')
         else:
             # Add a new task in complete mode (with every field filled)
             form = TaskForm(request.POST, request.FILES)
-            if form.is_valid():
-                task = Task()
-                task.name = form.cleaned_data['name']
-                task.description = form.cleaned_data['description']
-                task.date = form.cleaned_data['date']
-                task.start_date = form.cleaned_data['start_date']
-                task.finish_date = form.cleaned_data['finish_date']
-                task.location = form.cleaned_data['location']
-                task.customer = form.cleaned_data['customer']
-                task.provider = form.cleaned_data['provider']
-                task.order = form.cleaned_data['order']
-                task.state = form.cleaned_data['state']
-                task.notice = form.cleaned_data['notice']
-                task.notice_date = form.cleaned_data['notice_date']
-                task.save()
-            else:
-                return render(request, 'ABC/new_task.html', {'form':form})
+            if not form.is_valid():
+                messages.error(request, 'Some errors has occurred')
+                return render(request, 'ABC/new_task.html', {'form': form})
 
-        messages.success('Task created successfully')
-        return redirect('new_task')
+            task = Task()
+            task.name = form.cleaned_data['name']
+            task.description = form.cleaned_data['description']
+            task.date = form.cleaned_data['date']
+            task.start_date = form.cleaned_data['start_date']
+            task.finish_date = form.cleaned_data['finish_date']
+            task.location = form.cleaned_data['location']
+            task.customer = form.cleaned_data['customer']
+            task.provider = form.cleaned_data['provider']
+            task.order = form.cleaned_data['order']
+            task.state = form.cleaned_data['state']
+            task.notice = form.cleaned_data['notice']
+            task.notice_date = form.cleaned_data['notice_date']
+            task.save()
+            messages.success(request, 'Task created successfully')
+            return redirect('new_task')
 
 
 def delete_task(request, task_id):
@@ -473,16 +511,16 @@ def add_delivery_type(request):
     if request.method == 'POST':
         # Add a new Payment Type
         form = DeliveryTypeForm(request.POST, request.FILES)
-        if form.is_valid():
-            delivery_type = DeliveryType()
-            delivery_type.name = form.cleaned_data['name']
-            delivery_type.description = form.cleaned_data['description']
-            delivery_type.cost = form.cleaned_data['cost']
-            delivery_type.days = form.cleaned_data['days']
-            delivery_type.save()
-        else:
+        if not form.is_valid():
+            messages.error(request, 'Some errors has occurred')
             return render(request, 'ABC/new_delivery_type.html', {'form': form})
 
+        delivery_type = DeliveryType()
+        delivery_type.name = form.cleaned_data['name']
+        delivery_type.description = form.cleaned_data['description']
+        delivery_type.cost = form.cleaned_data['cost']
+        delivery_type.days = form.cleaned_data['days']
+        delivery_type.save()
         messages.success(request, 'Delivery Type created successfully')
         return redirect('new_delivery_type')
 
@@ -503,15 +541,15 @@ def add_payment_type(request):
     if request.method == 'POST':
         # Add a new Payment Type
         form = PaymentTypeForm(request.POST, request.FILES)
-        if form.is_valid():
-            payment_type = PaymentType()
-            payment_type.name = form.cleaned_data['name']
-            payment_type.description = form.cleaned_data['description']
-            payment_type.cost = form.cleaned_data['cost']
-            payment_type.save()
-        else:
+        if not form.is_valid():
+            messages.error(request, 'Some errors has occurred')
             return render(request, 'ABC/new_payment_type.html', {'form': form})
 
+        payment_type = PaymentType()
+        payment_type.name = form.cleaned_data['name']
+        payment_type.description = form.cleaned_data['description']
+        payment_type.cost = form.cleaned_data['cost']
+        payment_type.save()
         messages.success(request, 'Payment Type created successfully')
         return redirect('new_payment_type')
 
@@ -533,13 +571,13 @@ def add_vat_type(request):
         # Add a new VAT Type
         form = VatTypeForm(request.POST, request.FILES)
         if form.is_valid():
-            vat_type = VatType()
-            vat_type.name = form.cleaned_data['name']
-            vat_type.rate = form.cleaned_data['rate']
-            vat_type.save()
-        else:
-            return render(request, 'ABC/new_vat_type.html', {'form':form})
+            messages.error(request, 'Some errors has occurred')
+            return render(request, 'ABC/new_vat_type.html', {'form': form})
 
+        vat_type = VatType()
+        vat_type.name = form.cleaned_data['name']
+        vat_type.rate = form.cleaned_data['rate']
+        vat_type.save()
         messages.success(request, 'Vat Type created successfully')
         return redirect('new_vat_type')
 

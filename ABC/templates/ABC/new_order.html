@@ -1,6 +1,7 @@
 {% load static %}
 {% load humanize %}
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
@@ -9,10 +10,23 @@
 <script type="text/javascript">
     // Delete an item from the order cart
     function remove_item(element) {
+
+        if (!confirm("Are you sure?")) {
+            return;
+        }
+
         // delete the tr node from the tbody of the order cart
         var tr_node = element.parentNode.parentNode;
         var tbody_node = tr_node.parentNode;
         tbody_node.removeChild(tr_node);
+
+        // Recalcultate cart price
+        // TODO Add shipping cost
+        var total_retail_price = tr_node.childNodes.item(3).textContent;
+        var subtotal = parseInt($('#subtotal').text()) - total_retail_price;
+        $('#subtotal').text(subtotal + " €");
+        $('#total').text(subtotal + " €");
+
         $.ajax({
             type: 'post',
             url: '',
@@ -23,6 +37,22 @@
 
             }
         });
+    }
+
+    function change_quantity(element) {
+
+        var quantity = element.value;
+        var tr_node = element.parentNode.parentNode;
+        var retail_price = tr_node.childNodes.item(2).textContent;
+
+        var previous_total_retail_price = tr_node.childNodes.item(3).textContent;
+        var new_total_retail_price = quantity * retail_price;
+        tr_node.childNodes.item(3).textContent = new_total_retail_price;
+
+        var subtotal = parseInt($('#subtotal').text()) + (new_total_retail_price - previous_total_retail_price);
+        $('#subtotal').text(subtotal + " €");
+        $('#total').text(subtotal + " €");
+
     }
 
     // Disable the form submission in the case the user press the enter key
@@ -40,18 +70,18 @@
             minLength: 2,
             select: function(event, ui) {
 
-                var code = "<tr><td class=\"col-sm-8 col-md-6\"><div class=\"media\"><a class=\"thumbnail pull-left\" href=\"#\">" +
+                var code = "<tr id=\"<item_id>\"><td class=\"col-sm-8 col-md-6\"><div class=\"media\"><a class=\"thumbnail pull-left\" href=\"#\">" +
                 "<img class=\"media-object\" src=\"http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png\" style=\"width: 72px; height: 72px;\"> </a>" +
                 "<div class=\"media-body\">" +
                 "<h4 class=\"media-heading\" style=\"margin-left:5px\"><a href=\"#\"><item_name></a></h4>" +
                 "<h5 class=\"media-heading\" style=\"margin-left:5px\"> by <a href=\"#\"><provider_name></a></h5>" +
                 "<span style=\"margin-left:5px\">Status: </span><span class=\"text-success\"><strong><availability></strong></span></div></div></td>" +
                 "<td class=\"col-sm-1 col-md-1\" style=\"text-align: center\">" +
-                "<input type=\"number\" class=\"form-control\" id=\"quantity\" value=\"1\"></td>" +
-                "<td class=\"col-sm-1 col-md-1 text-center\"><strong><retail_price></strong></td>" +
-                "<td class=\"col-sm-1 col-md-1 text-center\"><strong><total></strong></td>" +
+                "<input type=\"number\" class=\"form-control\" id=\"quantity\" value=\"1\" onchange=\"javascript:change_quantity(this)\"></td>" +
+                "<td class=\"col-sm-1 col-md-1 text-center\"><strong id=\"retail_price\"><retail_price></strong></td>" +
+                "<td class=\"col-sm-1 col-md-1 text-center\" style=\"font-weight:bold\"><strong><total></strong></td>" +
                 "<td class=\"col-sm-1 col-md-1\">" +
-                "<button type=\"button\" onclick=\"javascript:remove_item(this);\" value=\"<item_id>\" class=\"btn btn-danger\">" +
+                "<button type=\"button\" onclick=\"javascript:remove_item(this);\" value=\"<retail_price>\" class=\"btn btn-danger\">" +
                 "<span class=\"glyphicon glyphicon-remove\"></span> Remove" +
                 "</button></td></tr>";
 
@@ -59,8 +89,15 @@
                 code = code.replace("<item_id>", ui.item.id);
                 code = code.replace("<availability>", ui.item.availability);
                 code = code.replace("<retail_price>", ui.item.retail_price);
+                code = code.replace("<retail_price>", ui.item.retail_price);
                 code = code.replace("<total>", ui.item.retail_price);
-                //code = code.replace("<provider_name>", ui.item.provider_name);
+                code = code.replace("<provider_name>", ui.item.provider_name);
+
+                // Recalcultate cart price
+                // TODO add shipping cost
+                var subtotal = parseInt($('#subtotal').text()) + ui.item.retail_price;
+                $('#subtotal').text(subtotal + " €");
+                $('#total').text(subtotal + " €");
 
                 event.preventDefault();
                 $('#details_body').prepend(code);
@@ -99,19 +136,22 @@
             <div class="col-lg-3">
                 <label for="number">{% trans 'Number' %}</label>
                 <div class="input-group">
-                    <input type="text" name="number" id="number" class="form-control" placeholder="{% trans 'Number' %}" size="10" aria-describedby="basic-addon1">
+                    {% render_field form.number class='form-control' size='10' placeholder=form.number.label %}
+                    {{ form.number.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="date">{% trans 'Date' %}</label>
                 <div class="input-group">
-                    <input type="date" name="date" id="date" class="form-control" placeholder="{% trans 'Date' %}" size="10" aria-describedby="basic-addon1">
+                    <input type="date" name="date" id="date" class="form-control" placeholder="{% trans 'Date' %}" size="10" value="{{ form.date.value }}">
+                    {{ form.date.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="delivery_date">{% trans 'Delivery Date' %}</label>
                 <div class="input-group">
-                    <input type="date" name="delivery_date" id="deliver_date" class="form-control" placeholder="{% trans 'Delivery Date' %}" size="10" aria-describedby="basic-addon1">
+                    <input type="date" name="delivery_date" id="deliver_date" class="form-control" placeholder="{% trans 'Delivery Date' %}" size="10" value="{{ form.delivery_date.value }}">
+                    {{ form.delivery_date.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
@@ -124,6 +164,7 @@
                         <option>Sent</option>
                         <option>Received</option>
                     </select>
+                    {{ form.state.errors }}
                 </div>
             </div>
         </div>
@@ -132,19 +173,22 @@
             <div class="col-lg-3">
                 <label for="Customer">{% trans 'Customer' %}</label>
                 <div class="input-group">
-                    <input type="text" name="customer" id="customer" class="form-control" placeholder="{% trans 'Customer' %}" size="20" aria-describedby="basic-addon1">
+                    {% render_field form.customer class='form-control' placeholder=form.customer.label %}
+                    {{ form.customer.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="delivery_type">{% trans 'Delivery Type' %}</label>
                 <div class="input-group">
-                    <input type="text" name="delivery_type" id="delivery_type" class="form-control" placeholder="{% trans 'Delivery Type' %}" size="20" aria-describedby="basic-addon1">
+                    {% render_field form.delivery_type class='form-control' placeholder=form.delivery_type.label %}
+                    {{ form.delivery_type.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="payment_type">{% trans 'Payment Type' %}</label>
                 <div class="input-group">
-                    <input type="text" name="payment_type" id="payment_type" class="form-control" placeholder="{% trans 'Payment Type' %}" size="20" aria-describedby="basic-addon1">
+                    {% render_field form.payment_type class='form-control' placeholder=form.payment_type.label %}
+                    {{ form.payment_type.errors }}
                 </div>
             </div>
         </div>
@@ -153,14 +197,17 @@
             <div class="col-lg-6">
                 <label for="notes">{% trans 'Notes' %}</label>
                 <div class="input-group">
-                    <textarea id="notes" name="notes" class="form-control" placeholder="{% trans 'Notes' %}" rows="5" cols="50" aria-describedby="basic-addon1"></textarea>
+                    <textarea id="notes" name="notes" class="form-control" placeholder="{% trans 'Notes' %}" rows="5" cols="50" aria-describedby="basic-addon1">
+                        {{ form.notes.value }}
+                    </textarea>
+                    {{ form.notes.errors }}
                 </div>
             </div>
         </div>
         <br/>
     </fieldset>
     <fieldset>
-        <legend>Details Information</legend>
+        <legend>{% trans 'Details Information' %}</legend>
         <div class="container">
             <input type="text" name="add_item" id="add_item" class="form-control" placeholder="{% trans 'Add Item' %}" size="30" aria-describedby="basic-addon1">
         </div>
@@ -169,10 +216,10 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th class="text-center">Price</th>
-                        <th class="text-center">Total</th>
+                        <th>{% trans 'Product' %}</th>
+                        <th>{% trans 'Quantity' %}</th>
+                        <th class="text-center">{% trans 'Price' %}</th>
+                        <th class="text-center">{% trans 'Total' %}</th>
                         <th> </th>
                     </tr>
                 </thead>
@@ -181,22 +228,22 @@
                         <td>   </td>
                         <td>   </td>
                         <td>   </td>
-                        <td><h5>Subtotal</h5></td>
-                        <td class="text-right"><h5><strong>$24.59</strong></h5></td>
+                        <td><h5>{% trans 'Subtotal' %}</h5></td>
+                        <td class="text-right"><h5><strong id="subtotal">0,00 €</strong></h5></td>
                     </tr>
                     <tr>
                         <td>   </td>
                         <td>   </td>
                         <td>   </td>
-                        <td><h5>Estimated shipping</h5></td>
-                        <td class="text-right"><h5><strong>$6.94</strong></h5></td>
+                        <td><h5>{% trans 'Estimated shipping' %}</h5></td>
+                        <td class="text-right"><h5><strong id="estimated_shipping">0,00 €</strong></h5></td>
                     </tr>
                     <tr>
                         <td>   </td>
                         <td>   </td>
                         <td>   </td>
-                        <td><h3>Total</h3></td>
-                        <td class="text-right"><h3><strong>$31.53</strong></h3></td>
+                        <td><h3>{% trans 'Total' %}</h3></td>
+                        <td class="text-right"><h3><strong id="total">0,00 €</strong></h3></td>
                     </tr>
                 </tbody>
             </table>
@@ -209,9 +256,13 @@
     {% if messages %}
         {% for message in messages %}
             <br/>
-            <div class="alert alert-success" role="alert">
-            {{ message }}
-            </div>
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" role="alert">
+            {% elif message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">
+            {% endif %}
+                    {{ message }}
+                </div>
         {% endfor %}
     {% endif %}
     </div>

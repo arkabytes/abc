@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^item/(?P<item_id>[0-9]*)/$', views.item, name='item'),
     url(r'items/$', views.items, name='items'),
     url(r'^autocomplete_item/$', views.autocomplete_item, name='autocomplete_item'),
+    url(r'^item_info/$', views.item_info, name='item_info'),
 
     url(r'new_provider/$', views.new_provider, name='new_provider'),
     url(r'add_provider/$', views.add_provider, name='add_provider'),
