@@ -5,6 +5,26 @@
 {% include 'ABC/navbar.html' %}
 {% include 'ABC/page_header.html' with title='Providers' icon='ABC/icons/anadirproveedor32.png' new_link='new_provider' tooltip='Add Provider' %}
 
+<script type="text/javascript">
+    function select_provider(provider_id) {
+        $.ajax({
+            url: "{% url 'provider_info' %}?provider_id=" + provider_id,
+            dataType: 'json',
+            success: function(data) {
+                $('#provider_name').text(data['name'] + ' (' + data['contact_name'] +  ')');
+                $('#location').text(data['location']);
+                $('#provider_email').text(data['email']);
+                $('#web').text(" " + data['web']);
+                $('#web').attr("href", data['web']);
+                $('#phone').text("" + data['phone']);
+            },
+            error: function(uno, dos, tres) {
+                alert("An error has occured while loading customer info");
+            }
+        });
+    }
+</script>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         {% trans 'Providers' %}
@@ -26,7 +46,8 @@
         {% for provider in providers %}
             <tr>
                 <td>{{ provider.id }}</td>
-                <td>{{ provider.name }}</td>
+                <td><a data-toggle="modal" data-target="#info_provider" data-id="{{ provider.id }}" id="provider_info"
+                           onclick="javascript:select_provider({{ provider.id }})" href="#">{{ provider.name }}</a></td>
                 <td>{{ provider.contact_name }}</td>
                 <td>{{ provider.email }}</td>
                 <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
@@ -54,6 +75,58 @@
             <button class="btn btn-primary btn-block" type="submit">{% trans 'Quick add' %}</button>
         </fieldset>
     </form>
+</div>
+<div class="modal fade" id="info_provider" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Provider</h4>
+            </div>
+            <br/>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="well well-sm">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-4">
+                                    <img src="{% static 'ABC/icons/provider512.png' %}" alt="" class="img-rounded img-responsive" />
+                                </div>
+                                <div class="col-sm-6 col-md-8" style="line-height: 17pt">
+                                    <h4 id="provider_name">name</h4>
+                                        <i class="glyphicon glyphicon-map-marker"></i> <cite id="location" title="location">Location</cite>
+                                    <p>
+                                        <i class="glyphicon glyphicon-envelope"></i> <span id="provider_email">email</span>
+                                        <br />
+                                        <i class="glyphicon glyphicon-globe"></i><a id="web" target="_blank" href="#"> url</a>
+                                        <br />
+                                        <i class="glyphicon glyphicon-phone"></i> <span id="phone">date</span>
+                                    </p>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary">
+                                            {% trans 'View' %}
+                                        </button>
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                            <span class="caret"></span><span class="sr-only">{% trans 'View' %}</span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="{% url 'orders' %}">{% trans 'Orders' %}</a></li>
+                                            <li><a href="{% url 'invoices' %}">{% trans 'Invoices' %}</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="{% url 'tasks' %}">{% trans 'Tasks' %}</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% include 'ABC/footer.html' %}

@@ -8,6 +8,41 @@
 {% include 'ABC/page_header.html' with title='New Order' %}
 
 <script type="text/javascript">
+    // Save dynamic HTML code generated during order details creation
+    function saveOrderDetails() {
+        localStorage.setItem("details_body", JSON.stringify($('#details_body').html()));
+    }
+
+    // Load dynamic HTML code previously stored
+    function loadOrderDetails() {
+        if (localStorage["details_body"] != null) {
+            var details_body = JSON.parse(localStorage["details_body"]);
+            $('#details_body').html(details_body);
+        }
+
+        if (document.getElementById("details_body").childElementCount == 3) {
+            $('#subtotal').text("0,00 €");
+            calculate_total();
+        }
+
+        if (document.getElementById("delivery_type").selectedIndex == 0) {
+            $('#estimated_shipping').text("0,00 €");
+            calculate_total();
+        }
+    }
+
+    function removeOrderDetails() {
+        localStorage.removeItem("details_body");
+        $('#estimated_shipping').val("0,00 €");
+    }
+
+    function calculate_total() {
+        var subtotal = parseFloat($('#subtotal').text());
+        var estimated_shipping = parseFloat($('#estimated_shipping').text());
+        var total = subtotal + estimated_shipping;
+        $('#total').text(total.toFixed(2).replace(".", ",") + " €");
+    }
+
     // Delete an item from the order cart
     function remove_item(element) {
 
@@ -20,40 +55,69 @@
         var tbody_node = tr_node.parentNode;
         tbody_node.removeChild(tr_node);
 
-        // Recalcultate cart price
-        // TODO Add shipping cost
-        var total_retail_price = tr_node.childNodes.item(3).textContent;
-        var subtotal = parseInt($('#subtotal').text()) - total_retail_price;
-        $('#subtotal').text(subtotal + " €");
-        $('#total').text(subtotal + " €");
+        // Recalcultate cart price if thereis is some item in the cart (>3 because subtotal, shipping and total are tr in tbody)
+        if (tbody_node.childElementCount > 3) {
+            var total_retail_price = parseFloat(tr_node.childNodes.item(3).textContent);
+            var subtotal = parseInt($('#subtotal').text()) - parseFloat(total_retail_price);
+        }
+        else {
+            var subtotal = 0;
+        }
 
-        $.ajax({
-            type: 'post',
-            url: '',
-            beforeSend: function() {
+        $('#subtotal').text(subtotal.toFixed(2).replace(".", ",") + " €");
+        calculate_total();
 
-            },
-            success: function(responseText) {
-
-            }
-        });
+        saveOrderDetails();
     }
 
     function change_quantity(element) {
 
-        var quantity = element.value;
+        var quantity = parseInt(element.value);
         var tr_node = element.parentNode.parentNode;
-        var retail_price = tr_node.childNodes.item(2).textContent;
+        var retail_price = parseFloat(tr_node.childNodes.item(2).textContent);
 
-        var previous_total_retail_price = tr_node.childNodes.item(3).textContent;
-        var new_total_retail_price = quantity * retail_price;
-        tr_node.childNodes.item(3).textContent = new_total_retail_price;
+        var previous_total_retail_price = parseFloat(tr_node.childNodes.item(3).textContent);
+        var new_total_retail_price = parseFloat(quantity) * parseFloat(retail_price);
+        tr_node.childNodes.item(3).textContent = parseFloat(new_total_retail_price).toFixed(2).replace(".", ",") + " €";
 
-        var subtotal = parseInt($('#subtotal').text()) + (new_total_retail_price - previous_total_retail_price);
-        $('#subtotal').text(subtotal + " €");
-        $('#total').text(subtotal + " €");
+        var subtotal = parseFloat($('#subtotal').text()) + parseFloat(new_total_retail_price - previous_total_retail_price);
+        $('#subtotal').text(subtotal.toFixed(2).replace(".", ",") + " €");
+        calculate_total();
 
+        element.setAttribute("value", quantity);
+        console.log(subtotal);
+
+        saveOrderDetails();
     }
+
+    // Show shipping price at the end of the cart depending of the delivery type selected by the user
+    function select_delivery_type(element) {
+        var delivery_type_id = element.value;
+        if (delivery_type_id == "") {
+            subtotal = parseFloat($('#subtotal').text());
+            $('#estimated_shipping').text("0,00 €");
+            calculate_total();
+        }
+        else {
+            $.ajax({
+                url: "{% url 'delivery_type_info' %}?delivery_type_id=" + delivery_type_id,
+                dataType: 'json',
+                success: function(data) {
+                    $('#estimated_shipping').text(data['cost'].toFixed(2).replace(".", ",") + " €");
+                    calculate_total();
+
+                },
+                error: function(uno, dos, tres) {
+                    alert("An error has occured while loading delivery type info");
+                }
+            });
+        }
+
+        saveOrderDetails();
+    }
+
+    $(window).bind('beforeunload', function(){
+    });
 
     // Disable the form submission in the case the user press the enter key
     jQuery(document).ready(function() {
@@ -63,6 +127,8 @@
                 return false;
             }
         });
+
+        loadOrderDetails();
 
         // autocomplete the item input adding a new item to the order cart with some extra information
         $('#add_item').autocomplete({
@@ -77,31 +143,34 @@
                 "<h5 class=\"media-heading\" style=\"margin-left:5px\"> by <a href=\"#\"><provider_name></a></h5>" +
                 "<span style=\"margin-left:5px\">Status: </span><span class=\"text-success\"><strong><availability></strong></span></div></div></td>" +
                 "<td class=\"col-sm-1 col-md-1\" style=\"text-align: center\">" +
-                "<input type=\"number\" class=\"form-control\" id=\"quantity\" value=\"1\" onchange=\"javascript:change_quantity(this)\"></td>" +
+                "<input type=\"number\" class=\"form-control\" id=\"quantity\" name=\"quantity\" value=\"1\" onchange=\"javascript:change_quantity(this)\"></td>" +
                 "<td class=\"col-sm-1 col-md-1 text-center\"><strong id=\"retail_price\"><retail_price></strong></td>" +
                 "<td class=\"col-sm-1 col-md-1 text-center\" style=\"font-weight:bold\"><strong><total></strong></td>" +
                 "<td class=\"col-sm-1 col-md-1\">" +
                 "<button type=\"button\" onclick=\"javascript:remove_item(this);\" value=\"<retail_price>\" class=\"btn btn-danger\">" +
                 "<span class=\"glyphicon glyphicon-remove\"></span> Remove" +
-                "</button></td></tr>";
+                "</button></td><input type=\"hidden\" name=\"items\" value=\"<item_id>\"></tr>";
 
                 code = code.replace("<item_name>", ui.item.name);
                 code = code.replace("<item_id>", ui.item.id);
+                code = code.replace("<item_id>", ui.item.id);
                 code = code.replace("<availability>", ui.item.availability);
-                code = code.replace("<retail_price>", ui.item.retail_price);
-                code = code.replace("<retail_price>", ui.item.retail_price);
-                code = code.replace("<total>", ui.item.retail_price);
+                code = code.replace("<retail_price>", parseFloat(ui.item.retail_price).toFixed(2).replace(".", ",") + " €");
+                code = code.replace("<retail_price>", parseFloat(ui.item.retail_price).toFixed(2).replace(".", ",") + " €");
+                code = code.replace("<total>", parseFloat(ui.item.retail_price).toFixed(2).replace(".", ",") + " €");
                 code = code.replace("<provider_name>", ui.item.provider_name);
 
                 // Recalcultate cart price
-                // TODO add shipping cost
-                var subtotal = parseInt($('#subtotal').text()) + ui.item.retail_price;
-                $('#subtotal').text(subtotal + " €");
-                $('#total').text(subtotal + " €");
+                var subtotal = parseInt($('#subtotal').text()) + parseFloat(ui.item.retail_price);
+                $('#subtotal').text(parseFloat(subtotal).toFixed(2).replace(".", ",") + " €");
+                calculate_total();
 
                 event.preventDefault();
                 $('#details_body').prepend(code);
                 $('#add_item').val('');
+
+                saveOrderDetails();
+
                 return false;
             }
         })
@@ -111,6 +180,7 @@
                 .appendTo(ul);
         };
 
+        /*
         // autocomplete the customer input
         $('#customer').autocomplete({
             source: "{% url 'autocomplete_customer' %}",
@@ -120,7 +190,7 @@
             return $("<li>")
                 .append("<div><strong>" + item.label + "</strong><br>" + item.company_name + "</div>")
                 .appendTo(ul);
-        };
+        };*/
     });
 </script>
 
@@ -129,7 +199,7 @@
 
     </div>
 <div class="panel-body">
-<form id="add_order" class="empty-form" action="{% url 'add_order' %}" method="post">{% csrf_token %}
+<form id="add_order" class="empty-form" action="{% url 'add_order' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
     <fieldset>
         <legend>{% trans 'Order Information' %}</legend>
         <div class="row">
@@ -143,14 +213,14 @@
             <div class="col-lg-3">
                 <label for="date">{% trans 'Date' %}</label>
                 <div class="input-group">
-                    <input type="date" name="date" id="date" class="form-control" placeholder="{% trans 'Date' %}" size="10" value="{{ form.date.value }}">
+                    {% render_field form.date class='form-control' size='10' placeholder=form.date.label %}
                     {{ form.date.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="delivery_date">{% trans 'Delivery Date' %}</label>
                 <div class="input-group">
-                    <input type="date" name="delivery_date" id="deliver_date" class="form-control" placeholder="{% trans 'Delivery Date' %}" size="10" value="{{ form.delivery_date.value }}">
+                    {% render_field form.delivery_date class='form-control' size='10' placeholder=form.delivery_date.label %}
                     {{ form.delivery_date.errors }}
                 </div>
             </div>
@@ -180,7 +250,7 @@
             <div class="col-lg-3">
                 <label for="delivery_type">{% trans 'Delivery Type' %}</label>
                 <div class="input-group">
-                    {% render_field form.delivery_type class='form-control' placeholder=form.delivery_type.label %}
+                    {% render_field form.delivery_type class='form-control' placeholder=form.delivery_type.label id="delivery_type" onchange='javascript:select_delivery_type(this)'%}
                     {{ form.delivery_type.errors }}
                 </div>
             </div>
@@ -190,6 +260,11 @@
                     {% render_field form.payment_type class='form-control' placeholder=form.payment_type.label %}
                     {{ form.payment_type.errors }}
                 </div>
+            </div>
+            <div class="col-lg-3">
+                <label for="document">{% trans 'Document' %}</label>
+                {% render_field form.document class='form-control' style='width:220px' %}
+                {{ form.document.errors }}
             </div>
         </div>
         <br/>
@@ -258,6 +333,9 @@
             <br/>
             {% if message.tags == 'success' %}
                 <div class="alert alert-success" role="alert">
+                <script type="text/javascript">
+                    removeOrderDetails();
+                </script>
             {% elif message.tags == 'error' %}
                 <div class="alert alert-danger" role="alert">
             {% endif %}

@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'add_provider/$', views.add_provider, name='add_provider'),
     url(r'delete_provider/(?P<provider_id>[0-9]*)/$', views.delete_provider, name='delete_provider'),
     url(r'providers/$', views.providers, name='providers'),
+    url(r'^provider_info/$', views.provider_info, name='provider_info'),
 
     url(r'new_customer/$', views.new_customer, name='new_customer'),
     url(r'add_customer/$', views.add_customer, name='add_customer'),
@@ -35,6 +36,7 @@ urlpatterns = [
     url(r'add_order/$', views.add_order, name='add_order'),
     url(r'delete_order/(?P<order_id>[0-9]*)/$', views.delete_order, name='delete_order'),
     url(r'orders/$', views.orders, name='orders'),
+    url(r'^order_details_info/$', views.order_details_info, name='order_details_info'),
 
     url(r'new_invoice/$', views.new_invoice, name='new_invoice'),
     url(r'add_invoice/$', views.add_invoice, name='add_invoice'),
@@ -55,6 +57,7 @@ urlpatterns = [
     url(r'new_delivery_type/$', views.new_delivery_type, name='new_delivery_type'),
     url(r'add_delivery_type/$', views.add_delivery_type, name='add_delivery_type'),
     url(r'delete_delivery_type/(?P<delivery_type_id>[0-9]*)/$', views.delete_delivery_type, name='delete_delivery_type'),
+    url(r'^delivery_type_info/$', views.delivery_type_info, name='delivery_type_info'),
     url(r'new_payment_type/$', views.new_payment_type, name='new_payment_type'),
     url(r'add_payment_type/$', views.add_payment_type, name='add_payment_type'),
     url(r'delete_payment_type/(?P<payment_type_id>[0-9]*)/$', views.delete_payment_type, name='delete_payment_type'),

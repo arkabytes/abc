@@ -15,6 +15,7 @@
                 $('#location').text(data['location']);
                 $('#email').text(data['email']);
                 $('#web').text(" " + data['web']);
+                $('#web').attr("href", data['web']);
                 $('#phone').text("" + data['phone']);
             },
             error: function(uno, dos, tres) {
@@ -73,17 +74,17 @@
                         <div class="well well-sm">
                             <div class="row">
                                 <div class="col-sm-6 col-md-4">
-                                    <img src="http://placehold.it/380x500" alt="" class="img-rounded img-responsive" />
+                                    <img src="{% static 'ABC/icons/customer512.png' %}" alt="" class="img-rounded img-responsive" />
                                 </div>
                                 <div class="col-sm-6 col-md-8" style="line-height: 17pt">
-                                    <h4 id="name">Federico Faci</h4>
-                                        <i class="glyphicon glyphicon-map-marker"></i> <cite id="location" title="Pina de Ebro, Zaragoza">Pina de Ebro, Zaragoza </cite>
+                                    <h4 id="name">name</h4>
+                                        <i class="glyphicon glyphicon-map-marker"></i> <cite id="location" title="location">Location</cite>
                                     <p>
-                                        <i class="glyphicon glyphicon-envelope"></i> <span id="email">ffaci@gmail.com</span>
+                                        <i class="glyphicon glyphicon-envelope"></i> <span id="email">email</span>
                                         <br />
-                                        <i class="glyphicon glyphicon-globe"></i><a id="web" href="http://www.jquery2dotnet.com"> http://www.sekano.net</a>
+                                        <i class="glyphicon glyphicon-globe"></i><a id="web" target="_blank" href="#"> url</a>
                                         <br />
-                                        <i class="glyphicon glyphicon-phone"></i> <span id="phone">11 Septiembre 2010</span>
+                                        <i class="glyphicon glyphicon-phone"></i> <span id="phone">date</span>
                                     </p>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-primary">

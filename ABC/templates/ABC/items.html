@@ -14,7 +14,8 @@
             success: function(data) {
                 $('#label').text(data['name']);
                 $('#name').text(data['name']);
-                $('#description').text(data['description']);
+                //$('#description').text(data['description']);
+                $('#description').html(data['description']);
                 $('#provider').text(data['provider_name']);
                 $('#cost_price').text(" " + data['cost_price']);
                 $('#retail_price').text("" + data['retail_price']);

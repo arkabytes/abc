@@ -1,8 +1,9 @@
 from django.db import models
 from django.utils import timezone
 
+
 class VatType(models.Model):
-    name = models.CharField(max_length=25,unique=True)
+    name = models.CharField(max_length=25, unique=True)
     rate = models.FloatField(default=0)
 
     def __str__(self):
@@ -10,7 +11,7 @@ class VatType(models.Model):
 
 
 class PaymentType(models.Model):
-    name = models.CharField(max_length=25,unique=True)
+    name = models.CharField(max_length=25, unique=True)
     description = models.TextField(default='')
     cost = models.FloatField(default=0)
 
@@ -108,14 +109,14 @@ class Order(models.Model):
     date = models.DateField(default=timezone.now)
     delivery_date = models.DateField(default=timezone.now)
     state = models.CharField(max_length=50)
-    notes = models.TextField(default='')
+    notes = models.TextField(default='', blank=True)
     tax_base = models.FloatField(default=0)
     vat = models.FloatField(default=0)
     amount = models.FloatField(default=0)
     customer = models.ForeignKey(Customer)
     delivery_cost = models.FloatField(default=0)
     payment_cost = models.FloatField(default=0)
-    document = models.FileField(upload_to='orders',default=None)
+    document = models.FileField(upload_to='items', default=None, blank=True)
     delivery_days = models.PositiveSmallIntegerField(default=0)
     delivery_type = models.ForeignKey(DeliveryType)
     payment_type = models.ForeignKey(PaymentType)

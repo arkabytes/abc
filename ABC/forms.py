@@ -59,11 +59,11 @@ class VatTypeForm(forms.ModelForm):
         fields = ('name', 'rate')
         model = VatType
 
+
 class OrderForm(forms.ModelForm):
     class Meta:
-        fields = ('number', 'date', 'delivery_date', 'state', 'notes', 'tax_base', 'vat', 'amount',
-                  'customer', 'delivery_cost', 'payment_cost', 'document', 'delivery_days',
-                  'delivery_type', 'payment_type', 'finished')
+        fields = ('number', 'date', 'delivery_date', 'state', 'notes',
+                  'customer', 'document', 'delivery_type', 'payment_type')
         model = Order
 
 

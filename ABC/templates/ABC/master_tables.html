@@ -30,7 +30,7 @@
                 <tr>
                     <td>{{ type.id }}</td>
                     <td>{{ type.name }}</td>
-                    <td>{{ type.cost | floatformat:2 | intcomma}}</td>
+                    <td>{{ type.cost | floatformat:2 | intcomma }} €</td>
                     <td>{{ type.days }}</td>
                     <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
                     <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
@@ -68,7 +68,7 @@
                     <td>{{ type.id }}</td>
                     <td>{{ type.name }}</td>
                     <td>{{ type.description | safe | truncatewords:10}}</td>
-                    <td>{{ type.cost | floatformat:2 | intcomma}} €</td>
+                    <td>{{ type.cost | floatformat:2 | intcomma }} €</td>
                     <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
                     <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                            href="{% url 'delete_payment_type' type.id %}">{% trans 'Delete' %}</a></td>

@@ -5,6 +5,77 @@
 {% include 'ABC/navbar.html' %}
 {% include 'ABC/page_header.html' with title='Orders' icon='ABC/icons/anadirpedido32.png' new_link='new_order' tooltip='Add Order' %}
 
+<script type="text/javascript">
+    function select_customer(customer_id) {
+        $.ajax({
+            url: "{% url 'customer_info' %}?customer_id=" + customer_id,
+            dataType: 'json',
+            success: function(data) {
+                $('#name').text(data['name'] + ' (' + data['company_name'] +  ')');
+                $('#location').text(data['location']);
+                $('#email').text(data['email']);
+                $('#web').text(" " + data['web']);
+                $('#web').attr("href", data['web']);
+                $('#phone').text("" + data['phone']);
+            },
+            error: function(uno, dos, tres) {
+                alert("An error has occured while loading customer info");
+            }
+        });
+    }
+
+    // Put order number to pick it when user wants to display order details at the modal dialog about order info
+    function select_order(order_number) {
+        $('#order_number').text(order_number);
+        remove_order_details();
+    }
+
+    // Show order details when user click 'view details' in modal dialog about order info
+    function view_details(element) {
+
+        var order_number = $('#order_number').text();
+
+        $.ajax({
+            url: "{% url 'order_details_info' %}?order_number=" + order_number,
+            dataType: 'json',
+            success: function(data) {
+                var keys = Object.keys(data);
+                var code = "<div class=\"container\">" +
+                "<table class=\"table\" style=\"width:500px\">" +
+                "<thead>\n" +
+                    "<tr>\n" +
+                    "<th>Item</th>\n" +
+                    "<th style='text-align:right'>Quantity</th>\n" +
+                    "<th style='text-align:right'>Price</th>\n" +
+                    "<th style='text-align:right'>Subtotal</th>\n" +
+                    "</tr>\n" +
+                    "</thead><tbody>";
+                for (i = 0; i < keys.length; i++) {
+                    var item_name = keys[i];
+
+                    code += "<tr class=\"active\">\n" +
+                        "<td>" + item_name + "</td>\n" +
+                        "<td style='text-align:right'>" + data[item_name]['quantity'] + "</td>\n" +
+                        "<td style=\"text-align:right\">" + parseFloat(data[item_name]['retail_price']).toFixed(2).replace(".", ",") + " €</td>\n" +
+                        "<td style=\"text-align:right\">" + parseFloat(data[item_name]['subtotal']).toFixed(2).replace(".", ",") + " €</td>\n" +
+                        "</tr>";
+                }
+                code += "</tbody></table></div>";
+
+                $('#order_details').append(code);
+
+            },
+            error: function(uno, dos, tres) {
+                alert("An error has occured while loading customer info");
+            }
+        });
+    }
+
+    // Remove order details when use close modal dialog about order info
+    function remove_order_details() {
+        $('#order_details').text("");
+    }
+</script>
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -27,11 +98,13 @@
         {% for order in orders %}
             <tr>
                 <td>{{ order.id }}</td>
-                <td>{{ order.number }}</td>
+                <td><a data-toggle="modal" data-target="#info_order" data-id="{{ order.id }}" id="order_info"
+                           onclick="javascript:select_order({{ order.number }})" href="#">{{ order.number }}</a></td>
                 <td>{{ order.date }}</td>
-                <td>{{ order.customer.name }}</td>
-                <td><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
-                <td><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
+                <td><a data-toggle="modal" data-target="#info_customer" data-id="{{ order.customer.id }}" id="customer_info"
+                           onclick="javascript:select_customer({{ order.customer.id }})" href="#">{{ order.customer.name }} {{ order.customer.surname }}</a></td>
+                <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                        href="{% url 'delete_order' order.id %}">{% trans 'Delete' %}</a></td>
             </tr>
         {% endfor %}
@@ -41,5 +114,110 @@
     </div>
 </div>
 
+<div class="modal fade" id="info_customer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Customer</h4>
+            </div>
+            <br/>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="well well-sm">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-4">
+                                    <img src="{% static 'ABC/icons/customer512.png' %}" alt="" class="img-rounded img-responsive" />
+                                </div>
+                                <div class="col-sm-6 col-md-8" style="line-height: 17pt">
+                                    <h4 id="name">name</h4>
+                                        <i class="glyphicon glyphicon-map-marker"></i> <cite id="location" title="location">Location</cite>
+                                    <p>
+                                        <i class="glyphicon glyphicon-envelope"></i> <span id="email">email</span>
+                                        <br />
+                                        <i class="glyphicon glyphicon-globe"></i><a id="web" target="_blank" href="#"> url</a>
+                                        <br />
+                                        <i class="glyphicon glyphicon-phone"></i> <span id="phone">date</span>
+                                    </p>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary">
+                                            {% trans 'View' %}
+                                        </button>
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                            <span class="caret"></span><span class="sr-only">{% trans 'View' %}</span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="{% url 'orders' %}">{% trans 'Orders' %}</a></li>
+                                            <li><a href="{% url 'invoices' %}">{% trans 'Invoices' %}</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="{% url 'tasks' %}">{% trans 'Tasks' %}</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="info_order" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Order</h4>
+            </div>
+            <br/>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="well well-sm">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-4">
+                                    <img src="{% static 'ABC/icons/order512.png' %}" alt="" class="img-rounded img-responsive" />
+                                </div>
+                                <div class="col-sm-6 col-md-8" style="line-height: 17pt">
+                                    <h4 id="order_number">name</h4>
+                                        <i class="glyphicon glyphicon-map-marker"></i> <cite id="location" title="location">Location</cite>
+                                    <p>
+                                        <i class="glyphicon glyphicon-envelope"></i> <span id="email">email</span>
+                                        <br />
+                                        <i class="glyphicon glyphicon-globe"></i><a id="web" target="_blank" href="#"> url</a>
+                                        <br />
+                                        <i class="glyphicon glyphicon-phone"></i> <span id="phone">date</span>
+                                    </p>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary">
+                                            {% trans 'View' %}
+                                        </button>
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                            <span class="caret"></span><span class="sr-only">{% trans 'View' %}</span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="#" id="view_details" onclick="javascript:view_details(this)">{% trans 'Details' %}</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="order_details">
+                    <!-- Order details appear here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="javscript:remove_order_details()" data-dismiss="modal">{% trans 'Close' %}</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% include 'ABC/footer.html' %}

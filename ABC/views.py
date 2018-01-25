@@ -9,7 +9,7 @@ from io import BytesIO
 import json
 
 from ABC.models import Item, Customer, Provider, VatType, PaymentType, DeliveryType
-from ABC.models import Event, Task, Order, Invoice
+from ABC.models import Event, Task, Order, Invoice, OrderDetail
 from arkaABC.settings import ITEMS_PER_PAGE
 from .forms import ItemQuickForm, ItemForm, OrderForm, InvoiceForm, TaskForm, EventForm, TaskQuickForm
 from .forms import CustomerQuickForm, CustomerForm, VatTypeForm, PaymentTypeForm, DeliveryTypeForm, ProviderForm, ProviderQuickForm
@@ -351,6 +351,21 @@ def providers(request):
     return render(request, 'ABC/providers.html', context)
 
 
+def provider_info(request):
+    provider_id = request.GET.get('provider_id')
+    provider = Provider.objects.get(pk=provider_id)
+    provider_json = {}
+    provider_json['name'] = provider.name
+    provider_json['contact_name'] = provider.contact_name
+    provider_json['location'] = provider.city + ", " + provider.province
+    provider_json['email'] = provider.email
+    provider_json['web'] = provider.web
+    provider_json['phone'] = provider.phone
+
+    data = json.dumps(provider_json)
+    return HttpResponse(data, 'application/json')
+
+
 def new_order(request):
     form = OrderForm()
     context = {'form': form}
@@ -364,13 +379,68 @@ def orders(request):
 
 
 def add_order(request):
-    pass;
+    if request.method == 'POST':
+        # Add a new order in complete mode (with every field filled)
+        form = OrderForm(request.POST, request.FILES)
+        if not form.is_valid():
+            messages.error(request, 'Some errors has occurred')
+            return render(request, 'ABC/new_order.html', {'form': form})
+        order = Order()
+        order.number = form.cleaned_data['number']
+        order.date = form.cleaned_data['date']
+        order.delivery_date = form.cleaned_data['delivery_date']
+        order.state = form.cleaned_data['state']
+        order.notes = form.cleaned_data['notes']
+        order.customer = form.cleaned_data['customer']
+        order.document = form.cleaned_data['document']
+        order.delivery_type = form.cleaned_data['delivery_type']
+        order.payment_type = form.cleaned_data['payment_type']
+        order.finished = False
+        order.payment_cost = order.payment_type.cost
+        order.delivery_days = order.delivery_type.days
+        order.delivery_cost = order.delivery_type.cost
+        order.save()
+
+        quantities = request.POST.getlist('quantity')
+        items = request.POST.getlist('items')
+
+        i = 0
+        for item_id in items:
+            item = Item.objects.get(pk=item_id)
+            order_detail = OrderDetail()
+            order_detail.order = order
+            order_detail.item = item
+            order_detail.discount = 0
+            order_detail.subtotal = item.retail_price * int(quantities[i])
+            order_detail.price = item.retail_price
+            order_detail.quantity = quantities[i]
+            order_detail.save()
+            i += 1
+
+        messages.success(request, 'Order created successfully')
+        return redirect('new_order')
 
 
 def delete_order(request, order_id):
     order = Order.objects.get(pk=order_id)
     order.delete()
     return redirect('orders')
+
+
+def order_details_info(request):
+    order_number = request.GET.get('order_number')
+    order_details = OrderDetail.objects.filter(order__number=order_number)
+    order_details_json = {}
+
+    for order_detail in order_details:
+        details = {}
+        details['quantity'] = order_detail.quantity
+        details['retail_price'] = order_detail.price
+        details['subtotal'] = order_detail.subtotal
+        order_details_json[order_detail.item.name] = details
+
+    data = json.dumps(order_details_json)
+    return HttpResponse(data, 'application/json')
 
 
 def new_invoice(request):
@@ -531,6 +601,17 @@ def delete_delivery_type(request, delivery_type_id):
     return redirect('master_tables')
 
 
+def delivery_type_info(request):
+    delivery_type_id = request.GET.get('delivery_type_id')
+    delivery_type = DeliveryType.objects.get(pk=delivery_type_id)
+    delivery_type_json = {}
+    delivery_type_json['name'] = delivery_type.name
+    delivery_type_json['cost'] = delivery_type.cost
+
+    data = json.dumps(delivery_type_json)
+    return HttpResponse(data, 'application/json')
+
+
 def new_payment_type(request):
     form = PaymentTypeForm()
     context = {'form': form}
@@ -570,7 +651,7 @@ def add_vat_type(request):
     if request.method == 'POST':
         # Add a new VAT Type
         form = VatTypeForm(request.POST, request.FILES)
-        if form.is_valid():
+        if not form.is_valid():
             messages.error(request, 'Some errors has occurred')
             return render(request, 'ABC/new_vat_type.html', {'form': form})
 
