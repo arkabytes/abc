@@ -4,25 +4,25 @@ from django.utils import timezone
 
 class VatType(models.Model):
     name = models.CharField(max_length=25, unique=True)
-    rate = models.FloatField(default=0)
+    rate = models.FloatField(default=0, null=True)
 
     def __str__(self):
-        return self.name;
+        return self.name
 
 
 class PaymentType(models.Model):
     name = models.CharField(max_length=25, unique=True)
     description = models.TextField(default='')
-    cost = models.FloatField(default=0)
+    cost = models.FloatField(default=0, null=True)
 
     def __str__(self):
         return self.name
 
 
 class DeliveryType(models.Model):
-    name = models.CharField(max_length=25,unique=True)
+    name = models.CharField(max_length=25, unique=True)
     description = models.TextField(default='')
-    cost = models.FloatField(default=0)
+    cost = models.FloatField(default=0, null=True)
     days = models.PositiveSmallIntegerField(default=1)
 
     def __str__(self):
@@ -106,8 +106,8 @@ class Event(models.Model):
 
 class Order(models.Model):
     number = models.CharField(max_length=20,unique=True)
-    date = models.DateField(default=timezone.now)
-    delivery_date = models.DateField(default=timezone.now)
+    date = models.DateTimeField(default=timezone.datetime.now)
+    delivery_date = models.DateTimeField(default=timezone.datetime.now)
     state = models.CharField(max_length=50)
     notes = models.TextField(default='', blank=True)
     tax_base = models.FloatField(default=0)

@@ -16,10 +16,10 @@ from .forms import CustomerQuickForm, CustomerForm, VatTypeForm, PaymentTypeForm
 
 
 def index(request):
-    ##if request.user.is_authenticated:
-    return render(request, 'ABC/index.html')
-    ##else:
-    ##    return redirect('signin')
+    if request.user.is_authenticated:
+        return render(request, 'ABC/index.html')
+    else:
+        return redirect('signin')
 
 
 def signin(request):

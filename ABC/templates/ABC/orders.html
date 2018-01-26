@@ -100,7 +100,7 @@
                 <td>{{ order.id }}</td>
                 <td><a data-toggle="modal" data-target="#info_order" data-id="{{ order.id }}" id="order_info"
                            onclick="javascript:select_order({{ order.number }})" href="#">{{ order.number }}</a></td>
-                <td>{{ order.date }}</td>
+                <td>{{ order.date | date:'d/m/Y'}}</td>
                 <td><a data-toggle="modal" data-target="#info_customer" data-id="{{ order.customer.id }}" id="customer_info"
                            onclick="javascript:select_customer({{ order.customer.id }})" href="#">{{ order.customer.name }} {{ order.customer.surname }}</a></td>
                 <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>

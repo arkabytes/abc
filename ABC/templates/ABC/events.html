@@ -29,7 +29,7 @@
                 <td>{{ event.id }}</td>
                 <td>{{ event.name }}</td>
                 <td>{{ event.description | safe | truncatewords:10}}</td>
-                <td>{{ event.date|date:'d F Y' }}</td>
+                <td>{{ event.date|date:'d/m/Y' }}</td>
                 <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
                 <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                        href="{% url 'delete_event' event.id %}">{% trans 'Delete' %}</a></td>

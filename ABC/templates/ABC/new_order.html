@@ -31,11 +31,13 @@
         }
     }
 
+    // reset order cart
     function removeOrderDetails() {
         localStorage.removeItem("details_body");
         $('#estimated_shipping').val("0,00 €");
     }
 
+    // Calculate total order price
     function calculate_total() {
         var subtotal = parseFloat($('#subtotal').text());
         var estimated_shipping = parseFloat($('#estimated_shipping').text());
@@ -70,29 +72,36 @@
         saveOrderDetails();
     }
 
+    // function called when user changes the quantity of an item in the cart
     function change_quantity(element) {
 
         var quantity = parseInt(element.value);
         var tr_node = element.parentNode.parentNode;
         var retail_price = parseFloat(tr_node.childNodes.item(2).textContent);
 
+        // get current subtotal price for the item
         var previous_total_retail_price = parseFloat(tr_node.childNodes.item(3).textContent);
+        // get new price with the new quantity
         var new_total_retail_price = parseFloat(quantity) * parseFloat(retail_price);
+        // put new price in the item subtotal
         tr_node.childNodes.item(3).textContent = parseFloat(new_total_retail_price).toFixed(2).replace(".", ",") + " €";
 
         var subtotal = parseFloat($('#subtotal').text()) + parseFloat(new_total_retail_price - previous_total_retail_price);
         $('#subtotal').text(subtotal.toFixed(2).replace(".", ",") + " €");
         calculate_total();
 
+        // Change value attribute in the input of the current item (to save HTML later)
         element.setAttribute("value", quantity);
-        console.log(subtotal);
 
+        // save details HTML
         saveOrderDetails();
     }
 
     // Show shipping price at the end of the cart depending of the delivery type selected by the user
     function select_delivery_type(element) {
         var delivery_type_id = element.value;
+
+        // If not delivery type is selected, reset estimated shipping cost
         if (delivery_type_id == "") {
             subtotal = parseFloat($('#subtotal').text());
             $('#estimated_shipping').text("0,00 €");
@@ -116,6 +125,7 @@
         saveOrderDetails();
     }
 
+    // To do something when user leave page (Currenty nothing is happening)
     $(window).bind('beforeunload', function(){
     });
 
@@ -136,6 +146,7 @@
             minLength: 2,
             select: function(event, ui) {
 
+                // Code to insert in tbody (order_details) when an item is added to the cart
                 var code = "<tr id=\"<item_id>\"><td class=\"col-sm-8 col-md-6\"><div class=\"media\"><a class=\"thumbnail pull-left\" href=\"#\">" +
                 "<img class=\"media-object\" src=\"http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png\" style=\"width: 72px; height: 72px;\"> </a>" +
                 "<div class=\"media-body\">" +
@@ -151,6 +162,7 @@
                 "<span class=\"glyphicon glyphicon-remove\"></span> Remove" +
                 "</button></td><input type=\"hidden\" name=\"items\" value=\"<item_id>\"></tr>";
 
+                // Replace some values about item information
                 code = code.replace("<item_name>", ui.item.name);
                 code = code.replace("<item_id>", ui.item.id);
                 code = code.replace("<item_id>", ui.item.id);
@@ -165,6 +177,7 @@
                 $('#subtotal').text(parseFloat(subtotal).toFixed(2).replace(".", ",") + " €");
                 calculate_total();
 
+                // Disable normal operation, add the code to tbody and empty the input
                 event.preventDefault();
                 $('#details_body').prepend(code);
                 $('#add_item').val('');
@@ -213,19 +226,19 @@
             <div class="col-lg-3">
                 <label for="date">{% trans 'Date' %}</label>
                 <div class="input-group">
-                    {% render_field form.date class='form-control' size='10' placeholder=form.date.label %}
+                    <input type="date" name="{{ form.date.label.lower }}" id="date" size="30" class="form-control" placeholder="{% trans 'Date' %}" aria-describedby="basic-addon2" value="{{ form.date.value }}">
                     {{ form.date.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="delivery_date">{% trans 'Delivery Date' %}</label>
                 <div class="input-group">
-                    {% render_field form.delivery_date class='form-control' size='10' placeholder=form.delivery_date.label %}
+                    <input type="date" name="{{ form.delivery_date.label.lower }}" id="date" size="30" class="form-control" placeholder="{% trans 'Delivery Date' %}" aria-describedby="basic-addon2" value="{{ form.delivery_date.value }}">
                     {{ form.delivery_date.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
-                <label for="state">{% trans 'Delivery Date' %}</label>
+                <label for="state">{% trans 'State' %}</label>
                 <div class="input-group">
                     <select class="form-control" name="state" id="state">
                         <option>Unfinished</option>

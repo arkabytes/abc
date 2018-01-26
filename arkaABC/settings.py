@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'ABC.apps.AbcConfig',
     'widget_tweaks',
-    'djmoney',
+    'easy_pdf'
 ]
 
 MIDDLEWARE = [
@@ -122,6 +122,8 @@ USE_TZ = True
 DATE_FORMAT = 'd/m/Y'
 DATE_INPUT_FORMATS = ['%d/%m/%Y']
 DECIMAL_SEPARATOR = ','
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 
 # Static files (CSS, JavaScript, Images)
