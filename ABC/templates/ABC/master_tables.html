@@ -26,15 +26,15 @@
         </thead>
         <tbody>
         {% if delivery_types %}
-            {% for type in delivery_types %}
+            {% for delivery_type in delivery_types %}
                 <tr>
-                    <td>{{ type.id }}</td>
-                    <td>{{ type.name }}</td>
-                    <td>{{ type.cost | floatformat:2 | intcomma }} €</td>
-                    <td>{{ type.days }}</td>
-                    <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                    <td>{{ delivery_type.id }}</td>
+                    <td>{{ delivery_type.name }}</td>
+                    <td>{{ delivery_type.cost | floatformat:2 | intcomma }} €</td>
+                    <td>{{ delivery_type.days }}</td>
+                    <td class="text-center"><a class="btn btn-sm btn-warning" href="{% url 'new_delivery_type' delivery_type.id %}">{% trans 'Modify' %}</a></td>
                     <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
-                           href="{% url 'delete_delivery_type' type.id %}">{% trans 'Delete' %}</a></td>
+                           href="{% url 'delete_delivery_type' delivery_type.id %}">{% trans 'Delete' %}</a></td>
                 </tr>
             {% endfor %}
         {% endif %}
@@ -63,15 +63,15 @@
         </thead>
         <tbody>
         {% if payment_types %}
-            {% for type in payment_types %}
+            {% for payment_type in payment_types %}
                 <tr>
-                    <td>{{ type.id }}</td>
-                    <td>{{ type.name }}</td>
-                    <td>{{ type.description | safe | truncatewords:10}}</td>
-                    <td>{{ type.cost | floatformat:2 | intcomma }} €</td>
-                    <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                    <td>{{ payment_type.id }}</td>
+                    <td>{{ payment_type.name }}</td>
+                    <td>{{ payment_type.description | safe | truncatewords:10}}</td>
+                    <td>{{ payment_type.cost | floatformat:2 | intcomma }} €</td>
+                    <td class="text-center"><a class="btn btn-sm btn-warning" href="{% url 'new_payment_type' payment_type.id %}">{% trans 'Modify' %}</a></td>
                     <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
-                           href="{% url 'delete_payment_type' type.id %}">{% trans 'Delete' %}</a></td>
+                           href="{% url 'delete_payment_type' payment_type.id %}">{% trans 'Delete' %}</a></td>
                 </tr>
             {% endfor %}
         {% endif %}
@@ -99,14 +99,14 @@
         </thead>
         <tbody>
         {% if vat_types %}
-            {% for type in vat_types %}
+            {% for vat_type in vat_types %}
                 <tr>
-                    <td>{{ type.id }}</td>
-                    <td>{{ type.name }}</td>
-                    <td>{{ type.rate | floatformat:2 | intcomma}} %</td>
-                    <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                    <td>{{ vat_type.id }}</td>
+                    <td>{{ vat_type.name }}</td>
+                    <td>{{ vat_type.rate | floatformat:2 | intcomma}} %</td>
+                    <td class="text-center"><a class="btn btn-sm btn-warning" href="{% url 'new_vat_type' vat_type.id %}">{% trans 'Modify' %}</a></td>
                     <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
-                           href="{% url 'delete_vat_type' type.id %}">{% trans 'Delete' %}</a></td>
+                           href="{% url 'delete_vat_type' vat_type.id %}">{% trans 'Delete' %}</a></td>
                 </tr>
             {% endfor %}
         {% endif %}

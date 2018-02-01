@@ -30,7 +30,7 @@
                 <td>{{ task.name }}</td>
                 <td>{{ task.description | safe | truncatewords:10 }}</td>
                 <td>{{ task.date|date:'d/m/Y'}}</td>
-                <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                <td class="text-center"><a class="btn btn-sm btn-warning" href="{% url 'new_task' task.id %}">{% trans 'Modify' %}</a></td>
                 <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                        href="{% url 'delete_task' task.id %}">{% trans 'Delete' %}</a></td>
             </tr>

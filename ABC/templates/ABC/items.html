@@ -54,8 +54,8 @@
                 <td><a data-toggle="modal" data-target="#info_item" data-id="{{ item.id }}" id="item_info"
                        onclick="javascript:select_item({{ item.id }})" href="#">{{ item.name }}</a></td>
                 <td>{{ item.description | safe | truncatewords:10}}</td>
-                <td>{{ item.retail_price | floatformat:2 | intcomma}} €</td>
-                <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                <td class="text-right">{{ item.retail_price | floatformat:2 | intcomma}} €</td>
+                <td class="text-center"><a class="btn btn-sm btn-warning" href="{% url 'new_item' item.id %}">{% trans 'Modify' %}</a></td>
                 <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                        href="{% url 'delete_item' item.id %}">{% trans 'Delete' %}</a></td>
             </tr>

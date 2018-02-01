@@ -50,7 +50,7 @@
                            onclick="javascript:select_customer({{ customer.id }})" href="#">{{ customer.name }} {{ customer.surname }}</a></td>
                     <td>{{ customer.company_name }}</td>
                     <td>{{ customer.email }}</td>
-                    <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                    <td class="text-center"><a class="btn btn-sm btn-warning" href="{% url 'new_customer' customer.id %}">{% trans 'Modify' %}</a></td>
                     <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                            href="{% url 'delete_customer' customer.id %}">{% trans 'Delete' %}</a></td>
                 </tr>

@@ -50,7 +50,7 @@
                            onclick="javascript:select_provider({{ provider.id }})" href="#">{{ provider.name }}</a></td>
                 <td>{{ provider.contact_name }}</td>
                 <td>{{ provider.email }}</td>
-                <td class="text-center"><a class="btn btn-sm btn-warning" href="#">{% trans 'Modify' %}</a></td>
+                <td class="text-center"><a class="btn btn-sm btn-warning" href="{% url 'new_provider' provider.id %}">{% trans 'Modify' %}</a></td>
                 <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                        href="{% url 'delete_provider' provider.id %}">{% trans 'Delete' %}</a></td>
             </tr>

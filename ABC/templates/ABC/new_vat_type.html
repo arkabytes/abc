@@ -5,14 +5,22 @@
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
-{% include 'ABC/page_header.html' with title='New VAT Type' %}
+{% if vat_type_id %}
+    {% include 'ABC/page_header.html' with title='Modify VAT Type' %}
+{% else %}
+    {% include 'ABC/page_header.html' with title='New VAT Type' %}
+{% endif %}
 
 <div class="panel panel-default">
     <div class="panel-heading">
 
     </div>
     <div class="panel-body">
-    <form class="empty-form" action="{% url 'add_vat_type' %}" method="post">{% csrf_token %}
+    {% if vat_type_id %}
+        <form class="empty-form" action="{% url 'modify_vat_type' %}" method="post">{% csrf_token %}
+    {% else %}
+        <form class="empty-form" action="{% url 'add_vat_type' %}" method="post">{% csrf_token %}
+    {% endif %}
     <fieldset>
         <legend>{% trans 'VAT Type Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>
@@ -36,8 +44,11 @@
         </div>
         {% endif %}
         <br/>
-        <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
+        <button class="btn btn-primary btn-block" type="submit">{% if vat_type_id %}{% trans 'Modifiy' %}{% else %}{% trans 'Add' %}{% endif %}</button>
         <input type="hidden" name="mode" value="complete"/>
+    {% if vat_type_id %}
+        <input type="hidden" name="vat_type_id" value="{{ form.instance.id }}"/>
+    {% endif %}
     </fieldset>
     </form>
     {% if messages %}

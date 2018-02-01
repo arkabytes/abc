@@ -44,7 +44,7 @@
         <label for="name">{% trans 'Cost' %}</label>
         <div class="input-group">
             <span class="input-group-addon">€</span>
-            {% render_field form.cost style='width:150px' class='form-control' style='width:150px' placeholder=form.cost.label %}
+            {% render_field form.cost class='form-control' style='width:120px' placeholder=form.cost.label %}
         </div>
         {% if form.cost.errors %}
         <div class="alert alert-danger">

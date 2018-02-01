@@ -39,8 +39,8 @@
 
     // Calculate total order price
     function calculate_total() {
-        var subtotal = parseFloat($('#subtotal').text());
-        var estimated_shipping = parseFloat($('#estimated_shipping').text());
+        var subtotal = parseFloat($('#subtotal').text().replace(",", "."));
+        var estimated_shipping = parseFloat($('#estimated_shipping').text().replace(",", "."));
         var total = subtotal + estimated_shipping;
         $('#total').text(total.toFixed(2).replace(".", ",") + " €");
     }
@@ -77,12 +77,12 @@
 
         var quantity = parseInt(element.value);
         var tr_node = element.parentNode.parentNode;
-        var retail_price = parseFloat(tr_node.childNodes.item(2).textContent);
+        var retail_price = parseFloat(tr_node.childNodes.item(2).firstChild.value.replace(",", "."));
 
         // get current subtotal price for the item
         var previous_total_retail_price = parseFloat(tr_node.childNodes.item(3).textContent);
         // get new price with the new quantity
-        var new_total_retail_price = parseFloat(quantity) * parseFloat(retail_price);
+        var new_total_retail_price = parseInt(quantity) * parseFloat(retail_price);
         // put new price in the item subtotal
         tr_node.childNodes.item(3).textContent = parseFloat(new_total_retail_price).toFixed(2).replace(".", ",") + " €";
 
@@ -92,6 +92,35 @@
 
         // Change value attribute in the input of the current item (to save HTML later)
         element.setAttribute("value", quantity);
+
+        // save details HTML
+        saveOrderDetails();
+    }
+
+    // function called when user changes the price of an item in the cart
+    function change_price(element) {
+
+        var new_price = parseFloat(element.value.replace(",", "."));
+        var tr_node = element.parentNode.parentNode;
+        var quantity = parseInt(tr_node.childNodes.item(1).firstChild.value);
+
+        // get current quantity of this item
+        var previous_total_retail_price = parseFloat(tr_node.childNodes.item(3).textContent);
+        console.info(previous_total_retail_price);
+        // calculate new price times current quantity
+        var new_total_retail_price = parseInt(quantity) * parseFloat(new_price);
+        console.info(new_total_retail_price);
+        // put new price in the item subtotal
+        tr_node.childNodes.item(3).textContent = parseFloat(new_total_retail_price).toFixed(2).replace(".", ",") + " €";
+
+        // calculate new subtotal for this item
+        var subtotal = parseFloat($('#subtotal').text()) + parseFloat(new_total_retail_price) - parseFloat(previous_total_retail_price);
+        console.info(subtotal);
+        $('#subtotal').text(subtotal.toFixed(2).replace(".", ",") + " €");
+        calculate_total();
+
+        // Change value attribute in the input of the current item (to save HTML later)
+        element.setAttribute("value", new_price);
 
         // save details HTML
         saveOrderDetails();
@@ -155,25 +184,30 @@
                 "<span style=\"margin-left:5px\">Status: </span><span class=\"text-success\"><strong><availability></strong></span></div></div></td>" +
                 "<td class=\"col-sm-1 col-md-1\" style=\"text-align: center\">" +
                 "<input type=\"number\" class=\"form-control\" id=\"quantity\" name=\"quantity\" value=\"1\" onchange=\"javascript:change_quantity(this)\"></td>" +
-                "<td class=\"col-sm-1 col-md-1 text-center\"><strong id=\"retail_price\"><retail_price></strong></td>" +
+
+                "<td class=\"col-sm-1 col-md-1\" style=\"text-align: center\">" +
+                "<input type=\"number\" class=\"form-control\" step=\"any\" id=\"retail_price\" name=\"retail_price\" value=\"<retail_price>\" onchange=\"javascript:change_price(this)\"></td>" +
+
+                //"<td class=\"col-sm-1 col-md-1 text-center\"><strong id=\"retail_price\"><retail_price></strong></td>" +
                 "<td class=\"col-sm-1 col-md-1 text-center\" style=\"font-weight:bold\"><strong><total></strong></td>" +
                 "<td class=\"col-sm-1 col-md-1\">" +
                 "<button type=\"button\" onclick=\"javascript:remove_item(this);\" value=\"<retail_price>\" class=\"btn btn-danger\">" +
                 "<span class=\"glyphicon glyphicon-remove\"></span> Remove" +
-                "</button></td><input type=\"hidden\" name=\"items\" value=\"<item_id>\"></tr>";
+                "</button></td><input type=\"hidden\" name=\"items\" value=\"<item_id>\"><input type=\"hidden\" name=\"vat\" value=\"<vat>\"</tr>";
 
                 // Replace some values about item information
                 code = code.replace("<item_name>", ui.item.name);
                 code = code.replace("<item_id>", ui.item.id);
                 code = code.replace("<item_id>", ui.item.id);
                 code = code.replace("<availability>", ui.item.availability);
-                code = code.replace("<retail_price>", parseFloat(ui.item.retail_price).toFixed(2).replace(".", ",") + " €");
+                code = code.replace("<retail_price>", parseFloat(ui.item.retail_price).toFixed(2));
                 code = code.replace("<retail_price>", parseFloat(ui.item.retail_price).toFixed(2).replace(".", ",") + " €");
                 code = code.replace("<total>", parseFloat(ui.item.retail_price).toFixed(2).replace(".", ",") + " €");
                 code = code.replace("<provider_name>", ui.item.provider_name);
+                code = code.replace("<vat>", ui.item.vat);
 
                 // Recalcultate cart price
-                var subtotal = parseInt($('#subtotal').text()) + parseFloat(ui.item.retail_price);
+                var subtotal = parseInt($('#subtotal').text().replace(",", ".")) + parseFloat(ui.item.retail_price);
                 $('#subtotal').text(parseFloat(subtotal).toFixed(2).replace(".", ",") + " €");
                 calculate_total();
 
@@ -233,7 +267,7 @@
             <div class="col-lg-3">
                 <label for="delivery_date">{% trans 'Delivery Date' %}</label>
                 <div class="input-group">
-                    <input type="date" name="{{ form.delivery_date.label.lower }}" id="date" size="30" class="form-control" placeholder="{% trans 'Delivery Date' %}" aria-describedby="basic-addon2" value="{{ form.delivery_date.value }}">
+                    <input type="date" name="delivery_date" id="date" size="30" class="form-control" placeholder="{% trans 'Delivery Date' %}" aria-describedby="basic-addon2" value="{{ form.delivery_date.value }}">
                     {{ form.delivery_date.errors }}
                 </div>
             </div>
