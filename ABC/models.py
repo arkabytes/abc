@@ -69,7 +69,7 @@ class Provider(models.Model):
 
 
 class Item(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=80, unique=True)
     description = models.TextField(default='')
     stock = models.IntegerField(default=0)
     cost_price = models.FloatField(default=0, blank=True)
@@ -118,7 +118,7 @@ class Order(models.Model):
     payment_cost = models.FloatField(default=0)
     document = models.FileField(upload_to='items', default=None, blank=True)
     delivery_days = models.PositiveSmallIntegerField(default=0)
-    delivery_type = models.ForeignKey(DeliveryType)
+    delivery_type = models.ForeignKey(DeliveryType, null=True, blank=True)
     payment_type = models.ForeignKey(PaymentType)
     finished = models.BooleanField(default=False)
 

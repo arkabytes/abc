@@ -139,18 +139,6 @@ MEDIA_ROOT = '/Users/Santi/Projects/abc/ABC/static/ABC'
 #MEDIA_ROOT = '/home/astable/Projects/abc/ABC/static/ABC'
 
 # Global constants
-ITEMS_PER_PAGE = 5
+ITEMS_PER_PAGE = 10
 
-LOGGING = {
-    'version': 1,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'stream': sys.stdout,
-        }
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO'
-    }
-}
+LOGIN_URL = 'signin'
