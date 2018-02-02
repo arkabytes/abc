@@ -17,8 +17,8 @@
                 //$('#description').text(data['description']);
                 $('#description').html(data['description']);
                 $('#provider').text(data['provider_name']);
-                $('#cost_price').text(" " + data['cost_price']);
-                $('#retail_price').text("" + data['retail_price']);
+                $('#cost_price').text(" " + data['cost_price'].toFixed(2).replace(".", ",") + " €");
+                $('#retail_price').text("" + data['retail_price'].toFixed(2).replace(".", ",") + " €");
                 $('img.img-rounded').attr("src", "{% static 'ABC' %}" + data['thumbnail']);
             },
             error: function(uno, dos, tres) {

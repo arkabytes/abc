@@ -45,6 +45,7 @@ urlpatterns = [
     url(r'modify_order/$', views.modify_order, name='modify_order'),
     url(r'orders/$', views.orders, name='orders'),
     url(r'^order_details_info/$', views.order_details_info, name='order_details_info'),
+    url(r'^order_info/$', views.order_info, name='order_info'),
 
     url(r'new_invoice/$', views.new_invoice, name='new_invoice'),
     url(r'add_invoice/$', views.add_invoice, name='add_invoice'),

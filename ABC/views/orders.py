@@ -121,3 +121,21 @@ def order_details_info(request):
 
     data = json.dumps(order_details_json)
     return HttpResponse(data, 'application/json')
+
+
+@login_required
+def order_info(request):
+    order_number = request.GET.get('order_number')
+    order = Order.objects.get(number=order_number)
+    order_json = {}
+
+    order_json['company_name'] = order.customer.company_name
+    order_json['date'] = order.date.strftime("%d/%m/%Y")
+    order_json['state'] = order.state
+    order_json['tax_base'] = order.tax_base
+    order_json['vat'] = order.vat
+    order_json['amount'] = order.amount
+    order_json['finished'] = order.finished
+
+    data = json.dumps(order_json)
+    return HttpResponse(data, 'application/json')

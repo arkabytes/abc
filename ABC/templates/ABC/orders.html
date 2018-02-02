@@ -21,15 +21,32 @@
                 $('#phone').text("" + data['phone']);
             },
             error: function(uno, dos, tres) {
-                alert("An error has occured while loading customer info");
+                alert("An error has occurred while loading customer info");
             }
         });
     }
 
     // Put order number to pick it when user wants to display order details at the modal dialog about order info
     function select_order(order_number) {
-        $('#order_number').text(order_number);
-        remove_order_details();
+        $.ajax({
+            url: "{% url 'order_info' %}?order_number=" + order_number,
+            dataType: 'json',
+            success: function(data) {
+                $('#order_number').text(order_number);
+                $('#order_company_name').text(data['company_name']);
+                $('#order_date').text(data['date']);
+                $('#order_tax_base').text(data['tax_base'].toFixed(2).replace(".", ",") + " €");
+                $('#order_vat').text(data['vat'].toFixed(2).replace(".", ",") + " €");
+                $('#order_amount').text(data['amount'].toFixed(2).replace(".", ",") + " €");
+                $('#finished').text(data['finished']);
+            },
+            error: function(uno, dos, tres) {
+                alert("An error has occurred while loading order info")
+            }
+        });
+
+        // Clear order details area
+        //remove_order_details();
     }
 
     // Show order details when user click 'view details' in modal dialog about order info
@@ -193,13 +210,17 @@
                                 </div>
                                 <div class="col-sm-6 col-md-8" style="line-height: 17pt">
                                     <h4 id="order_number">name</h4>
-                                        <i class="glyphicon glyphicon-map-marker"></i> <cite id="location" title="location">Location</cite>
+                                    <h3 id="order_company_name">company_name</h3>
                                     <p>
-                                        <i class="glyphicon glyphicon-envelope"></i> <span id="email">email</span>
+                                        <i class="glyphicon glyphicon-calendar"></i> <span id="order_date">date</span>
                                         <br />
-                                        <i class="glyphicon glyphicon-globe"></i><a id="web" target="_blank" href="#"> url</a>
+                                        <i class="glyphicon glyphicon-ok"></i> <span id="order_finished">finished</span>
+                                        <br/>
+                                        <i class="glyphicon glyphicon-euro"></i> {% trans '(Tax base)' %}: <span id="order_tax_base">tax_base</span>
                                         <br />
-                                        <i class="glyphicon glyphicon-phone"></i> <span id="phone">date</span>
+                                        <i class="glyphicon glyphicon-euro"></i> {% trans 'VAT' %}: <span id="order_vat">order_vat</span>
+                                        <br />
+                                        <i class="glyphicon glyphicon-euro"></i> <span id="order_amount" style="font-weight:bold;font-size:17px">order_amount</span>
                                     </p>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-primary">
