@@ -13,13 +13,23 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-
+        <script type="text/javascript">
+            // Ask user when he leaves this page
+            $(window).bind('beforeunload', function(){
+                return confirm("Are you sure?");
+            });
+        </script>
     </div>
+    {% if view %}
+        <script type="text/javascript">
+            $(window).unbind('beforeunload');
+        </script>
+    {% endif %}
     <div class="panel-body">
     {% if vat_type_id %}
-        <form class="empty-form" action="{% url 'modify_vat_type' %}" method="post">{% csrf_token %}
+        <form class="empty-form" action="{% url 'modify_vat_type' %}" method="post" onsubmit="$(window).unbind('beforeunload');">{% csrf_token %}
     {% else %}
-        <form class="empty-form" action="{% url 'add_vat_type' %}" method="post">{% csrf_token %}
+        <form class="empty-form" action="{% url 'add_vat_type' %}" method="post" onsubmit="$(window).unbind('beforeunload');">{% csrf_token %}
     {% endif %}
     <fieldset>
         <legend>{% trans 'VAT Type Information' %}</legend>
@@ -44,7 +54,9 @@
         </div>
         {% endif %}
         <br/>
-        <button class="btn btn-primary btn-block" type="submit">{% if vat_type_id %}{% trans 'Modifiy' %}{% else %}{% trans 'Add' %}{% endif %}</button>
+        {% if not view %}
+            <button class="btn btn-primary btn-block" type="submit">{% if vat_type_id %}{% trans 'Modify' %}{% else %}{% trans 'Add' %}{% endif %}</button>
+        {% endif %}
         <input type="hidden" name="mode" value="complete"/>
         {% if vat_type_id %}
         <input type="hidden" name="vat_type_id" value="{{ form.instance.id }}"/>

@@ -8,10 +8,15 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-
+        <script type="text/javascript">
+            // Ask user when he leaves this page
+            $(window).bind('beforeunload', function(){
+                return confirm("Are you sure?");
+            });
+        </script>
     </div>
     <div class="panel-body">
-<form class="empty-form" action="{% url 'add_item' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+<form class="empty-form" action="{% url 'add_item' %}" method="post" enctype="multipart/form-data" onsubmit="$(window).unbind('beforeunload')">{% csrf_token %}
     <fieldset>
         <legend>{% trans 'Invoice Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>

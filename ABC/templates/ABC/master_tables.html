@@ -95,6 +95,7 @@
                 <th>{% trans 'Rate' %}</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -104,6 +105,7 @@
                     <td>{{ vat_type.id }}</td>
                     <td>{{ vat_type.name }}</td>
                     <td>{{ vat_type.rate | floatformat:2 | intcomma}} %</td>
+                    <td class="text-center"><a class="btn btn-sm btn-info" href="{% url 'new_vat_type' vat_type.id %}?view=1">{% trans 'View' %}</a></td>
                     <td class="text-center"><a class="btn btn-sm btn-warning" href="{% url 'new_vat_type' vat_type.id %}">{% trans 'Modify' %}</a></td>
                     <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                            href="{% url 'delete_vat_type' vat_type.id %}">{% trans 'Delete' %}</a></td>

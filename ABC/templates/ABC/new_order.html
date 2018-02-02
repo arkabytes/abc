@@ -5,7 +5,11 @@
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
-{% include 'ABC/page_header.html' with title='New Order' %}
+{% if order_id %}
+    {% include 'ABC/page_header.html' with title='Modify Order' %}
+{% else %}
+    {% include 'ABC/page_header.html' with title='New Order' %}
+{% endif %}
 
 <script type="text/javascript">
     // Save dynamic HTML code generated during order details creation
@@ -377,7 +381,7 @@
             </table>
         </div>
         <br/>
-        <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
+        <button class="btn btn-primary btn-block" type="submit">{% if order_id %}{% trans 'Modify' %}{% else %}{% trans 'Add' %}{% endif %}</button>
         <input type="hidden" name="mode" value="complete"/>
         {% if order_id %}
         <input type="hidden" name="order_id" value="{{ order_id }}"/>

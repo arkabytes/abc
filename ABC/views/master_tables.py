@@ -135,6 +135,10 @@ def new_vat_type(request, vat_type_id=None):
         form = VatTypeForm()
 
     context = {'form': form, 'vat_type_id': vat_type_id}
+    view = request.GET.get('view')
+    if view == '1':
+        context['view'] = True
+
     return render(request, 'ABC/new_vat_type.html', context)
 
 

@@ -5,7 +5,11 @@
 
 {% include 'ABC/header.html' %}
 {% include 'ABC/navbar.html' %}
-{% include 'ABC/page_header.html' with title='New Customer' %}
+{% if customer_id %}
+    {% include 'ABC/page_header.html' with title='Modify Customer' %}
+{% else %}
+    {% include 'ABC/page_header.html' with title='New Customer' %}
+{% endif %}
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -17,12 +21,17 @@
             jQuery(document).ready(function() {
                 $('#cif').focus();
             });
+
+            // Ask user when he leaves this page
+            $(window).bind('beforeunload', function(){
+                return confirm("Are you sure?");
+            });
         </script>
 
     {% if customer_id %}
-    <form class="empty-form" action="{% url 'modify_customer' %}" method="post">{% csrf_token %}
+    <form class="empty-form" action="{% url 'modify_customer' %}" method="post" onsubmit="$(window).unbind('beforeunload');">{% csrf_token %}
     {% else %}
-    <form class="empty-form" action="{% url 'add_customer' %}" method="post">{% csrf_token %}
+    <form class="empty-form" action="{% url 'add_customer' %}" method="post" onsubmit="$(window).unbind('beforeunload');">{% csrf_token %}
     {% endif %}
     <fieldset>
         <legend>{% trans 'Customer Information' %}</legend>
@@ -138,7 +147,7 @@
             </div>
         </div>
         <br/>
-        <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
+        <button class="btn btn-primary btn-block" type="submit">{% if customer_id %}{% trans 'Modify' %}{% else %}{% trans 'Add' %}{% endif %}</button>
         <input type="hidden" name="mode" value="complete"/>
         {% if customer_id %}
         <input type="hidden" name="customer_id" value="{{ customer_id }}"/>
