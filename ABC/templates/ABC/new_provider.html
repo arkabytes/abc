@@ -12,7 +12,11 @@
 
     </div>
     <div class="panel-body">
-<form class="empty-form" action="{% url 'add_provider' %}" method="post">{% csrf_token %}
+    {% if provider_id %}
+    <form class="empty-form" action="{% url 'modify_provider' %}" method="post">{% csrf_token %}
+    {% else %}
+    <form class="empty-form" action="{% url 'add_provider' %}" method="post">{% csrf_token %}
+    {% endif %}
     <fieldset>
         <legend>{% trans 'Provider Information' %}</legend>
         <div class="row">
@@ -123,6 +127,9 @@
         <br/>
         <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
         <input type="hidden" name="mode" value="complete"/>
+        {% if provider_id %}
+        <input type="hidden" name="provider_id" value="{{ provider_id }}"/>
+        {% endif %}
     </fieldset>
     </form>
     {% if messages %}

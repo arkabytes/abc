@@ -99,6 +99,7 @@ class Event(models.Model):
     customer = models.ForeignKey(Customer, null=True, blank=True)
     provider = models.ForeignKey(Provider, null=True, blank=True)
     notice_date = models.DateTimeField(default=timezone.datetime.now, null=True, blank=True)
+    done = models.BooleanField(default=False, blank=True)
 
     def __str__(self):
         return self.name

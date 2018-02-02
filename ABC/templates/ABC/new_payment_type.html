@@ -12,7 +12,11 @@
 
     </div>
     <div class="panel-body">
-<form class="empty-form" action="{% url 'add_payment_type' %}" method="post">{% csrf_token %}
+    {% if payment_type_id %}
+    <form class="empty-form" action="{% url 'modify_payment_type' %}" method="post">{% csrf_token %}
+    {% else %}
+    <form class="empty-form" action="{% url 'add_payment_type' %}" method="post">{% csrf_token %}
+    {% endif %}
     <fieldset>
         <legend>{% trans 'Payment Type Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>
@@ -54,6 +58,9 @@
         <br/>
         <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
         <input type="hidden" name="mode" value="complete"/>
+        {% if payment_type_id %}
+        <input type="hidden" name="payment_type_id" value="{{ payment_type_id }}"/>
+        {% endif %}
     </fieldset>
     </form>
     {% if messages %}

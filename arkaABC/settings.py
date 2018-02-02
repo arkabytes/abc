@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'ABC.apps.AbcConfig',
     'widget_tweaks',
-    'easy_pdf'
+    'easy_pdf',
 ]
 
 MIDDLEWARE = [

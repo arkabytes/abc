@@ -12,7 +12,11 @@
 
     </div>
     <div class="panel-body">
-<form class="empty-form" action="{% url 'add_item' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    {% if item_id %}
+    <form class="empty-form" action="{% url 'modify_item' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    {% else %}
+    <form class="empty-form" action="{% url 'add_item' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    {% endif %}
     <fieldset>
         <legend>{% trans 'Item Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>
@@ -119,6 +123,9 @@
         <br/>
         <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
         <input type="hidden" name="mode" value="complete"/>
+        {% if item_id %}
+        <input type="hidden" name="item_id" value="{{ item_id }}"/>
+        {% endif %}
     </fieldset>
     </form>
     {% if messages %}

@@ -12,7 +12,11 @@
 
     </div>
     <div class="panel-body">
+    {% if event_id %}
+    <form class="empty-form" action="{% url 'modify_event' %}" method="post">{% csrf_token %}
+    {% else %}
     <form class="empty-form" action="{% url 'add_event' %}" method="post">{% csrf_token %}
+    {% endif %}
     <fieldset>
         <legend>{% trans 'Event Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>
@@ -37,14 +41,16 @@
             <div class="col-lg-3">
             <label for="stock">{% trans 'Date' %}</label>
                 <div class="input-group">
-                    <input type="date" name="{{ form.date.label.lower }}" id="date" size="30" class="form-control" placeholder="{% trans 'Date' %}" aria-describedby="basic-addon2" value="{{ form.date.value }}">
+                    <input type="date" name="{{ form.date.label.lower }}" id="date" size="30" class="form-control" placeholder="{% trans 'Date' %}"
+                           aria-describedby="basic-addon2" value="{{ form.date.value | date:'Y-m-d' }}">
                     {{ form.date.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
             <label for="cost_price">{% trans 'Notice Date' %}</label>
                 <div class="input-group">
-                    <input type="date" name="notice_date" id="notice_date" size="30" class="form-control" placeholder="{% trans 'Notice Date' %}" aria-describedby="basic-addon2">
+                    <input type="date" name="notice_date" id="notice_date" size="30" class="form-control" placeholder="{% trans 'Notice Date' %}"
+                           aria-describedby="basic-addon2" value="{{ form.notice_date.value | date:'Y-m-d' }}">
                 </div>
             </div>
             <div class="col-lg-3">
@@ -71,10 +77,20 @@
                     {{ form.provider.errors }}
                 </div>
             </div>
+            <div class="col-lg-3">
+                <div class="input-group">
+                    <label for="done">{% trans 'Done?' %}</label>
+                    {% render_field form.done class='form-control' id='done' value='1' %}
+                    {{ form.done.errors }}
+                </div>
+            </div>
         </div>
         <br/>
         <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
         <input type="hidden" name="mode" value="complete"/>
+        {% if event_id %}
+        <input type="hidden" name="event_id" value="{{ event_id }}"/>
+        {% endif %}
     </fieldset>
     </form>
     {% if messages %}

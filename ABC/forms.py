@@ -77,7 +77,7 @@ class InvoiceForm(forms.ModelForm):
 
 class EventForm(forms.ModelForm):
     class Meta:
-        fields = ('name', 'description', 'date', 'location', 'customer', 'provider', 'notice_date')
+        fields = ('name', 'description', 'date', 'location', 'customer', 'provider', 'notice_date', 'done')
         model = Event
 
 

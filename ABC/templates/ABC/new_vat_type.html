@@ -46,9 +46,9 @@
         <br/>
         <button class="btn btn-primary btn-block" type="submit">{% if vat_type_id %}{% trans 'Modifiy' %}{% else %}{% trans 'Add' %}{% endif %}</button>
         <input type="hidden" name="mode" value="complete"/>
-    {% if vat_type_id %}
+        {% if vat_type_id %}
         <input type="hidden" name="vat_type_id" value="{{ form.instance.id }}"/>
-    {% endif %}
+        {% endif %}
     </fieldset>
     </form>
     {% if messages %}

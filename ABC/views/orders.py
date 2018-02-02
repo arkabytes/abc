@@ -56,7 +56,7 @@ def add_order(request):
         order.save()
 
         quantities = request.POST.getlist('quantity')
-        prices = request.POST.getlist('prices')
+        prices = request.POST.getlist('retail_price')
         items = request.POST.getlist('items')
 
         i = 0
@@ -67,11 +67,11 @@ def add_order(request):
             order_detail.order = order
             order_detail.item = item
             order_detail.discount = 0
-            order_detail.subtotal = item.retail_price * int(quantities[i])
-            tax_base += item.retail_price * int(quantities[i])
+            order_detail.subtotal = float(prices[i]) * int(quantities[i])
             order_detail.price = prices[i]
             order_detail.quantity = quantities[i]
             order_detail.save()
+            tax_base += float(prices[i]) * int(quantities[i])
             i += 1
 
         order.tax_base = tax_base

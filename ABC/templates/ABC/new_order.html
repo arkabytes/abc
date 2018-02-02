@@ -246,7 +246,11 @@
 
     </div>
 <div class="panel-body">
-<form id="add_order" class="empty-form" action="{% url 'add_order' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    {% if order_id %}
+    <form id="add_order" class="empty-form" action="{% url 'modify_order' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    {% else %}
+    <form id="add_order" class="empty-form" action="{% url 'add_order' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    {% endif %}
     <fieldset>
         <legend>{% trans 'Order Information' %}</legend>
         <div class="row">
@@ -260,14 +264,16 @@
             <div class="col-lg-3">
                 <label for="date">{% trans 'Date' %}</label>
                 <div class="input-group">
-                    <input type="date" name="{{ form.date.label.lower }}" id="date" size="30" class="form-control" placeholder="{% trans 'Date' %}" aria-describedby="basic-addon2" value="{{ form.date.value }}">
+                    <input type="date" name="{{ form.date.label.lower }}" id="date" size="30" class="form-control" placeholder="{% trans 'Date' %}"
+                           aria-describedby="basic-addon2" value="{{ form.date.value| date:'Y-m-d' }}">
                     {{ form.date.errors }}
                 </div>
             </div>
             <div class="col-lg-3">
                 <label for="delivery_date">{% trans 'Delivery Date' %}</label>
                 <div class="input-group">
-                    <input type="date" name="delivery_date" id="date" size="30" class="form-control" placeholder="{% trans 'Delivery Date' %}" aria-describedby="basic-addon2" value="{{ form.delivery_date.value }}">
+                    <input type="date" name="delivery_date" id="date" size="30" class="form-control" placeholder="{% trans 'Delivery Date' %}"
+                           aria-describedby="basic-addon2" value="{{ form.delivery_date.value| date:'Y-m-d' }}">
                     {{ form.delivery_date.errors }}
                 </div>
             </div>
@@ -373,6 +379,9 @@
         <br/>
         <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
         <input type="hidden" name="mode" value="complete"/>
+        {% if order_id %}
+        <input type="hidden" name="order_id" value="{{ order_id }}"/>
+        {% endif %}
     </fieldset>
     </form>
     {% if messages %}

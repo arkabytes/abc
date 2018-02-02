@@ -19,7 +19,11 @@
             });
         </script>
 
-<form class="empty-form" action="{% url 'add_customer' %}" method="post">{% csrf_token %}
+    {% if customer_id %}
+    <form class="empty-form" action="{% url 'modify_customer' %}" method="post">{% csrf_token %}
+    {% else %}
+    <form class="empty-form" action="{% url 'add_customer' %}" method="post">{% csrf_token %}
+    {% endif %}
     <fieldset>
         <legend>{% trans 'Customer Information' %}</legend>
         <div class="row">
@@ -136,6 +140,9 @@
         <br/>
         <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
         <input type="hidden" name="mode" value="complete"/>
+        {% if customer_id %}
+        <input type="hidden" name="customer_id" value="{{ customer_id }}"/>
+        {% endif %}
     </fieldset>
     </form>
     {% if messages %}

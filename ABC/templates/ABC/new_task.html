@@ -14,7 +14,11 @@
 
     </div>
     <div class="panel-body">
+    {% if task_id %}
+    <form class="empty-form" action="{% url 'modify_task' %}" method="post">{% csrf_token %}
+    {% else %}
     <form class="empty-form" action="{% url 'add_task' %}" method="post">{% csrf_token %}
+    {% endif %}
     <fieldset>
         <legend>{% trans 'Task Information' %}</legend>
         <div class="row">
@@ -133,6 +137,9 @@
         <br/>
         <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
         <input type="hidden" name="mode" value="complete"/>
+        {% if task_id %}
+        <input type="hidden" name="task_id" value="{{ task_id }}"/>
+        {% endif %}
     </fieldset>
     </form>
     {% if messages %}

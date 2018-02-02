@@ -12,7 +12,11 @@
 
     </div>
     <div class="panel-body">
+    {% if delivery_type_id %}
+    <form class="empty-form" action="{% url 'modify_delivery_type' %}" method="post">{% csrf_token %}
+    {% else %}
     <form class="empty-form" action="{% url 'add_delivery_type' %}" method="post">{% csrf_token %}
+    {% endif %}
     <fieldset>
         <legend>{% trans 'Delivery Type Information' %}</legend>
         <label for="name">{% trans 'Name' %}</label>
@@ -66,6 +70,9 @@
         <br/>
         <button class="btn btn-primary btn-block" type="submit">{% trans 'Add' %}</button>
         <input type="hidden" name="mode" value="complete"/>
+        {% if delivery_type_id %}
+        <input type="hidden" name="delivery_type_id" value="{{ delivery_type_id }}"/>
+        {% endif %}
     </fieldset>
     </form>
     {% if messages %}

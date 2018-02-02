@@ -58,5 +58,4 @@ def modify_event(request):
             return render(request, 'ABC/new_event.html', {'form': form, 'event_id': event_id})
 
         form.save()
-        messages.success(request, 'Event modified successfully')
         return redirect('events')

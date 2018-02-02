@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -62,7 +62,7 @@ urlpatterns = [
     url(r'add_task/$', views.add_task, name='add_task'),
     url(r'new_task/(?P<task_id>[0-9]*)/$', views.new_task, name='new_task'),
     url(r'delete_task/(?P<task_id>[0-9]*)/$', views.delete_task, name='delete_task'),
-    url(r'modify_task/$', views.modify_task, name='motify_task'),
+    url(r'modify_task/$', views.modify_task, name='modify_task'),
     url(r'tasks/$', views.tasks, name='tasks'),
 
     url(r'master_tables/$', views.master_tables, name='master_tables'),

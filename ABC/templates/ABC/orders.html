@@ -12,7 +12,8 @@
             url: "{% url 'customer_info' %}?customer_id=" + customer_id,
             dataType: 'json',
             success: function(data) {
-                $('#name').text(data['name'] + ' (' + data['company_name'] +  ')');
+                $('#company_name').text(data['company_name']);
+                $('#name').text(data['name'] + " " + data['surname']);
                 $('#location').text(data['location']);
                 $('#email').text(data['email']);
                 $('#web').text(" " + data['web']);
@@ -105,7 +106,7 @@
                            onclick="javascript:select_order({{ order.number }})" href="#">{{ order.number }}</a></td>
                 <td>{{ order.date | date:'d/m/Y'}}</td>
                 <td><a data-toggle="modal" data-target="#info_customer" data-id="{{ order.customer.id }}" id="customer_info"
-                           onclick="javascript:select_customer({{ order.customer.id }})" href="#">{{ order.customer.name }} {{ order.customer.surname }}</a></td>
+                       onclick="javascript:select_customer({{ order.customer.id }})" href="#">{{ order.customer.company_name }}</a></td>
                 <td class="text-right">{{ order.amount | floatformat:2 | intcomma }} €</td>
                 <td class="text-right">{{ order.state }}</td>
                 <td class="text-center"><a class="btn btn-sm btn-warning" href="{% url 'new_order' order.id %}">{% trans 'Modify' %}</a></td>
@@ -136,7 +137,9 @@
                                     <img src="{% static 'ABC/icons/customer512.png' %}" alt="" class="img-rounded img-responsive" />
                                 </div>
                                 <div class="col-sm-6 col-md-8" style="line-height: 17pt">
-                                    <h4 id="name">name</h4>
+                                    <h4 id="company_name">Company Name</h4>
+                                        <i class="glyphicon glyphicon-user"></i> <cite id="name" title="name">Name</cite>
+                                        <br/>
                                         <i class="glyphicon glyphicon-map-marker"></i> <cite id="location" title="location">Location</cite>
                                     <p>
                                         <i class="glyphicon glyphicon-envelope"></i> <span id="email">email</span>

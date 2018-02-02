@@ -140,6 +140,7 @@ def customer_info(request):
     customer = Customer.objects.get(pk=customer_id)
     customer_json = {}
     customer_json['name'] = customer.name
+    customer_json['surname'] = customer.surname
     customer_json['company_name'] = customer.company_name
     customer_json['location'] = customer.city + ", " + customer.province
     customer_json['email'] = customer.email
