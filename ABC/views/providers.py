@@ -17,7 +17,7 @@ def new_provider(request, provider_id=None):
     else:
         form = ProviderForm()
 
-    context = {'form': form, 'provider_id': provider}
+    context = {'form': form, 'provider_id': provider_id}
     return render(request, 'ABC/new_provider.html', context)
 
 
@@ -58,14 +58,13 @@ def modify_provider(request):
     if request.method == 'POST':
         provider_id = request.POST['provider_id']
         provider = Provider.objects.get(pk=provider_id)
-        # Modifiy a VAT Type
+        # Modify a VAT Type
         form = ProviderForm(request.POST, request.FILES, instance=provider)
         if not form.is_valid():
             messages.error(request, 'Some errors has occurred')
             return render(request, 'ABC/new_provider.html', {'form': form, 'provider_id': provider_id})
 
         form.save()
-        messages.success(request, 'Provider modified successfully')
         return redirect('providers')
 
 

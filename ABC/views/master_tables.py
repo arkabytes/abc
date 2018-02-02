@@ -11,9 +11,9 @@ from ABC.models import VatType, PaymentType, DeliveryType
 
 @login_required
 def master_tables(request):
-    vat_types = VatType.objects.all();
-    delivery_types = DeliveryType.objects.all();
-    payment_types = PaymentType.objects.all();
+    vat_types = VatType.objects.all()
+    delivery_types = DeliveryType.objects.all()
+    payment_types = PaymentType.objects.all()
     context = {'vat_types': vat_types, 'delivery_types': delivery_types, 'payment_types': payment_types}
     return render(request, 'ABC/master_tables.html', context)
 
@@ -63,7 +63,6 @@ def modify_delivery_type(request):
             return render(request, 'ABC/new_delivery_type.html', {'form': form, 'delivery_type_id': delivery_type_id})
 
         form.save()
-        messages.success(request, 'Delivery Type modified successfully')
         return redirect('master_tables')
 
 
@@ -124,7 +123,6 @@ def modify_payment_type(request):
             return render(request, 'ABC/new_payment_type.html', {'form': form, 'payment_type_id': payment_type_id})
 
         form.save()
-        messages.success(request, 'Payment Type modified successfully')
         return redirect('master_tables')
 
 
@@ -173,5 +171,4 @@ def modify_vat_type(request):
             return render(request, 'ABC/new_vat_type.html', {'form': form, 'vat_type_id': vat_type_id})
 
         form.save()
-        messages.success(request, 'Vat Type modified successfully')
         return redirect('master_tables')

@@ -78,7 +78,6 @@ def modify_customer(request):
             return render(request, 'ABC/new_customer.html', {'form': form, 'customer_id': customer_id})
 
         form.save()
-        messages.success(request, 'Customer modified successfully')
         return redirect('customers')
 
 

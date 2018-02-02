@@ -102,7 +102,6 @@ def modify_order(request):
             return render(request, 'ABC/new_order.html', {'form': form, 'order_id': order_id})
 
         form.save()
-        messages.success(request, 'Order modified successfully')
         return redirect('orders')
 
 

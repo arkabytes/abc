@@ -69,5 +69,4 @@ def modify_task(request):
             return render(request, 'ABC/new_task.html', {'form': form, 'task_id': task_id})
 
         form.save()
-        messages.success(request, 'Task modified successfully')
         return redirect('tasks')

@@ -75,7 +75,6 @@ def modify_item(request):
             return render(request, 'ABC/new_item.html', {'form': form, 'item_id': item_id})
 
         form.save()
-        messages.success(request, 'Item modified successfully')
         return redirect('items')
 
 
