@@ -1,3 +1,4 @@
+from background_task import background
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -59,3 +60,7 @@ def modify_event(request):
 
         form.save()
         return redirect('events')
+
+@background
+def notify_event():
+    print("Notifying event . . .")
