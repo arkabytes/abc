@@ -28,6 +28,10 @@ def new_item(request, item_id=None):
         form = ItemForm()
 
     context = {'form': form, 'item_id': item_id}
+    view = request.GET.get('view')
+    if view == '1':
+        context['view'] = True
+
     return render(request, 'ABC/new_item.html', context)
 
 

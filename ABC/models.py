@@ -109,7 +109,7 @@ class Order(models.Model):
     number = models.CharField(max_length=20,unique=True)
     date = models.DateTimeField(default=timezone.datetime.now)
     delivery_date = models.DateTimeField(default=timezone.datetime.now)
-    state = models.CharField(max_length=50)
+    state = models.CharField(max_length=50, default='Ordered', choices=(('O', 'Ordered'), ('NR', 'Not Ready'), ('R', 'Ready'), ('S', 'Sent'), ('P', 'Paid')))
     notes = models.TextField(default='', blank=True)
     tax_base = models.FloatField(default=0)
     vat = models.FloatField(default=0)
@@ -192,7 +192,8 @@ class Task(models.Model):
     customer = models.ForeignKey(Customer, null=True, blank=True)
     provider = models.ForeignKey(Provider, null=True, blank=True)
     order = models.ForeignKey(Order, null=True, blank=True)
-    state = models.CharField(max_length=50)
+    state = models.CharField(max_length=50, choices=(('TD', 'To do'), ('DNG', 'Doing'), ('DN', 'Done'), ('DIS', 'Discarded')),
+                             default='To do')
     notice = models.TextField(default='', null=True, blank=True)
     notice_date = models.DateTimeField(default=timezone.datetime.now, null=True, blank=True)
 

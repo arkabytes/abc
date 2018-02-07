@@ -6,49 +6,10 @@
 {% include 'ABC/navbar.html' %}
 {% include 'ABC/page_header.html' with title='Orders' icon='ABC/icons/anadirpedido32.png' new_link='new_order' tooltip='Add Order' %}
 
+{% include 'ABC/snippets/info_customer.html' %}
+{% include 'ABC/snippets/info_order.html' %}
+
 <script type="text/javascript">
-    function select_customer(customer_id) {
-        $.ajax({
-            url: "{% url 'customer_info' %}?customer_id=" + customer_id,
-            dataType: 'json',
-            success: function(data) {
-                $('#company_name').text(data['company_name']);
-                $('#name').text(data['name'] + " " + data['surname']);
-                $('#location').text(data['location']);
-                $('#email').text(data['email']);
-                $('#web').text(" " + data['web']);
-                $('#web').attr("href", data['web']);
-                $('#phone').text("" + data['phone']);
-            },
-            error: function(uno, dos, tres) {
-                alert("An error has occurred while loading customer info");
-            }
-        });
-    }
-
-    // Put order number to pick it when user wants to display order details at the modal dialog about order info
-    function select_order(order_number) {
-        $.ajax({
-            url: "{% url 'order_info' %}?order_number=" + order_number,
-            dataType: 'json',
-            success: function(data) {
-                $('#order_number').text(order_number);
-                $('#order_company_name').text(data['company_name']);
-                $('#order_date').text(data['date']);
-                $('#order_tax_base').text(data['tax_base'].toFixed(2).replace(".", ",") + " €");
-                $('#order_vat').text(data['vat'].toFixed(2).replace(".", ",") + " €");
-                $('#order_amount').text(data['amount'].toFixed(2).replace(".", ",") + " €");
-                $('#finished').text(data['finished']);
-            },
-            error: function(uno, dos, tres) {
-                alert("An error has occurred while loading order info")
-            }
-        });
-
-        // Clear order details area
-        //remove_order_details();
-    }
-
     // Show order details when user click 'view details' in modal dialog about order info
     function view_details(element) {
 
@@ -112,6 +73,7 @@
                 <th>{% trans 'State' %}</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -125,7 +87,8 @@
                 <td><a data-toggle="modal" data-target="#info_customer" data-id="{{ order.customer.id }}" id="customer_info"
                        onclick="javascript:select_customer({{ order.customer.id }})" href="#">{{ order.customer.company_name }}</a></td>
                 <td class="text-right">{{ order.amount | floatformat:2 | intcomma }} €</td>
-                <td class="text-right">{{ order.state }}</td>
+                <td class="text-right">{{ order.get_state_display }}</td>
+                <td class="text-center"><a class="btn btn-sm btn-info" href="{% url 'new_order' order.id %}?view=1">{% trans 'View' %}</a></td>
                 <td class="text-center"><a class="btn btn-sm btn-warning" href="{% url 'new_order' order.id %}">{% trans 'Modify' %}</a></td>
                 <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                        href="{% url 'delete_order' order.id %}">{% trans 'Delete' %}</a></td>
@@ -134,118 +97,6 @@
     {% endif %}
         </tbody>
     </table>
-    </div>
-</div>
-
-<div class="modal fade" id="info_customer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Customer</h4>
-            </div>
-            <br/>
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-6">
-                        <div class="well well-sm">
-                            <div class="row">
-                                <div class="col-sm-6 col-md-4">
-                                    <img src="{% static 'ABC/icons/customer512.png' %}" alt="" class="img-rounded img-responsive" />
-                                </div>
-                                <div class="col-sm-6 col-md-8" style="line-height: 17pt">
-                                    <h4 id="company_name">Company Name</h4>
-                                        <i class="glyphicon glyphicon-user"></i> <cite id="name" title="name">Name</cite>
-                                        <br/>
-                                        <i class="glyphicon glyphicon-map-marker"></i> <cite id="location" title="location">Location</cite>
-                                    <p>
-                                        <i class="glyphicon glyphicon-envelope"></i> <span id="email">email</span>
-                                        <br />
-                                        <i class="glyphicon glyphicon-globe"></i><a id="web" target="_blank" href="#"> url</a>
-                                        <br />
-                                        <i class="glyphicon glyphicon-phone"></i> <span id="phone">date</span>
-                                    </p>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-primary">
-                                            {% trans 'View' %}
-                                        </button>
-                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                            <span class="caret"></span><span class="sr-only">{% trans 'View' %}</span>
-                                        </button>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="{% url 'orders' %}">{% trans 'Orders' %}</a></li>
-                                            <li><a href="{% url 'invoices' %}">{% trans 'Invoices' %}</a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="{% url 'tasks' %}">{% trans 'Tasks' %}</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="info_order" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Order</h4>
-            </div>
-            <br/>
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-6">
-                        <div class="well well-sm">
-                            <div class="row">
-                                <div class="col-sm-6 col-md-4">
-                                    <img src="{% static 'ABC/icons/order512.png' %}" alt="" class="img-rounded img-responsive" />
-                                </div>
-                                <div class="col-sm-6 col-md-8" style="line-height: 17pt">
-                                    <h4 id="order_number">name</h4>
-                                    <h3 id="order_company_name">company_name</h3>
-                                    <p>
-                                        <i class="glyphicon glyphicon-calendar"></i> <span id="order_date">date</span>
-                                        <br />
-                                        <i class="glyphicon glyphicon-ok"></i> <span id="order_finished">finished</span>
-                                        <br/>
-                                        <i class="glyphicon glyphicon-euro"></i> {% trans '(Tax base)' %}: <span id="order_tax_base">tax_base</span>
-                                        <br />
-                                        <i class="glyphicon glyphicon-euro"></i> {% trans 'VAT' %}: <span id="order_vat">order_vat</span>
-                                        <br />
-                                        <i class="glyphicon glyphicon-euro"></i> <span id="order_amount" style="font-weight:bold;font-size:17px">order_amount</span>
-                                    </p>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-primary">
-                                            {% trans 'View' %}
-                                        </button>
-                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                            <span class="caret"></span><span class="sr-only">{% trans 'View' %}</span>
-                                        </button>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#" id="view_details" onclick="javascript:view_details(this)">{% trans 'Details' %}</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="order_details">
-                    <!-- Order details appear here -->
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" onclick="javscript:remove_order_details()" data-dismiss="modal">{% trans 'Close' %}</button>
-            </div>
-        </div>
     </div>
 </div>
 

@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'ABC.apps.AbcConfig',
     'widget_tweaks',
     'easy_pdf',
-    'background_task'
 ]
 
 MIDDLEWARE = [

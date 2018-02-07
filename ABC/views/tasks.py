@@ -15,6 +15,10 @@ def new_task(request, task_id=None):
         form = TaskForm()
 
     context = {'form': form, 'task_id': task_id}
+    view = request.GET.get('view')
+    if view == '1':
+        context['view'] = True
+
     return render(request, 'ABC/new_task.html', context)
 
 

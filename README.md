@@ -8,13 +8,22 @@ Actualmente no hay ninguna versión liberada.
 
 Requisitos
 ===
- * Pillow
- * django-widget-tweaks
- * reportlab
+ * Python3 con los siguientes paquetes:
+  * Django
+  * Pillow
+  * django-widget-tweaks
+  * reportlab
+  * background-tasks
 
-***
+Librerías utilizadas
+===
+ * Bootstrap 4
+ * SB Admin 2
+   [SB Admin 2 Theme](https://github.com/BlackrockDigital/startbootstrap-sb-admin-2)
+ * JQuery
+ * JQuery UI
+ * CKEditor
 
-abc is a web application written in Python with Django framework to be used like an ERP by SME to manage Customers, Providers, Orders,
-Invoices and Stocking.
-
-Currently there is not yet a release.
+Autores
+===
+Santiago Faci <santi@arkabytes.com>

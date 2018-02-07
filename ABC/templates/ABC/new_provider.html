@@ -134,7 +134,11 @@
             </div>
         </div>
         <br/>
+        {% if view %}
+        <button class="btn btn-info btn-block" type="button" onclick="$(window).unbind('beforeunload');history.back();">{% trans 'Back' %}</button>
+        {% else %}
         <button class="btn btn-primary btn-block" type="submit">{% if provider_id %}{% trans 'Modify' %}{% else %}{% trans 'Add' %}{% endif %}</button>
+        {% endif %}
         <input type="hidden" name="mode" value="complete"/>
         {% if provider_id %}
         <input type="hidden" name="provider_id" value="{{ provider_id }}"/>

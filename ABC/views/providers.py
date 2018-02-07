@@ -18,6 +18,10 @@ def new_provider(request, provider_id=None):
         form = ProviderForm()
 
     context = {'form': form, 'provider_id': provider_id}
+    view = request.GET.get('view')
+    if view == '1':
+        context['view'] = True
+
     return render(request, 'ABC/new_provider.html', context)
 
 

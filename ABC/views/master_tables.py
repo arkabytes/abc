@@ -27,6 +27,10 @@ def new_delivery_type(request, delivery_type_id=None):
         form = DeliveryTypeForm()
 
     context = {'form': form, 'delivery_type_id': delivery_type_id}
+    view = request.GET.get('view')
+    if view == '1':
+        context['view'] = True
+
     return render(request, 'ABC/new_delivery_type.html', context)
 
 
@@ -87,6 +91,10 @@ def new_payment_type(request, payment_type_id=None):
         form = PaymentTypeForm()
 
     context = {'form': form, 'payment_type_id': payment_type_id}
+    view = request.GET.get('view')
+    if view == '1':
+        context['view'] = True
+
     return render(request, 'ABC/new_payment_type.html', context)
 
 

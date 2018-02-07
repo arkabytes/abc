@@ -16,6 +16,10 @@ def new_event(request, event_id=None):
         form = EventForm()
 
     context = {'form': form, 'event_id': event_id}
+    view = request.GET.get('view')
+    if view == '1':
+        context['view'] = True
+
     return render(request, 'ABC/new_event.html', context)
 
 

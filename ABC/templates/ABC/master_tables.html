@@ -22,6 +22,7 @@
                 <th>{% trans 'Days' %}</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -32,6 +33,7 @@
                     <td>{{ delivery_type.name }}</td>
                     <td>{{ delivery_type.cost | floatformat:2 | intcomma }} €</td>
                     <td>{{ delivery_type.days }}</td>
+                    <td class="text-center"><a class="btn btn-sm btn-info" href="{% url 'new_delivery_type' delivery_type.id %}?view=1">{% trans 'View' %}</a></td>
                     <td class="text-center"><a class="btn btn-sm btn-warning" href="{% url 'new_delivery_type' delivery_type.id %}">{% trans 'Modify' %}</a></td>
                     <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                            href="{% url 'delete_delivery_type' delivery_type.id %}">{% trans 'Delete' %}</a></td>
@@ -59,6 +61,7 @@
                 <th>{% trans 'Cost' %}</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -69,6 +72,7 @@
                     <td>{{ payment_type.name }}</td>
                     <td>{{ payment_type.description | safe | truncatewords:10}}</td>
                     <td>{{ payment_type.cost | floatformat:2 | intcomma }} €</td>
+                    <td class="text-center"><a class="btn btn-sm btn-info" href="{% url 'new_payment_type' payment_type.id %}?view=1">{% trans 'View' %}</a></td>
                     <td class="text-center"><a class="btn btn-sm btn-warning" href="{% url 'new_payment_type' payment_type.id %}">{% trans 'Modify' %}</a></td>
                     <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                            href="{% url 'delete_payment_type' payment_type.id %}">{% trans 'Delete' %}</a></td>

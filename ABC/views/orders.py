@@ -18,6 +18,10 @@ def new_order(request, order_id=None):
         form = OrderForm()
 
     context = {'form': form, 'order_id': order_id}
+    view = request.GET.get('view')
+    if view == '1':
+        context['view'] = True
+
     return render(request, 'ABC/new_order.html', context)
 
 

@@ -65,7 +65,11 @@
         </div>
         {% endif %}
         <br/>
+        {% if view %}
+        <button class="btn btn-info btn-block" type="button" onclick="$(window).unbind('beforeunload');history.back();">{% trans 'Back' %}</button>
+        {% else %}
         <button class="btn btn-primary btn-block" type="submit">{% if payment_type_id %}{% trans 'Modify' %}{% else %}{% trans 'Add' %}{% endif %}</button>
+        {% endif %}
         <input type="hidden" name="mode" value="complete"/>
         {% if payment_type_id %}
         <input type="hidden" name="payment_type_id" value="{{ payment_type_id }}"/>

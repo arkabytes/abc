@@ -5,6 +5,8 @@
 {% include 'ABC/navbar.html' %}
 {% include 'ABC/page_header.html' with title='Events' icon='ABC/icons/anadiragenda32.png' new_link='new_event' tooltip='Add Event' %}
 
+{% include 'ABC/snippets/info_customer.html' %}
+
 <div class="panel panel-default">
     <div class="panel-heading">
         Items
@@ -15,8 +17,10 @@
             <tr>
                 <th>#</th>
                 <th>{% trans 'Name' %}</th>
+                <th>{% trans 'Customer' %}</th>
                 <th>{% trans 'Description' %}</th>
                 <th>{% trans 'Date' %}</th>
+                <th></th>
                 <th></th>
                 <th></th>
             </tr>
@@ -27,8 +31,11 @@
             <tr>
                 <td>{{ event.id }}</td>
                 <td>{{ event.name }}</td>
+                <td><a data-toggle="modal" data-target="#info_customer" data-id="{{ event.customer.id }}" id="customer_info"
+                           onclick="select_customer({{ event.customer.id }})" href="#">{{ event.customer.company_name }}</a></td>
                 <td>{{ event.description | safe | truncatewords:10 }}</td>
                 <td>{{ event.date | date:'d/m/Y' }}</td>
+                <td class="text-center"><a class="btn btn-sm btn-info" href="{% url 'new_event' event.id %}?view=1">{% trans 'View' %}</a></td>
                 <td class="text-center"><a class="btn btn-sm btn-warning" href="{% url 'new_event' event.id %}">{% trans 'Modify' %}</a></td>
                 <td class="text-center"><a class="btn btn-sm btn-danger" onclick="return confirm('{% trans 'Are you sure?' %}');"
                        href="{% url 'delete_event' event.id %}">{% trans 'Delete' %}</a></td>

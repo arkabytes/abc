@@ -31,6 +31,10 @@ def new_customer(request, customer_id=None):
         form = CustomerForm()
 
     context = {'form': form, 'customer_id': customer_id}
+    view = request.GET.get('view')
+    if view == '1':
+        context['view'] = True
+
     return render(request, 'ABC/new_customer.html', context)
 
 
