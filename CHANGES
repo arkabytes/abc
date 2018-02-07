@@ -1,0 +1,10 @@
+Version 0.1
+(7 February 2018)
+    First runnable version (basic features)
+        - Customer management (create, modify, view, delete)
+        - Provider management (create, modify, view, delete)
+        - Item management (create, modify, view, delete)
+        - Order management (create, modify, view, delete)
+        - Task management (create, modify, view, delete)
+        - Event management (create, modify, view, delete)
+        - Master Tables management: VAT type, Delivery Type, Payment Type (create, modify, view, delete)
