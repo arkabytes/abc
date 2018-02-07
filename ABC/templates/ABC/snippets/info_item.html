@@ -1,0 +1,77 @@
+{% load static %}
+{% load i18n %}
+
+<script type="text/javascript">
+    function select_item(item_id) {
+        $.ajax({
+            url: "{% url 'item_info' %}?item_id=" + item_id,
+            dataType: 'json',
+            success: function(data) {
+                $('#label').text(data['name']);
+                $('#name').text(data['name']);
+                //$('#description').text(data['description']);
+                $('#description').html(data['description']);
+                $('#provider').text(data['provider_name']);
+                $('#cost_price').text(" " + data['cost_price'].toFixed(2).replace(".", ",") + " €");
+                $('#retail_price').text("" + data['retail_price'].toFixed(2).replace(".", ",") + " €");
+                $('img.img-rounded').attr("src", "{% static 'ABC' %}" + data['thumbnail']);
+            },
+            error: function(uno, dos, tres) {
+                alert("An error has occured while loading item info");
+            }
+        });
+    }
+</script>
+
+<div class="modal fade" id="info_item" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="label">Item</h4>
+            </div>
+            <br/>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="well well-sm">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-4">
+                                    <img id="thumbnail" src="http://placehold.it/380x500" alt="" class="img-rounded img-responsive" />
+                                </div>
+                                <div class="col-sm-6 col-md-8" style="line-height: 17pt">
+                                    <h4 id="name">The name</h4>
+                                        <i class="glyphicon glyphicon-list-alt"></i> <span id="description" title="Location">Location </span>
+                                    <p>
+                                        <i class="glyphicon glyphicon-lock"></i> <span id="provider">Provider</span>
+                                        <br />
+                                        <i class="glyphicon glyphicon-euro"></i> {% trans 'Cost price' %}: <span id="cost_price"> Cost price</span>
+                                        <br />
+                                        <i class="glyphicon glyphicon-euro"></i> {% trans 'Retail price' %}: <span id="retail_price">Retail price</span>
+                                    </p>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary">
+                                            {% trans 'View' %}
+                                        </button>
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                            <span class="caret"></span><span class="sr-only">{% trans 'View' %}</span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="{% url 'orders' %}">{% trans 'Orders' %}</a></li>
+                                            <li><a href="{% url 'invoices' %}">{% trans 'Invoices' %}</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="{% url 'tasks' %}">{% trans 'Tasks' %}</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}</button>
+            </div>
+        </div>
+    </div>
+</div>
