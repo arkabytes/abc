@@ -79,8 +79,8 @@ class Item(models.Model):
     image2 = models.ImageField(upload_to='items', blank=True)
     image3 = models.ImageField(upload_to='items', blank=True)
     thumbnail = models.ImageField(upload_to='items')
-    provider = models.ForeignKey(Provider, null=True)
-    vat_type = models.ForeignKey(VatType, null=True)
+    provider = models.ForeignKey(Provider, models.SET_NULL, null=True)
+    vat_type = models.ForeignKey(VatType, models.SET_NULL, null=True)
 
     @classmethod
     def create(cls, name, description, price, thumbnail):
@@ -96,8 +96,8 @@ class Event(models.Model):
     description = models.TextField(default='')
     date = models.DateTimeField(default=timezone.datetime.now)
     location = models.CharField(max_length=100, null=True, blank=True)
-    customer = models.ForeignKey(Customer, null=True, blank=True)
-    provider = models.ForeignKey(Provider, null=True, blank=True)
+    customer = models.ForeignKey(Customer, models.SET_NULL, null=True, blank=True)
+    provider = models.ForeignKey(Provider, models.SET_NULL, null=True, blank=True)
     notice_date = models.DateTimeField(default=timezone.datetime.now, null=True, blank=True)
     done = models.BooleanField(default=False, blank=True)
 
@@ -114,13 +114,13 @@ class Order(models.Model):
     tax_base = models.FloatField(default=0)
     vat = models.FloatField(default=0)
     amount = models.FloatField(default=0)
-    customer = models.ForeignKey(Customer)
+    customer = models.ForeignKey(Customer, models.SET_NULL, null=True)
     delivery_cost = models.FloatField(default=0)
     payment_cost = models.FloatField(default=0)
     document = models.FileField(upload_to='items', default=None, blank=True)
     delivery_days = models.PositiveSmallIntegerField(default=0)
-    delivery_type = models.ForeignKey(DeliveryType, null=True, blank=True)
-    payment_type = models.ForeignKey(PaymentType)
+    delivery_type = models.ForeignKey(DeliveryType, models.SET_NULL, null=True, blank=True)
+    payment_type = models.ForeignKey(PaymentType, models.SET_NULL, null=True, blank=True)
     finished = models.BooleanField(default=False)
 
     def __str__(self):
@@ -128,7 +128,7 @@ class Order(models.Model):
 
 
 class OrderDetail(models.Model):
-    item = models.ForeignKey(Item)
+    item = models.ForeignKey(Item, models.SET_NULL, null=True, blank=True)
     item_name = models.CharField(max_length=100)
     description = models.TextField(default='')
     price = models.FloatField(default=0)
@@ -137,7 +137,7 @@ class OrderDetail(models.Model):
     subtotal = models.FloatField(default=0)
     vat = models.FloatField(default=0)
     notes = models.TextField(default='')
-    order = models.ForeignKey(Order)
+    order = models.ForeignKey(Order, models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.order.number + "|" + self.item.name
@@ -157,17 +157,17 @@ class Invoice(models.Model):
     city = models.CharField(max_length=50)
     province = models.CharField(max_length=50)
     postal_code = models.IntegerField(default=0)
-    document = models.FileField(upload_to='invoices',default=None)
-    payment_type = models.ForeignKey(PaymentType)
-    order = models.ForeignKey(Order)
-    customer = models.ForeignKey(Customer)
+    document = models.FileField(upload_to='invoices', default=None)
+    payment_type = models.ForeignKey(PaymentType, models.SET_NULL, null=True, blank=True)
+    order = models.ForeignKey(Order, models.SET_NULL, null=True, blank=True)
+    customer = models.ForeignKey(Customer, models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.number
 
 
 class InvoiceDetail(models.Model):
-    item = models.ForeignKey(Item)
+    item = models.ForeignKey(Item, models.SET_NULL, null=True, blank=True)
     item_name = models.CharField(max_length=100)
     description = models.TextField(default='')
     price = models.FloatField(default=0)
@@ -176,7 +176,7 @@ class InvoiceDetail(models.Model):
     subtotal = models.FloatField(default=0)
     vat = models.FloatField(default=0)
     notes = models.TextField(default='')
-    invoice = models.ForeignKey(Invoice)
+    invoice = models.ForeignKey(Invoice, models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.invoice.number + "|" + self.item.name
@@ -189,9 +189,9 @@ class Task(models.Model):
     start_date = models.DateTimeField(default=timezone.datetime.now, null=True, blank=True)
     finish_date = models.DateTimeField(default=timezone.datetime.now, null=True, blank=True)
     location = models.CharField(max_length=50, null=True, blank=True)
-    customer = models.ForeignKey(Customer, null=True, blank=True)
-    provider = models.ForeignKey(Provider, null=True, blank=True)
-    order = models.ForeignKey(Order, null=True, blank=True)
+    customer = models.ForeignKey(Customer, models.SET_NULL, null=True, blank=True)
+    provider = models.ForeignKey(Provider, models.SET_NULL, null=True, blank=True)
+    order = models.ForeignKey(Order, models.SET_NULL, null=True, blank=True)
     state = models.CharField(max_length=50, choices=(('TD', 'To do'), ('DNG', 'Doing'), ('DN', 'Done'), ('DIS', 'Discarded')),
                              default='To do')
     notice = models.TextField(default='', null=True, blank=True)
