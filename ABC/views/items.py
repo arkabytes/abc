@@ -85,15 +85,15 @@ def modify_item(request):
 @login_required
 def items(request):
     items = Item.objects.order_by('name')
-    page = request.GET.get('page', 1)
+    # page = request.GET.get('page', 1)
 
-    paginator = Paginator(items, ITEMS_PER_PAGE)
-    try:
-        items = paginator.page(page)
-    except PageNotAnInteger:
-        items = paginator.page(1)
-    except EmptyPage:
-        items = paginator.page(paginator.num_pages)
+    # paginator = Paginator(items, ITEMS_PER_PAGE)
+    # try:
+    #    items = paginator.page(page)
+    # except PageNotAnInteger:
+    #    items = paginator.page(1)
+    # except EmptyPage:
+    #    items = paginator.page(paginator.num_pages)
 
     context = {'items': items}
     return render(request, 'ABC/items.html', context)

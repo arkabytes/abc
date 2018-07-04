@@ -1,3 +1,5 @@
+from enum import Enum
+
 from django.db import models
 from django.utils import timezone
 
@@ -105,11 +107,20 @@ class Event(models.Model):
         return self.name
 
 
+class States(Enum):
+    ORDERED = 'Ordered'
+    NOT_READY = 'Not Ready'
+    READY = 'Ready'
+    SENT = 'Sent'
+    PAID = 'Paid'
+
+
 class Order(models.Model):
     number = models.CharField(max_length=20,unique=True)
     date = models.DateTimeField(default=timezone.datetime.now)
     delivery_date = models.DateTimeField(default=timezone.datetime.now)
     state = models.CharField(max_length=50, default='Ordered', choices=(('O', 'Ordered'), ('NR', 'Not Ready'), ('R', 'Ready'), ('S', 'Sent'), ('P', 'Paid')))
+    # state = models.CharField(max_length=5, choices=[(state, state.value) for state in States], default=States.NOT_READY)
     notes = models.TextField(default='', blank=True)
     tax_base = models.FloatField(default=0)
     vat = models.FloatField(default=0)
